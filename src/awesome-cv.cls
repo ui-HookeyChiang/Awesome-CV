@@ -1,1 +1,1 @@
-awesome-cv.cls
+../awesome-cv.cls
