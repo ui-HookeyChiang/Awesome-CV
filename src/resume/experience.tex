@@ -1,0 +1,72 @@
+%-------------------------------------------------------------------------------
+%	SECTION TITLE
+%-------------------------------------------------------------------------------
+\cvsection{Work Experience}
+
+
+%-------------------------------------------------------------------------------
+%	CONTENT
+%-------------------------------------------------------------------------------
+\begin{cventries}
+
+%---------------------------------------------------------
+  \cventry
+    {UniFi-OS Storage Software Engineer} % Job title
+    {Ubiquiti Inc.} % Organization
+    {Taiwan/Remote} % Location
+    {Mar. 2022 - Present} % Date(s)
+    {
+      \begin{cvitems} % Description(s) of tasks/responsibilities
+        \item {Delievered UniFi-NAS NPIs, including bringups, factory test
+          plans, and service maintenance on Debian.}
+        \item Upgraded Linux from 4.19 to 5.10, handling incompatibilities with back-tracking mainline commits.
+        \item Provided technical guidance, implementing cohesive user-friendly NAS solutions involving Samba, snapshots, data backup, data integrity, system-data migration, secure network discovery; shared these specifications, documents, reproducible code snippets in Confluence with cross-teams.
+        \item Redesigned the fs layout to reduce needless writes by 50\% and address leakage of internal data.
+        \item Tuned btrfs configs on atime, space\_cache, qgroup usage to achieve
+        better 8\% read and 5\% write.
+        \item Quantified and worked-around hours-long subvolume deletions causing btrfs unresponsive.
+        \item Brought system stability and performance improvements to all products with UniFi-OS.
+        \item Reduced overheads of a python cli by 65\% of CPU, 50\% of memory, then
+        resulting in 15\%-to-50\% less-load-average system. Then introduced a gRPC state exporter for subscription and streaming.
+        \item Resolved an OOM due to socket buffers on a 64kB page-sized system,
+        reducing 93\% over-allocation.
+        \item Assured software quality with tools such as golang test framework, xfstest, and packetdriller.
+      \end{cvitems}
+    }
+
+%---------------------------------------------------------
+  \cventry
+    {Software Engineer} % Job title
+    {QNAP Systems Inc.} % Organization
+    {Taiwan} % Location
+    {Jan. 2018 - Feb. 2022} % Date(s)
+    {
+      \begin{cvitems} % Description(s) of tasks/responsibilities
+        \item {Took full part in Hybridmount, a filesystem as cloud storage
+          gateway, running on 190K of QNAP NASes as of 2021, capable of video
+          streaming and accessible through common protocols, SMB/NFS/FTP.}
+        \item {Designed database schema, CLI, RPC protocol, loopback-fs cache
+          management.}
+        \item {Handled cloud-, platform- variant filename encodings so as to
+          utilize Linux VFS dcache.}
+        \item {Shortened duration of compiling codes from 30 minutes to less
+          than 10 minutes.}
+        \item {Shortened duration of copying 50 millions of files from 60 days
+          to less than 7 days.}
+        \item {Maintained software quality by composing unit tests, integration
+          tests, FS testsuites and benchmarks, run with Jenkins and Docker.
+          Handled less than 20 support tickets since the first official release.}
+        \item {Identified multiple deadlocks and data races. Improved sequential
+          write by 50\% faster, random read 10\%, metadata speed 300\% with
+          optimizations, including multi-threading, fine-grained locking, VFS
+          caching, file read-ahead, filename hashing, database index.}
+        \item {Realized features in deduplication filesystem, write-back cache
+          and chunk-defragmentation. Reworked read/write operations with 50\%
+          less lines of code and fixed abnormal data shown at chunk edges.}
+        \item {Analyzed and created POC of a POSIX-compliant cloud-tiering file
+          system with FUSE, IPFS in golang.}
+      \end{cvitems}
+    }
+
+%---------------------------------------------------------
+\end{cventries}
