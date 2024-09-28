@@ -17,20 +17,38 @@
     {Mar. 2022 - Present} % Date(s)
     {
       \begin{cvitems} % Description(s) of tasks/responsibilities
-        \item {Delievered UNAS NPIs, including bringups, factory test
-          plans, and service maintenance on Debian.}
-        \item Upgraded Linux from 4.19 to 5.10, handling incompatibilities with back-tracking mainline commits.
-        \item Provided technical guidance, implementing cohesive user-friendly NAS solutions involving Samba, snapshots, data backup, data integrity, system-data migration, secure network discovery; shared these specifications, documents, reproducible code snippets in Confluence with cross-teams.
-        \item Redesigned the fs layout to reduce needless writes by 50\% and address leakage of internal data.
-        \item Tuned btrfs configs on atime, space\_cache, qgroup usage to achieve
-        better 8\% read and 5\% write.
-        \item Quantified and worked-around hours-long subvolume deletions causing btrfs unresponsive.
-        \item Brought system stability and performance improvements to all products with UniFi-OS.
-        \item Reduced overheads of a python cli by 65\% of CPU, 50\% of memory, then
-        resulting in 15\%-to-50\% less-load-average system. Then introduced a gRPC state exporter for subscription and streaming.
-        \item Resolved an OOM due to socket buffers on a 64kB page-sized system,
-        reducing 93\% over-allocation.
-        \item Assured software quality with tools such as golang test framework, xfstest, and packetdriller.
+        \item Dedicated to UNAS, including NPI deliveries, test plans, and
+          feature developements on Debian.
+        \begin{itemize}
+          \item Researched and developed cohesive user-friendly NAS solutions
+            involving Samba, network discovery, snapshots, data backup, data
+            integrity, system-data migration; shared product visions,
+            specifications, documents, code snippets in Confluence with
+            cross-functional teams.
+          \item Upgraded Linux from 4.19 to 5.10, encountering code
+            incompatibilities and regressions rooted in PCI, RAID, PHY, AHCI,
+            resolved by cautiously backtracking mainline and SDK. Holistically
+            verified system stability and performance with stress-ng, fio,
+            xfstest, packetdriller, and Phoronix Test Suite. Moreover,
+            unleashed IO with the mq-deadline scheduler, Btrfs xxhash, and the
+            sendfile syscall.
+          \item Reduced cross-device copies, quota accounting and data leakage
+            with the FS layout redesign.
+          \item Worked around the issue of hours-long unresponsiveness caused
+            by Btrfs subvolume deletions.
+          \item Tuned Btrfs configs on atime, space\_cache, quota usage to
+            achieve better 8\% read and 5\% write.
+        \end{itemize}
+        \item Brought system stability and performance improvements to all
+          UniFi-OS products.
+        \begin{itemize}
+          \item Reduced overhead of a Python CLI by 65\% usage in CPU, 50\% in
+            memory, causing 15\%-to-50\% less in system load average.
+            Introduced a gRPC state exporter for lightweight streaming
+            notifications.
+          \item Fixed an OOM bug due to misbehaving socket forward allocation on
+            a 64kB page-sized system.
+        \end{itemize}
       \end{cvitems}
     }
 
