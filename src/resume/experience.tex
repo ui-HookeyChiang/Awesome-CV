@@ -30,14 +30,12 @@
             resolved by cautiously backtracking mainline and SDK. Holistically
             verified system stability and performance with stress-ng, fio,
             xfstest, packetdriller, and Phoronix Test Suite. Moreover,
-            unleashed IO with the mq-deadline scheduler, Btrfs xxhash, and the
-            sendfile syscall.
+            unleashed IO with the mq-deadline scheduler, Btrfs xxhash,
+            increasing performance of SSD RAID by 16\%.
           \item Reduced cross-device copies, quota accounting and data leakage
             with the FS layout redesign.
           \item Worked around the issue of hours-long unresponsiveness caused
             by Btrfs subvolume deletions.
-          \item Tuned Btrfs configs on atime, space\_cache, quota usage to
-            achieve better 8\% read and 5\% write.
         \end{itemize}
         \item Brought system stability and performance improvements to all
           UniFi-OS products.
