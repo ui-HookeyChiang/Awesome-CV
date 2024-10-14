@@ -59,35 +59,34 @@
     {Jan. 2018 - Feb. 2022} % Date(s)
     {
       \begin{cvitems} % Description(s) of tasks/responsibilities
-        \item {Took full part in Hybridmount, a FS as cloud storage
-          gateway, deployed on 190K QNAP devices as of 2021, supporting video
-          streaming and accessible via common protocols, e.g., SMB, NFS, and FTP.}
+        \item Took full part in Hybridmount, a FS as cloud storage gateway,
+          deployed on 190K QNAP devices as of 2021, supporting video streaming
+          and accessible via common protocols, e.g., SMB, NFS, and FTP.
         \begin{itemize}
-          \item {Designed the database schema, CLI, IPC protocol, and loopback-fs cache
-            management.}
-          \item {Maintained software quality by composing unit, integration, and
-              stress tests, incorporating public FS test suites (pjdfstest) and
-            benchmarks (filebench), and building automated CI pipelines using
-            Jenkins and Docker. Handled fewer than 20 support tickets since the
-            first official release.}
-          \item {Reduced duration of compiling codes from 30 minutes to fewer
-            than 10 minutes.}
-          \item {Reduced the time to create 50 million files from 60 days
-            on SSDs to less than 7 days on HDDs.}
-          \item {Continuously improved runtime performance, achieving a 50\%
+          \item Designed the database schema, CLI, IPC protocol, and loopback-fs
+            cache management.
+          \item Maintained software quality by composing unit, integration, and
+            stress tests, incorporating pjdfstest and filebench, and building
+            automated CI pipelines using Jenkins and Docker. Handled fewer than
+            20 support tickets since the first official release.
+          \item Reduced duration of compiling codes from 30 minutes to fewer
+            than 10 minutes.
+          \item Reduced the time to create 50 million files from 60 days
+            on SSDs to less than 7 days on HDDs.
+          \item Continuously improved runtime performance, achieving a 50\%
             increase in sequential write speed, 10\% random read, 300\% metadata
             operations through various optimizations, including filename
             hashing, file read-ahead, multi-threading, fine-grained locking, VFS
-            caching, database index.}
-          \item {Successfully utilized VFS dcache by carefully handling unicode
-            normalization and case sensitivity.}
+            caching, database index.
+          \item Successfully utilized VFS dcache by carefully handling unicode
+            normalization and case sensitivity.
         \end{itemize}
-        \item {Implemented features in deduplication filesystem, write-back
-            cache and chunk defragmentation. Refactored read/write operations,
-            reducing the related codebase by 50\% and additionally resolving
-          abnormal data display at chunk edges.}
-        \item {Analyzed and created POC of a POSIX-compliant cloud-tiering file
-          system with FUSE, IPFS in golang.}
+        \item Implemented features in deduplication filesystem, write-back cache
+          and chunk defragmentation. Refactored read/write operations, reducing
+          the related codebase by 50\% and additionally resolving abnormal data
+          display at chunk edges.
+        \item Analyzed and created POC of a POSIX-compliant cloud-tiering file
+          system with FUSE, IPFS in golang.
       \end{cvitems}
     }
 
