@@ -25,13 +25,12 @@
             backup, data integrity, system-data migration; shared product
             visions, specifications, documents, code snippets in Confluence with
             cross-functional teams.
-          \item Upgraded Linux from 4.19 to 5.10, encountering code
-            incompatibilities and regressions rooted in PCI, RAID, PHY, AHCI,
-            resolved by cautiously backtracking mainline and SDK. Holistically
-            verified system stability and performance with stress-ng, fio,
-            xfstest, packetdriller, and Phoronix Test Suite. Moreover,
-            unleashed IO with the mq-deadline scheduler, Btrfs xxhash,
-            increasing performance of SSD RAID by 16\%.
+          \item Ported Linux from 4.19 to 5.10, resolving code incompatibilities
+            and regressions rooted in PCI, RAID, PHY, AHCI, by cautiously
+            backtracking Linux and BSP. Holistically verified system stability
+            and performance with stress-ng, fio, xfstest, packetdriller, and
+            Phoronix Test Suite. Additionally, increased write performance by
+            40\% by appling the mq-deadline scheduler and Btrfs sync disk-io.
           \item Reduced cross-device copies, quota accounting and data leakage
             with the FS layout redesign.
           \item Worked around the issue of hours-long unresponsiveness caused
@@ -40,8 +39,8 @@
         \item Brought system stability and performance improvements to all
           UniFi-OS products.
         \begin{itemize}
-          \item Reduced overhead of a Python CLI by 65\% usage in CPU, 50\% in
-            memory, causing 15\%-to-50\% less in system load average.
+          \item Lowered the overhead of a Python CLI by 65\% usage in CPU and
+            50\% in memory, leading to a 30\% reduction in system load.
             Introduced a gRPC state exporter for lightweight streaming
             notifications.
           \item Fixed an OOM bug due to misbehaving socket forward allocation on
