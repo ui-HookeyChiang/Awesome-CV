@@ -17,37 +17,38 @@
     {Mar. 2022 - Present} % Date(s)
     {
       \begin{cvitems} % Description(s) of tasks/responsibilities
-        \item Dedicated to UNAS, including NPI deliveries, test plans, and
-          feature developements on Alpine AL524.
-        \begin{itemize}
-          \item Researched and developed cohesive user-friendly NAS solutions
-            on Debian, involving network discovery, Samba, snapshots, data
-            backup, data integrity, system-data migration; shared product
-            visions, specifications, documents, code snippets in Confluence with
-            cross-functional teams.
-          \item Ported Linux from 4.19 to 5.10, resolving code incompatibilities
-            and regressions rooted in PCI, RAID, PHY, AHCI, by cautiously
-            backtracking Linux and BSP. Holistically verified system stability
-            and performance with stress-ng, fio, xfstest, packetdriller, and
-            Phoronix Test Suite. Additionally, increased write performance by
-            40\% by appling the mq-deadline scheduler and Btrfs sync disk-io.
-          \item Achieved 800MB/s Samba bandwidth over 10GbE by tuning both the
-            server and client.
+        \item Dedicated to the very first Ubiquiti's NAS and its fundamentals,
+          focusing on a cohesive storage service.
+          \begin{itemize}
+          \item Collaborated with cross-functional teams by sharing
+            proposals, documents, code snippets, hence achieving NPI
+            deliveries, test plans on Alpine AL524 and feature implementations,
+            including file service, network discovery, versioning, backup,
+            integrity, migration on Debian.
+          \item Upgraded Linux from 4.19 to 5.10, resolving code
+            incompatibilities and regressions rooted from PCI, RAID, PHY, AHCI,
+            by cautiously backtracking Linux and BSP. Holistically verified
+            system stability and performance with stress-ng, fio, xfstest,
+            packetdriller, and Phoronix Test Suite. Additionally, increased
+            write performance by 40\% by applying the mq-deadline scheduler and
+            Btrfs sync io.
+          \item Unleashed 800/900 MBs bi-directional Samba throughput over
+            10GbE by tuning the entire system.
           \item Reduced cross-device copies, quota accounting and data leakage
             with the FS layout redesign.
           \item Worked around the issue of hours-long unresponsiveness caused
             by Btrfs subvolume deletions.
-        \end{itemize}
+          \end{itemize}
         \item Brought system stability and performance improvements to all
           UniFi-OS products.
-        \begin{itemize}
+          \begin{itemize}
           \item Lowered the overhead of a Python CLI by 65\% usage in CPU and
             50\% in memory, leading to a 30\% reduction in system load.
             Introduced a gRPC state exporter for lightweight streaming
             notifications.
           \item Fixed an OOM bug due to misbehaving socket forward allocation on
             a 64kB page-sized system.
-        \end{itemize}
+          \end{itemize}
       \end{cvitems}
     }
 
