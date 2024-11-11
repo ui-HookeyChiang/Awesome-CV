@@ -17,37 +17,55 @@
     {Mar. 2022 - Present} % Date(s)
     {
       \begin{cvitems} % Description(s) of tasks/responsibilities
-        \item Dedicated to the very first Ubiquiti's NAS and its fundamentals,
+        \item {
+          Dedicated to the very first Ubiquiti's NAS and its fundamentals,
           focusing on a cohesive storage solution.
+          }
           \begin{itemize}
-          \item Accomplished NPI deliveries, factory test plans for AL524 SoC,
+          \item {
+            Accomplished NPI deliveries, factory test plans for AL524 SoC,
             and feature implementations on Debian OS, including file service,
             network discovery, data versioning, integrity, backup, migration
             through close collaboration with cross-functional teams and
             iterative refinement.
-          \item Led the way for Linux upgrade from 4.19 to 5.10, resolving code
+            }
+          \item {
+            Led the way for Linux upgrade from 4.19 to 5.10, resolving code
             incompatibilities and regressions rooted from PCI, RAID, PHY, AHCI,
             by cautiously backtracking Linux and BSP. Holistically verified
             system stability and performance with stress-ng, fio, xfstest,
             packetdrill, and Phoronix Test Suite. Moreover, increased
             write IOPS by 40\% by applying the mq-deadline scheduler and
             Btrfs sync io.
-          \item Unleashed a unidirectional Samba throughput from 600/850 MB/s
+            }
+          \item {
+            Unleashed a unidirectional Samba throughput from 600/850 MB/s
             (UL/DL) to 830/940 MB/s over 10GbE by optimizing the entire system.
-          \item Reduced cross-device copies, quota accounting and data leakage
+            }
+          \item {
+            Reduced cross-device copies, quota accounting and data leakage
             with the FS layout redesign.
-          \item Worked around the issue of hours-long unresponsiveness caused
+            }
+          \item {
+            Worked around the issue of hours-long unresponsiveness caused
             by Btrfs subvolume deletions.
+            }
           \end{itemize}
-        \item Brought system stability and performance improvements to all
+        \item {
+          Brought system stability and performance improvements to all
           UniFi-OS products.
+          }
           \begin{itemize}
-          \item Lowered the overhead of a Python CLI by 65\% usage in CPU and
+          \item {
+            Lowered the overhead of a Python CLI by 65\% usage in CPU and
             50\% in memory, leading to a 30\% reduction in system load.
             Introduced a gRPC state exporter for lightweight streaming
             notifications.
-          \item Fixed an OOM bug due to misbehaving socket forward allocation on
+            }
+          \item {
+            Fixed an OOM bug due to misbehaving socket forward allocation on
             a 64kB page-sized system.
+            }
           \end{itemize}
       \end{cvitems}
     }
@@ -60,35 +78,53 @@
     {Jan. 2018 - Feb. 2022} % Date(s)
     {
       \begin{cvitems} % Description(s) of tasks/responsibilities
-        \item Took full part in Hybridmount, a FS as cloud storage gateway,
+        \item {
+          Took full part in Hybridmount, a FS as cloud storage gateway,
           deployed on 190K QNAP devices as of 2021, capable of video streaming,
           content caching and accessible via file-sharing protocols.
+          }
         \begin{itemize}
-          \item Designed the database schema, CLI, IPC protocol, and loopback-FS
+          \item {
+            Designed the database schema, CLI, IPC protocol, and loopback-FS
             cache management.
-          \item Maintained software quality by composing unit, integration, and
+            }
+          \item {
+            Maintained software quality by composing unit, integration, and
             stress tests, incorporating public suites, pjdfstest and filebench,
             and building automated CI pipelines using Jenkins and Docker.
             Handled fewer than 20 support tickets since the first official
             release.
-          \item Reduced duration of compiling codes from 30 minutes to fewer
+            }
+          \item {
+            Reduced duration of compiling codes from 30 minutes to fewer
             than 10 minutes.
-          \item Reduced the time to create 50 million files from 60 days
+            }
+          \item {
+            Reduced the time to create 50 million files from 60 days
             on SSDs to less than 7 days on HDDs.
-          \item Continuously improved runtime performance, achieving a 50\%
+            }
+          \item {
+            Continuously improved runtime performance, achieving a 50\%
             increase in sequential write speed, 10\% random read, 300\% metadata
             operations through various optimizations, including filename
             hashing, file read-ahead, multi-threading, fine-grained locking, VFS
             caching, database index.
-          \item Successfully utilized VFS dcache by carefully handling unicode
+            }
+          \item {
+            Successfully utilized VFS dcache by carefully handling unicode
             normalization and case sensitivity.
+            }
         \end{itemize}
-        \item Implemented features in deduplication FS, write-back cache
+      \item {
+          Implemented features in deduplication FS, write-back cache
           and chunk defragmentation. Refactored read/write operations, reducing
           the related codebase by 50\% and consequently fixing abnormal data
           assembly at chunk edges.
-        \item Analyzed and created POC of a POSIX-compliant cloud-tiering FS
+          }
+        \item {
+          Analyzed and created POC of a POSIX-compliant cloud-tiering FS
           with FUSE, IPFS in golang.
+          }
       \end{cvitems}
     }
 
