@@ -18,37 +18,34 @@
     {
       \begin{cvitems} % Description(s) of tasks/responsibilities
         \item {
-          Dedicated to the very first Ubiquiti's NAS, including its kernel,
-          middleware and UX-centric solutions.
+          Pioneered Ubiquiti’s first NAS development, striving for bringup,
+          kernel integration, middleware, and UX solutions under constrained
+          resources, leading to market success and product line expansion.
           }
           \begin{itemize}
           \item {
-            Accomplished NPI deliveries, factory test plans for AL524 SoC,
-            and feature implementations on Debian OS, including filesystem, file
-            service, network discovery, data versioning, integrity, backup,
-            migration through close collaboration with cross-functional teams
-            and iterative refinement.
+            Delivered NPI milestones, designing, developing, and testing
+            features on Debian OS, including filesystem management, file
+            services, network discovery, and system-data migration.
             }
           \item {
-            Led the way for Linux upgrade from 4.19 to 5.10, resolving code
-            incompatibilities and regressions rooted from PCI, RAID, PHY, AHCI,
-            by cautiously backtracking Linux and BSP. Holistically verified
-            system stability and performance with stress-ng, fio, xfstest,
-            packetdrill, and Phoronix Test Suite. Besides, increased write IOPS
-            by 40\% using drive-affined IO schedulers and synchronized Btrfs IO.
+            Upgraded Linux from 4.19 to 5.10, resolving PCI, RAID, AHCI and PHY
+            regressions, bringing in a 40\% improvement in write IOPS with
+            optimized Btrfs disk I/O scheduling.
+            Holistically verified system stability and performance with Phoronix
+            Test Suites, stress-ng, packetdrill, xfstest.
             }
           \item {
-            Unleashed a unidirectional Samba throughput from 600/850 MB/s
-            (UL/DL) to 830/940 MB/s over 10GbE by tuning the entire system
-            stack.
+            Achieving 38\% upload and 11\% download transfer rate
+            improvements, reaching 830/940 MB/s over 10GbE.
             }
           \item {
             Reduced cross-device copies, quota accounting and data leakage
             with the FS layout redesign.
             }
           \item {
-            Minimized the days-long latency of Btrfs subvolume deletions,
-            proportional to the number of files.
+            Minimized the latency of Btrfs subvolume deletions, making it
+            orthogonal to the number of files.
             }
           \end{itemize}
         \item {
@@ -57,14 +54,15 @@
           }
           \begin{itemize}
           \item {
-            Lowered the overhead of a Python CLI by 65\% usage in CPU and
-            50\% in memory, leading to a 30\% reduction in system load.
+            Optimized Python CLI, reducing CPU usage by 65\% and memory usage by
+            50\%, leading to a 30\% decrease in system load.
             Introduced a gRPC state exporter for lightweight streaming
-            notifications.
+            notifications, saving system resource, reducing latency from a
+            seconds to microseconds.
             }
           \item {
-            Fixed an OOM bug due to misbehaving socket forward allocation on
-            a 64kB page-sized system.
+            Fixed an OOM bug due to socket misallocations, improving 64kB
+            page-sized system reliability.
             }
           \end{itemize}
       \end{cvitems}
@@ -81,7 +79,7 @@
         \item {
           Took full part in Hybridmount, a FS as cloud storage gateway,
           deployed on 190K QNAP devices as of 2021, capable of video streaming,
-          content caching and accessible via file-sharing protocols.
+          content caching and access via file-sharing protocols.
           }
         \begin{itemize}
           \item {
@@ -89,8 +87,8 @@
             cache management.
             }
           \item {
-            Maintained software quality by composing unit, integration, and
-            stress tests, incorporating public suites, pjdfstest and filebench,
+            Ensured software quality by composing unit, integration, and
+            stress tests, incorporating public suites (pjdfstest and filebench),
             and building automated CI pipelines using Jenkins and Docker.
             Handled fewer than 20 support tickets since the first official
             release.
@@ -116,15 +114,19 @@
             }
         \end{itemize}
       \item {
-          Implemented features in deduplication FS, write-back cache
-          and chunk defragmentation. Refactored read/write operations, reducing
-          the related codebase by 50\% and consequently fixing abnormal data
-          assembly at chunk edges.
-          }
-        \item {
-          Analyzed and created POC of a POSIX-compliant cloud-tiering FS
-          with FUSE, IPFS in golang.
-          }
+        Implemented features in deduplication FS, write-back cache and chunk
+        defragmentation.
+        }
+        \begin{itemize}
+          \item {
+            Refactored read/write operations, reducing the related codebase by
+            50\% and consequently fixing abnormal data assembly at chunk edges.
+            }
+        \end{itemize}
+      \item {
+        Developed a POC of a POSIX-compliant cloud-tiering FS with FUSE, IPFS in
+        Go.
+        }
       \end{cvitems}
     }
 
