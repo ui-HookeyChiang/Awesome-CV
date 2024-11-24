@@ -18,26 +18,31 @@
     {
       \begin{cvitems} % Description(s) of tasks/responsibilities
         \item {
-          Pioneered Ubiquiti’s first NAS development, striving for bringup,
-          kernel integration, middleware and UX solutions under constrained
-          resources, leading to market success and product line expansion.
+          Pioneered the software and firmware development of Ubiquiti’s first
+          NAS under constrained resources, involving in hardware bringup,
+          strategic planning, user-centric solution design and iterative
+          refinement, contributing to market success and product line expansion.
           }
           \begin{itemize}
           \item {
-            Delivered NPI milestones, designing, developing and testing
-            features on Debian OS, including filesystem management, file
+            Ported the BSP and uboot FIT image to AL324 board,
+            preparing factory production tests.
+            }
+          \item {
+            Collaborating on designing, developing and testing core NAS features
+            on Debian OS, including storage management, filesystem (FS)
             services, network discovery and system-data migration.
             }
           \item {
-            Upgraded Linux from 4.19 to 5.10, resolving PCI, RAID, AHCI and PHY
-            regressions, bringing in a 40\% improvement in write IOPS with
-            optimized Btrfs disk I/O scheduling.
-            Holistically verified system stability and performance with Phoronix
-            Test Suites, stress-ng, packetdrill, xfstest.
+            Upgraded Linux from 4.19 to 5.10, resolving Alpine SDK, PCI, RAID,
+            AHCI and PHY regressions. Holistically verified
+            system stability and performance with Phoronix Test Suites,
+            packetdrill, xfstest. Brought in a 40\% improvement in
+            write IOPS with optimized Btrfs disk I/O scheduling
             }
           \item {
-            Achieving 38\% upload and 11\% download transfer rate
-            improvements, reaching 830/940 MB/s over 10GbE.
+            Boosted transfer rates by 38\% (upload) and 11\% (download),
+            reaching 830/940 MB/s over 10GbE.
             }
           \item {
             Reduced cross-device copies, quota accounting and data leakage
@@ -54,11 +59,11 @@
           }
           \begin{itemize}
           \item {
-            Optimized Python CLI, reducing CPU usage by 65\% and memory usage by
-            50\%, leading to a 30\% decrease in system load.
+            Optimized an exporter CLI in Python, reducing CPU usage by 65\% and
+            memory usage by 50\%, leading to a 30\% decrease in system load.
             Introduced a gRPC state exporter for lightweight streaming
-            notifications, saving system resource, reducing latency from a
-            seconds to microseconds.
+            notifications, eliminating most latency from seconds to
+            microseconds.
             }
           \item {
             Fixed an OOM bug due to socket misallocations, improving 64kB
@@ -83,12 +88,12 @@
           }
         \begin{itemize}
           \item {
-            Designed the database schema, CLI, IPC protocol and loopback-FS
+            Designed and implemented the database schema, CLI, IPC and loopback-FS
             cache management.
             }
           \item {
             Ensured software quality by composing unit, integration and
-            stress tests, incorporating public suites (pjdfstest and filebench),
+            stress tests, incorporating public suites (pjdfstest and filebench)
             and building automated CI pipelines using Jenkins and Docker.
             Handled fewer than 20 support tickets since the first official
             release.
@@ -114,13 +119,13 @@
             }
         \end{itemize}
       \item {
-        Implemented features in deduplication FS, write-back cache and chunk
-        defragmentation.
+        Implemented key features in deduplication FS, including write-back cache
+        and chunk defragmentation.
         }
         \begin{itemize}
           \item {
-            Refactored read/write operations, reducing the related codebase by
-            50\%, and consequently fixing abnormal data assembly at chunk edges.
+            Refactored read/write operations, consequently reducing the related
+            codebase by 50\% and fixing abnormal data assembly at chunk edges.
             }
         \end{itemize}
       \item {
