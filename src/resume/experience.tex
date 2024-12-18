@@ -19,54 +19,55 @@
       \begin{cvitems} % Description(s) of tasks/responsibilities
         \item {
           Pioneered the software and firmware development of Ubiquiti’s first
-          NAS in the team of 3 members, collaborating in hardware bringup,
-          strategic planning, UI/UX solution design and customer support,
-          contributing to market success and product line expansion.
+          NAS in the team of 3 members, contributing sales to 10k units per month and
+          product line expansion.
           }
           \begin{itemize}
           \item {
-            Ported the BSP and uboot FIT image to AL324 boards,
-            preparing factory production tests.
+            Collaborated teams in hardware bringup, strategic planning, UI/UX
+            design and customer support.
             }
           \item {
-            Led technically on researching, developing and testing core NAS
-            features on Debian OS, including storage management, filesystem (FS)
-            services, network discovery and system-data migration.
+            Developed core NAS features on Debian OS, including storage
+            management, filesystem services, network discovery and system-data
+            migration.
             }
           \item {
-            Upgraded Linux from 4.19 to 5.10, resolving Alpine SDK, PCI, RAID,
-            AHCI and PHY regressions. Holistically verified
-            system stability and performance with Phoronix Test Suites,
-            packetdrill, xfstest. Brought in a 40\% improvement in
-            write IOPS with optimized Btrfs disk I/O scheduling.
+            Upgraded Linux kernel (4.19 to 5.10), resolving Alpine SDK, PCI, RAID,
+            AHCI and PHY regressions.
+          }
+          \item {
+            Verified system stability and performance holistically with Phoronix
+            Test Suites, packetdrill, xfstest.
+          }
+          \item {
+            Achieved a 40\% increase in write IOPS via Btrfs disk I/O
+            scheduling and tuning.
             }
           \item {
             Boosted transfer rates by 38\% (upload) and 55\% (download),
             reaching 830/940 MB/s over 10GbE.
             }
           \item {
-            Reduced cross-device copies, quota accounting and data leakage
-            with the FS layout redesign.
-            }
-          \item {
-            Minimized the latency of Btrfs subvolume deletions, making it
-            orthogonal to the number of files.
+            Optimized Btrfs subvolume deletions latency, making it
+            independent of file count and enhancing UX significantly.
             }
           \end{itemize}
         \item {
-          Brought system stability and performance improvements to all
-          UniFi-OS products.
+          Enhanced system reliability and performance across all UniFi-OS products.
           }
           \begin{itemize}
           \item {
-            Optimized an exporter CLI in Python, reducing CPU usage by 65\% and
+            Improved an exporter CLI in Python, reducing CPU usage by 65\% and
             memory usage by 50\%, leading to a 30\% decrease in system load.
-            Introduced a gRPC state exporter for lightweight streaming
-            notifications, eliminating most latency from seconds to
+          }
+          \item {
+            Introduced a gRPC state exporter for real-time streaming
+            notifications, cutting latency from seconds to
             microseconds.
             }
           \item {
-            Fixed an OOM bug due to socket misallocations, improving 64kB
+            Resolved an OOM bug due to socket misallocations, stablizing 64kB
             page-sized system reliability.
             }
           \end{itemize}
@@ -82,14 +83,14 @@
     {
       \begin{cvitems} % Description(s) of tasks/responsibilities
         \item {
-          Took full part in Hybridmount, a FS as cloud storage gateway,
-          deployed on 190K QNAP devices as of 2021, capable of video streaming,
-          content caching and access via file-sharing protocols.
+          Spearheaded Hybridmount, a FS as cloud storage gateway,
+          deployed on 190K QNAP devices as of 2021, capable of content caching
+          and access via file-sharing protocols, reducing users' operating costs.
           }
         \begin{itemize}
           \item {
-            Designed and implemented the database schema, CLI, IPC and loopback-FS
-            cache management.
+            Engineered key features, including database schema, CLI, IPC and loopback-FS
+            management.
             }
           \item {
             Ensured software quality by composing unit, integration and
@@ -103,7 +104,7 @@
             than 10 minutes.
             }
           \item {
-            Reduced the time to create 50 million files from 60 days
+            Reduced the file creation time (50 million files) from 60 days
             on SSDs to less than 7 days on HDDs.
             }
           \item {
@@ -112,18 +113,18 @@
             read-ahead, lock contention mitigation and VFS caching.
             }
           \item {
-            Successfully utilized VFS dcache by carefully handling unicode
+            Utilized VFS dcache by carefully handling unicode
             normalization and case sensitivity.
             }
         \end{itemize}
       \item {
-        Implemented key features in deduplication FS, including write-back cache
+        Implemented key features in dedup FS, including writeback cache
         and chunk defragmentation.
         }
         \begin{itemize}
           \item {
-            Refactored read/write operations, consequently reducing the related
-            codebase by 50\% and fixing abnormal data assembly at chunk edges.
+            Refactored read/write operations, reducing the related
+            codebase by 50\%, fixing data assembly issues at chunk edges.
             }
         \end{itemize}
       \end{cvitems}
