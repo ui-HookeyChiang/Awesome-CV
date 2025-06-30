@@ -717,6 +717,7 @@
 % Usage: \cvsection{<section-title>}
 \newcommand{\cvsection}[1]{%
   \vspace{\acvSectionTopSkip}
+  \vspace{-1mm}
   \sectionstyle{#1}
   \phantomsection
   \color{sectiondivider}\vhrulefill{0.9pt}
@@ -744,6 +745,7 @@
 % Define an environment for cventry
 \newenvironment{cventries}{%
   \vspace{\acvSectionContentTopSkip}
+  \vspace{-3mm}
   \begin{center}
 }{%
   \end{center}
@@ -751,7 +753,7 @@
 % Define an entry of cv information
 % Usage: \cventry{<position>}{<title>}{<location>}{<date>}{<description>}
 \newcommand*{\cventry}[5]{%
-  \vspace{-2.5mm}
+  \vspace{0.3em}
   \setlength\tabcolsep{0pt}
   \setlength{\extrarowheight}{0pt}
   \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} L{\textwidth - 4.5cm} R{4.5cm}}
@@ -826,15 +828,14 @@
 
 % Define an environment for cvitems(for cventry)
 \newenvironment{cvitems}{%
-  \vspace{-3.0mm}
+  \vspace{-0.618em}
   \begin{justify}
-  \begin{itemize}[leftmargin=2ex, nosep, itemsep=0.33em]
-    \setlength{\parskip}{0pt}
+  \begin{itemize}[leftmargin=2ex, nosep, itemsep=0.0em]
+    \setlength{\parskip}{0.33em}
     \renewcommand{\labelitemi}{\bullet}
 }{%
   \end{itemize}
   \end{justify}
-  \vspace{1.0mm}
 }
 
 
