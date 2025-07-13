@@ -18,59 +18,63 @@
     {
       \begin{cvitems} % Description(s) of tasks/responsibilities
         \item {
-          Pioneered the software and firmware development of Ubiquiti’s first
-          NAS in the team of 3 members, contributing sales to 5k units per month and
-          product line expansion.
+            Pioneered the first Ubiquiti's NAS platform, achieving product line
+            expansion to 6 variants.
           }
           \begin{itemize}
           \item {
-            Collaborated teams in hardware bringup, strategic planning, UI/UX
-            design and customer support.
-            }
-          \item {
-            Developed core NAS features on Debian OS, including storage
-            management, filesystem services, network discovery and system-data
-            migration.
-            }
-          \item {
-            Upgraded Linux kernel (4.19 to 5.10), fixing regressions in Alpine SDK, PCI, RAID,
-            AHCI and PHY. This upgrade unlocks advanced storage/network
-            capabilities, enabling future product scalability.
+            Carried out multi-stack developments, from U-boot, Debian
+            bootstrapping to core NAS features, including storage
+            management, file services on Btrfs, network discovery and DB migration.
           }
           \item {
-            Verified system stability and performance holistically with Phoronix
-            Test Suites, packetdrill, xfstest.
-          }
-          \item {
-            Achieved a 40\% increase in write IOPS via Btrfs disk I/O
-            scheduling and tuning.
+            Developed cgroup on CPU, memory and swap for system
+            availablity with I/O prioritization.
             }
           \item {
-            Boosted transfer rates by 38\% (upload) and 55\% (download),
-            reaching 830/940 MB/s over 10GbE.
-            }
-          \item {
-            Optimized Btrfs subvolume deletions latency, making it
-            independent of file count.
+            Increased product reliability by introducing unit, filesystem,
+            storage, network, and stress tests.
             }
           \end{itemize}
         \item {
-          Enhanced system reliability and performance across all UniFi-OS products.
+          Delivered exceptional performance gains through comprehensive system optimization.
           }
           \begin{itemize}
           \item {
-            Improved an exporter CLI in Python, reducing CPU usage by 65\% and
-            memory usage by 50\%, leading to a 30\% decrease in system load.
+            Boosted Samba throughput from 544/592 MB/s to 830/930 MB/s.
           }
           \item {
-            Introduced a gRPC state exporter for real-time streaming
-            notifications, minimizing latency from seconds to
-            microseconds.
+            Enhanced SSD-RAID IOPS by 40\% using mq-deadline and ARM64 hardware-accelerated CRC32.
             }
           \item {
-            Resolved an OOM bug due to socket misallocations, stablizing 64kB
-            page-sized system reliability.
+            Reduced user-facing latency during Btrfs subvolume deletion, which
+            scaled poorly with file count.
             }
+          \item {
+            Refined the implementations to eliminate write amplification that
+            wear out users' equipments.
+            }
+          \end{itemize}
+        \item {
+          Enhanced system reliability, scalability and performance across all UniFi-OS products.
+          }
+          \begin{itemize}
+          \item {
+            Upgraded kernel 4.19 to 5.10, resolving driver issues,
+            unleashing storage and network capabilities.
+          }
+          \item {
+            Eliminated OOM crashes, including 93\% socket buffer waste and
+            filesystem-abusing updates.
+          }
+          \item {
+            Introduced a gRPC state exporter to replace a python poller,
+            minimizing latency to microseconds.
+          }
+          \item {
+            Established SOPs for support engineers, enabling the team to focus
+            on high-complexity issues.
+          }
           \end{itemize}
       \end{cvitems}
     }
@@ -84,48 +88,48 @@
     {
       \begin{cvitems} % Description(s) of tasks/responsibilities
         \item {
-          Spearheaded Hybridmount, a FS as cloud storage gateway,
-          deployed on 190K QNAP devices as of 2021, capable of content caching
-          and access via file-sharing protocols, reducing users' operating costs.
+          Delivered Hybridmount, a filesystem allowing local access to cloud
+          files, reducing user-operating costs.
           }
         \begin{itemize}
           \item {
-            Engineered key features, including database schema, CLI, IPC and loopback-FS
-            management.
+            Built FUSE-based architecture with SQLite DB, libev event handling, and qrpc communication.
             }
           \item {
-            Ensured software quality by composing unit, integration and
-            stress tests, incorporating public suites (pjdfstest and filebench)
-            and building automated CI pipelines using Jenkins and Docker.
-            Handled fewer than 20 support tickets since the first official
-            release.
+            Implemented features including multi-cloud support, selective
+            mounting, client-side encryption, smart synchronization with predownload/autoupdate, cache pinning, and partial downloads.
             }
           \item {
-            Reduced duration of compiling codes from 30 minutes to fewer
-            than 10 minutes.
-            }
-          \item {
-            Reduced the file creation time (50 million files) from 60 days
-            on SSDs to less than 7 days on HDDs.
-            }
-          \item {
-            Achieving a 50\% increase in sequential write speed, 10\% random
-            read, 300\% metadata operations through hashing, DB indexing,
-            read-ahead, lock contention mitigation and VFS caching.
-            }
-          \item {
-            Utilized VFS dcache by carefully handling unicode
-            normalization and case sensitivity.
+            Developed CI using GitLab, Jenkins, and Docker with pjdfstest and filebench validation.
             }
         \end{itemize}
-      \item {
-        Implemented key features in dedup FS, including writeback cache
-        and chunk defragmentation.
-        }
+        \item {
+          Achieved 300\% metadata, 50\% sequential write and 10\% random read performance improvement through multi-layer
+          caching, algorithm refinement and database optimization.
+          }
         \begin{itemize}
           \item {
-            Refactored read/write operations, reducing the related
-            codebase by 50\%, fixing data assembly issues at chunk edges.
+            Enabled VFS cache by handling unicode normalization,
+            case-sensitivity and cache invalidation.
+            }
+          \item {
+            Resolved cyclic deadlocks between FUSE xattr and RPC-based daemon queries through redesign.
+            }
+          \item {
+            Enabled 50M+ files at 200 files/sec through metadata redesign, eliminating inode count limits.
+            }
+          \item {
+            Optimized download latency by 36\% using centralized state machine with condition variables.
+            }
+          \item {
+            Reduced recursive deletion from 22s to 1s implementing one-shot delete API for 1000 directories.
+            }
+          \item {
+            Improved NFS directory listing from 1s to 0.3s through readdirplus syscall optimization.
+            }
+          \item {
+            Reduced build time from 30 minutes to under 10 minutes, shrinking
+            code size by 13\%.
             }
         \end{itemize}
       \end{cvitems}
