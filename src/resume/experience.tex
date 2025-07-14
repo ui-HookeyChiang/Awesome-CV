@@ -47,8 +47,8 @@
             Enhanced SSD-RAID IOPS by 40\% using mq-deadline and ARM64 hardware-accelerated CRC32.
             }
           \item {
-            Reduced user-facing latency during Btrfs subvolume deletion, which
-            scaled poorly with file count.
+            Reduced user-facing latency during Btrfs subvolume deletion,
+            scaling poorly with file count.
             }
           \item {
             Refined the implementations to eliminate write amplification that
@@ -75,6 +75,10 @@
             Established SOPs for support engineers, enabling the team to focus
             on high-complexity issues.
           }
+          \item {
+            Optimized the build system with AI reviewers and supporting backport packages
+            installation.
+          }
           \end{itemize}
       \end{cvitems}
     }
@@ -100,7 +104,7 @@
             mounting, client-side encryption, smart synchronization with predownload/autoupdate, cache pinning, and partial downloads.
             }
           \item {
-            Developed CI using GitLab, Jenkins, and Docker with pjdfstest and filebench validation.
+            Developed CI using GitLab, Jenkins, and Docker with pjdfstest and filebench validation tools.
             }
         \end{itemize}
         \item {
@@ -126,10 +130,6 @@
             }
           \item {
             Improved NFS directory listing from 1s to 0.3s through readdirplus syscall optimization.
-            }
-          \item {
-            Reduced build time from 30 minutes to under 10 minutes, shrinking
-            code size by 13\%.
             }
         \end{itemize}
       \end{cvitems}
