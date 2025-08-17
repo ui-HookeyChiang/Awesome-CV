@@ -18,8 +18,7 @@
     {
       \begin{cvitems} % Description(s) of tasks/responsibilities
         \item {
-            Pioneered the first Ubiquiti's NAS platform, achieving product line
-            expansion to 6 variants.
+            Pioneered Ubiquiti's first NAS platform with 3 members, scaling the product line to 6 model variants.
           }
           \begin{itemize}
           \item {
@@ -28,31 +27,24 @@
             management, file services on Btrfs, network discovery and DB migration.
           }
           \item {
-            Developed cgroup on CPU, memory and swap for system
-            availablity with I/O prioritization.
-            }
+            Led comprehensive performance profiling across NIC, RAID, SSD-cache, and Btrfs.
+          }
           \item {
-            Increased product reliability by introducing unit, filesystem,
-            storage, network, and stress tests.
+            Co-designed cross-team stress testing framework with multi-day I/O loops and RAID expansion, discovering critical filesystem and protocol stability issues before production.
             }
           \end{itemize}
         \item {
-          Delivered exceptional performance gains through comprehensive system optimization.
+          Delivered exceptional performance gains through full-stack system optimization and resource control.
           }
           \begin{itemize}
           \item {
-            Boosted Samba throughput from 544/592 MB/s to 830/930 MB/s.
+            Boosted Samba file transfer throughput from 544/592 MB/s to 830/930 MB/s.
           }
           \item {
-            Enhanced SSD-RAID IOPS by 40\% using mq-deadline and ARM64 hardware-accelerated CRC32.
+            Enhanced SSD-RAID write IOPS by 40\% using mq-deadline scheduler and ARM64 CRC32.
             }
           \item {
-            Reduced user-facing latency during Btrfs subvolume deletion,
-            scaling poorly with file count.
-            }
-          \item {
-            Refined the implementations to eliminate write amplification that
-            wear out users' equipments.
+            Reduced Btrfs subvolume deletion latency and write amplification from cross-subvolume moves.
             }
           \end{itemize}
         \item {
