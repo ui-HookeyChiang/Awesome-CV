@@ -1,8 +1,62 @@
 # Ubiquiti Experience
 
-## 2024
+## 2025
 
-### Q4 Achievements
+### Q2 Achievements
+
+#### Platform-wide Build System Revamp
+- Solved a long-standing limitation in the build system, enabling all platforms to install and upgrade to backported packages without unintentionally upgrading unrelated system components
+- This upgrade path made it possible to successfully update Samba, resolving:
+  - Large file upload failures (frequently reported since product launch)
+  - Reconnection issues due to unstable networks
+  - File locking issues across clients
+- Unified default DNS configurations across all platforms, reducing configuration inconsistencies and lowering maintenance overhead across teams
+
+#### Comprehensive NAS Stability & Stress Testing
+- Co-led cross-team test planning with SQA, designing and implementing platform-wide stress and long-run stability tests for UNAS services
+- Improved automation coverage and depth, enabling the discovery of several critical issues:
+  - RAID expansion + I/O leading to crashes
+  - ecryptfs lock-ups during RAID operations
+  - File locks caused by non-durable Samba clients
+- Test scenario highlights:
+  - Multi-day I/O stress loops with RAID expansion and snapshot creation/deletion
+  - Concurrent Linux/Mac/Windows clients running FIO workloads on encrypted and non-encrypted volumes
+  - Mac Time Machine backup validation on all drive types
+  - xfstests for Btrfs subvolume, balance, and scrub under stress
+
+#### Platform Performance Profiling (UNASPro8)
+- Performed end-to-end storage and network performance evaluations on UNASPro8 platform, covering:
+  - NIC, RAID, SSD-cache, Btrfs, Samba, NFS
+- Provided deep insights to RD, PM, and QA teams:
+  - LVM performance overhead and RAID throughput improvements after CPU upgrade
+  - SSD cache hit rate vs actual read/write performance
+  - NIC receive path being CPU-bound and implications for link aggregation
+- These findings guided hardware strategy and product tuning for future releases
+
+#### System-Level I/O Scheduling & IRQ Optimization
+- On UNASPro-87, handled SFP hotplug events across various timings by correctly configuring IRQ affinity, preventing service performance degradation in production environments
+
+#### Drive Architecture Enhancements
+- Refactored the Drive migrator system, splitting logic into:
+  - System-level migration
+  - Storage pool–level migration
+- Prevented file corruption due to duplicate migration
+- Implemented subvolume rm throttling to reduce memory queue usage, preventing OOMs during mass deletion
+- Fixed frequent OOMs caused by the Drive app modifying file system attributes at large scale, improving system reliability under real-world workloads
+
+#### Filesystem & Protocol Troubleshooting
+- Supporting multiple Btrfs, eCryptFS, and Samba edge cases, including:
+  - Samba timestamp granularity reduced to seconds
+  - Poor performance on encrypted file systems
+  - Files missing from Samba clients
+  - Permission/login failures
+  - I/O prioritization for saturated network usage
+  - Third-party compatibility issues
+- Collaborated with UX/PM to evaluate snapshot space usage across subvolumes:
+  - Provided technical insight on CPU/IO cost and time skew issues
+  - Prevented low-ROI implementation through evidence-based recommendation
+
+### Q1 Achievements
 
 #### System Stability & Memory Optimization
 - Conducted in-depth analysis and resolution of OOM (Out-of-Memory) issues in UNAS, particularly triggered by snapshot deletions and file system-wide attribute modifications
@@ -32,7 +86,9 @@
 - Resolved critical Samba failures and storage bottlenecks
 - Established a complete set of SOPs to streamline troubleshooting, improve response times, train support staff, and reduce overall R&D load, enabling the team to focus on high-complexity issues
 
-### Q3 Achievements
+## 2024
+
+### Q3Q4 Achievements
 
 #### WORM (Write-Once-Read-Many) Specification Development
 - Proposed WORM (Write-Once-Read-Many) Specification and Release Plan

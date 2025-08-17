@@ -11,12 +11,15 @@
 
 ### Key Achievements
 
-#### **Ubiquiti (2022-2024) - UNAS Platform Engineer**
+#### **Ubiquiti (2022-Present) - UNAS Platform Engineer**
 - **Product Success**: Contributed to 5K monthly unit sales and product portfolio expansion from 1 to 6 variants, scaling engineering team from 3 to 5 members
+- **Build System Innovation**: Solved platform-wide package management limitations, enabling secure backported updates and resolving critical Samba issues including large file uploads and network reconnection failures
+- **Performance Profiling**: Led comprehensive UNASPro8 performance evaluation across NIC, RAID, SSD-cache, Btrfs, and protocols, providing hardware strategy guidance for future releases
+- **Stress Testing Framework**: Co-led cross-team test planning with SQA, designing multi-day I/O stress loops with RAID expansion, discovering and resolving critical filesystem and protocol issues
 - **System Bring-up**: Enabled hardware for UNAS Pro/Studio, including U-Boot, Linux kernel, and complete firmware stack integration
 - **Performance Optimization**: Boosted Samba throughput from 544/592 MB/s to 730/930 MB/s through IRQ isolation, TCP tuning, zero-copy I/O, and async processing
 - **Resource Management**: Implemented cgroup-based resource isolation, reducing OOM incidents by 93% and enabling stable multi-service operation
-- **Storage Architecture**: Designed Btrfs-based storage architecture supporting snapshots, file services, encryption and backups.
+- **Storage Architecture**: Designed Btrfs-based storage architecture supporting snapshots, file services, encryption and backups with multi-volume support across enterprise deployments
 - **Quality Assurance**: Established comprehensive testing framework using xfstests, stress-ng, and automated CI/CD pipelines, reducing support escalations by 80%
 
 #### **QNAP (Cloud File System) - Lead Performance Engineer**
