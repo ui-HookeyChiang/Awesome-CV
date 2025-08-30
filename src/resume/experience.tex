@@ -22,16 +22,21 @@
           }
           \begin{itemize}
           \item {
-            Carried out multi-stack developments, from U-boot, Debian
+            Carried out multi-stack designs, developments and tests, from U-boot, Debian
             bootstrapping to core NAS features, including storage
-            management, file services on Btrfs, network discovery and DB migration.
+            management, file services on Btrfs, network discovery.
           }
           \item {
-            Led comprehensive performance profiling across NIC, RAID, SSD-cache, and Btrfs.
+            Co-worked stress testing framework with QA team on multi-day I/O loops and RAID expansion, discovering critical filesystem and protocol stability issues before production.
           }
           \item {
-            Co-designed cross-team stress testing framework with multi-day I/O loops and RAID expansion, discovering critical filesystem and protocol stability issues before production.
-            }
+            Established SOPs for support engineers, enabling the team to focus
+            on high-complexity issues.
+          }
+          \item {
+            Upgraded kernel 4.19 to 5.10, resolving driver issues,
+            unleashing storage and network capabilities.
+          }
           \end{itemize}
         \item {
           Delivered exceptional performance gains through full-stack system optimization and resource control.
@@ -46,26 +51,21 @@
           \item {
             Reduced Btrfs subvolume deletion latency and write amplification from cross-subvolume moves.
             }
+          \item {
+            Eliminated OOM crashes, including 93\% socket buffer waste and
+            filesystem-abusing updates.
+          }
+          \item {
+            Led comprehensive performance profiling across NIC, RAID, SSD-cache, Btrfs and file services.
+          }
           \end{itemize}
         \item {
           Enhanced system reliability, scalability and performance across all UniFi-OS products.
           }
           \begin{itemize}
           \item {
-            Upgraded kernel 4.19 to 5.10, resolving driver issues,
-            unleashing storage and network capabilities.
-          }
-          \item {
-            Eliminated OOM crashes, including 93\% socket buffer waste and
-            filesystem-abusing updates.
-          }
-          \item {
-            Introduced a gRPC state exporter to replace a python poller,
+            Introduced a gRPC state exporter to replace a Python poller,
             minimizing latency to microseconds.
-          }
-          \item {
-            Established SOPs for support engineers, enabling the team to focus
-            on high-complexity issues.
           }
           \item {
             Optimized the build system with AI reviewers and supporting backport packages
