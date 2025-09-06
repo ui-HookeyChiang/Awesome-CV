@@ -113,7 +113,7 @@
 
 ##### TCP Socket Behavior Optimization
 - Enabled tcp_quickack to combine ACKs with responses
-- Enabled tcp_nodelay to reduce latency by avoiding ACK delays
+- Enabled tcp_nodelay to reduce latency by avoiding buffering writes
 - Disabled tcp_cork to favor lower latency
 - Enabled tcp_zerocopy_recv for faster receive paths
 

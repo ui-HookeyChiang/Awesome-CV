@@ -3,11 +3,24 @@
 ## Senior System Engineer & Storage Architect
 
 ### Core Expertise
-**System Architecture & Platform Development**: Led end-to-end system bring-up and architecture design for enterprise storage platforms, from bootloader and kernel integration to user-space applications.
 
-**Performance Engineering**: Specialized in full-stack performance optimization, delivering measurable improvements across storage, network, and system layers through profiling, algorithmic redesign, and resource management.
+**System Architecture & Platform Development**: Led end-to-end system bring-up and architecture design for enterprise storage platforms, from U-Boot bootloader and Linux kernel integration to user-space applications. Pioneered NAS platform scaling from 3 to 5 engineers with 6 product variants. Architected gRPC-based service frameworks replacing polling systems with microsecond-latency state management.
 
-**Storage & Filesystem Engineering**: Expertise in modern filesystems (Btrfs, FUSE), RAID systems, and storage virtualization, with focus on reliability, performance, and data integrity at scale.
+**Storage Architecture & Filesystem Engineering**: Architected comprehensive storage systems from filesystem layout to service integration. Designed Btrfs-based multi-volume architectures supporting snapshots, encryption, WORM compliance, and backup workflows. Implemented FUSE-based cloud filesystem with selective mounting, client-side encryption, and transparent NFS/SMB access. Expert in modern filesystems (Btrfs, ext4), RAID systems, and storage optimization with focus on reliability, performance, and data integrity at enterprise scale.
+
+**Performance Engineering & Optimization**: Specialized in full-stack performance optimization delivering measurable improvements across storage, network, and system layers. Achieved Samba throughput gains from 544/592 MB/s to 830/930 MB/s through IRQ isolation, TCP tuning, and zero-copy I/O. Improved metadata operations by 300%, reduced directory deletion from 22s to 1s, and enhanced SSD-RAID write IOPS by 40% using ARM64 hardware acceleration.
+
+**Quality Assurance & Testing**: Established comprehensive testing frameworks using industry-standard tools (xfstests, stress-ng, packetdrill, filebench). Co-led cross-team stress testing implementing multi-day I/O validation, RAID expansion tests, and filesystem stability validation. Built automated CI/CD pipelines with GitLab, Jenkins, and Docker reducing support escalations by 80%.
+
+#### Tech Stacks
+**Programming & System Languages**: C/C++, Go, Python, Shell scripting, SQL
+**Frameworks & Protocols**: gRPC, libev, FUSE, Samba/NFS protocols, qrpc
+**Storage & Filesystem**: Btrfs, ext4, RAID systems, SQLite, LVM
+**Linux & Kernel**: Linux kernel development, filesystem drivers, block layer, cgroups, PCIe drivers
+**Testing & Validation**: xfstests, blktests, stress-ng, packetdrill, pjdfstest, filebench
+**DevOps & Build Systems**: Git, Docker, Jenkins, GitLab CI/CD, Debian packaging, autotools, Meson
+**Performance & Debugging**: CPU profiling, memory optimization, IRQ tuning, TCP optimization
+**Development Tools**: nvim, AI-enhanced coding tools, Coverity static analysis, troubleshooting utilities
 
 ### Key Achievements
 
