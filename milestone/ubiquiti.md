@@ -13,16 +13,40 @@
 - Unified default DNS configurations across all platforms, reducing configuration inconsistencies and lowering maintenance overhead across teams
 
 #### Comprehensive NAS Stability & Stress Testing
-- Co-led cross-team test planning with SQA, designing and implementing platform-wide stress and long-run stability tests for UNAS services
-- Improved automation coverage and depth, enabling the discovery of several critical issues:
-  - RAID expansion + I/O leading to crashes
-  - ecryptfs lock-ups during RAID operations
-  - File locks caused by non-durable Samba clients
-- Test scenario highlights:
-  - Multi-day I/O stress loops with RAID expansion and snapshot creation/deletion
-  - Concurrent Linux/Mac/Windows clients running FIO workloads on encrypted and non-encrypted volumes
-  - Mac Time Machine backup validation on all drive types
-  - xfstests for Btrfs subvolume, balance, and scrub under stress
+
+##### Situation
+- Ubiquiti NAS platform lacked comprehensive stability testing for real-world deployment scenarios
+- Product reliability issues affecting customer satisfaction and generating frequent support escalations
+- Insufficient validation of multi-service interactions under sustained high-load conditions
+- Critical stability gaps in RAID operations, filesystem interactions, and cross-platform client compatibility
+
+##### Action
+**Cross-Team Collaboration & Framework Design:**
+- Co-led comprehensive test planning with SQA team designing platform-wide stress testing framework
+- Established automated testing infrastructure supporting multi-day continuous validation cycles
+- Implemented comprehensive coverage across storage, network, and filesystem layers
+
+**Multi-Platform Stress Testing Implementation:**
+- Multi-day I/O stress loops with concurrent RAID expansion and snapshot creation/deletion operations
+- Cross-platform validation using concurrent Linux/Mac/Windows clients running FIO workloads
+- Comprehensive testing across encrypted and non-encrypted volumes validating security performance
+- Mac Time Machine backup validation across all supported drive types and configurations
+
+**Filesystem & Storage Validation:**
+- Integrated xfstests for Btrfs subvolume operations, balance, and scrub under sustained stress
+- Implemented comprehensive RAID expansion testing with concurrent high-throughput I/O operations
+- Validated filesystem integrity across power cycles and service interruptions
+
+##### Result
+**Critical Issue Discovery & Resolution:**
+- Discovered and resolved RAID expansion crashes during concurrent high I/O operations
+- Fixed eCryptFS lock-ups during RAID operations preventing system hangs
+- Resolved Samba file locking issues caused by non-durable client connections
+- Enhanced platform stability through comprehensive edge case identification
+
+**Quality Assurance Impact:**
+- Improved test automation coverage enabling continuous stability validation
+- Established robust testing methodology for NAS-series product releases
 
 #### Platform Performance Profiling (UNASPro8)
 - Performed end-to-end storage and network performance evaluations on UNASPro8 platform, covering:
