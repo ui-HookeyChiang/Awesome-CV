@@ -97,8 +97,6 @@
 - Defined a phased rollout strategy to align with market demand and regulatory compliance requirements
 
 #### Samba Performance Optimization
-- Improved Samba throughput from 544/592 MB/s (write/read) to 730/930 MB/s via full-stack performance optimizations
-- **Baseline setup**: 7× SSD (KINGSTON OCP0S31) in RAID 5 or RAID 10; local I/O performance was 951/1850 MB/s (write/read)
 - **Samba limitation**: single-threaded smbd process that does not scale with multi-core CPUs
 
 ##### CPU Affinity Tuning
@@ -124,6 +122,8 @@
 - Scaled TCP buffer sizes dynamically based on observed bottlenecks and rmax thresholds
 
 ##### Results
+- Improved Samba throughput from 544/592 MB/s (write/read) to 730/930 MB/s via full-stack performance optimizations
+- **Baseline setup**: 7× SSD (KINGSTON OCP0S31) in RAID 5 or RAID 10; local I/O performance was 951/1850 MB/s (write/read)
 - **RAID 5 with 7 SSDs over Samba**: 730 MB/s write / 930 MB/s read (via fio)
 - **RAID 10 with 7 SSDs over Samba**: 830 MB/s write / 930 MB/s read
 - **Additional impact**: The same framework was applied to optimize an in-house file transfer daemon, achieving 1 GB/s throughput while reducing CPU usage by 30%
@@ -133,26 +133,49 @@
 - **Results**: +40% SSD RAID write IOPS, +6% HDD RAID write IOPS
 
 #### Linux Kernel Upgrade (v4.19 → v5.10)
-- Prepared and stabilized Linux kernel upgrade, resolving major compatibility and regression issues involving Alpine SDK, PCI, RAID, PHY, and AHCI drivers
-- **Impact**: Modernized Alpine SoC PCIe infrastructure for better long-term maintainability and kernel compatibility while reducing code duplication and complexity
 
-##### Key Technical Improvements
-- **API Modernization**: Migrated to modern PCI host bridge APIs (devm_pci_alloc_host_bridge, pci_host_probe)
-- **Resource Management**: Properly extracted and maintained ecam_base and io_base from devm allocations
-- **Driver Data Alignment**: Standardized driver data handling to match other PCIe controllers
+##### Situation
+- Alpine SoC running outdated Linux 4.19 kernel limiting system capabilities
+- Required Btrfs enhancements for xxhash checksum and inline file scrubbing blocked by kernel limitations
+- Legacy codebase too complex for backporting upstream commits
+- Compatibility issues preventing future hardware feature development
 
-##### AL Ethernet Adaptive RX Coalescing
-- Provided runtime configurability with ethtool architecture
+##### Action
+**System Upgrade & Modernization:**
+- Prepared and stabilized Linux kernel upgrade from 4.19 to 5.10
+- Resolved major compatibility and regression issues across Alpine SDK, PCI, RAID, PHY, and AHCI drivers
+
+**Alpine PCIe Driver Modernization:**
+- Migrated to modern PCI host bridge APIs (devm_pci_alloc_host_bridge, pci_host_probe)
+- Properly extracted and maintained ecam_base and io_base from devm allocations
+- Standardized driver data handling to match other PCIe controllers
+
+**Network Performance Enhancements:**
+- Implemented AL Ethernet adaptive RX coalescing with runtime configurability
 - Enhanced throughput with independent TX/RX coalescing based on workload
+- Provided ethtool architecture for dynamic tuning
 
-##### Critical Bug Fixes
-- **RAID5 Performance**: Fixed perf regression with 50% drop, investigation showed merged writes spike in each drive, adjusted IO size from 4K to 64K
-- **Realtek PHY**: Fixed system crashes caused by ALDPS/EEE default hardware behaviors, traced by kdump and ramoops
-- **AHCI Driver**: Resolved incorrect PCI IRQ vector setup through dynamic IRQ vector selection and simplified IRQ management
+**Critical Bug Resolution:**
+- Fixed RAID5 50% performance regression by adjusting I/O size from 4K to 64K
+- Resolved Realtek PHY system crashes from ALDPS/EEE behaviors using kdump analysis
+- Fixed AHCI driver PCI IRQ vector setup through dynamic IRQ vector selection
+- Corrected PHY auto-negotiation regressions from generic framework upgrades
 
-##### Validation
-- Carefully backported and validated Linux kernel and BSP components to ensure feature completeness and system reliability
-- Performed comprehensive system validation using tools such as stress-ng, fio, xfstests, packetdrill, and the Phoronix Test Suite
+**Comprehensive Validation:**
+- Backported and validated Linux kernel and BSP components for system reliability
+- Performed extensive validation using stress-ng, fio, xfstests, packetdrill, and Phoronix Test Suite
+
+##### Result
+**Enhanced System Capabilities:**
+- Enabled NVMe 1.4, multi-queue block layer, and cgroup resource control
+- Unlocked faster and more robust Btrfs functions (snapshots, space accounting, zoned devices)
+- Achieved extremely low scheduler latency and advanced TCP congestion control
+- Successfully deployed stable Linux 5.10 with zero regression issues
+
+**Infrastructure Modernization:**
+- Modernized Alpine SoC PCIe infrastructure for long-term maintainability
+- Improved kernel compatibility while reducing code duplication and complexity
+- Enabled future hardware feature development and system scalability
 
 ### Q2 Achievements
 
