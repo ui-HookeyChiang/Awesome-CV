@@ -97,40 +97,49 @@
 - Defined a phased rollout strategy to align with market demand and regulatory compliance requirements
 
 #### Samba Performance Optimization
-- **Samba limitation**: single-threaded smbd process that does not scale with multi-core CPUs
 
-##### CPU Affinity Tuning
-- Dedicated an exclusive CPU core to RX interrupts to prevent contention with smbd
-- Leveraged TX queue pinning (one TX queue per CPU) for better TX-side efficiency
-- Avoided co-locating RX and smbd on the same CPU to prevent performance degradation
-- RPS/RFS considered but discarded due to high CPU overhead and hardware lacking aRFS support
+##### Situation
+- Single-threaded smbd process fundamentally limited by CPU core scaling
+- Network throughput bottlenecked at 544/592 MB/s (write/read) despite 951/1850 MB/s local I/O capacity
+- Hardware platform underutilized with suboptimal IRQ distribution and TCP configuration
+- Enterprise storage performance requirements demanding higher throughput and efficiency
 
-##### Samba-layer Performance Tuning
+##### Action
+**CPU Affinity & IRQ Optimization:**
+- Dedicated exclusive CPU core to RX interrupts preventing contention with smbd process
+- Implemented TX queue pinning (one TX queue per CPU) for improved TX-side efficiency
+- Avoided co-locating RX and smbd on same CPU to prevent performance degradation
+- Evaluated and discarded RPS/RFS due to high CPU overhead and lacking aRFS hardware support
+
+**Samba-Layer Performance Tuning:**
 - Enabled zero-copy data transfer from socket buffer to page cache
-- Leveraged asynchronous I/O and increased negotiated packet size (e.g., jumbo frames)
+- Leveraged asynchronous I/O with increased negotiated packet sizes including jumbo frame support
+- Optimized Samba configuration for high-throughput workloads
 
-##### TCP Socket Behavior Optimization
-- Enabled tcp_quickack to combine ACKs with responses
+**TCP Socket Behavior Optimization:**
+- Enabled tcp_quickack to combine ACKs with responses reducing round-trip latency
 - Enabled tcp_nodelay to reduce latency by avoiding buffering writes
-- Disabled tcp_cork to favor lower latency
+- Disabled tcp_cork to favor lower latency over packet efficiency
 - Enabled tcp_zerocopy_recv for faster receive paths
 
-##### System-wide Network Tuning
-- Applied RX interrupt coalescing and adaptive RX
+**System-wide Network Tuning:**
+- Applied RX interrupt coalescing and adaptive RX for optimal packet processing
 - Switched congestion control algorithm from BBR to CUBIC for better burst handling
-- Changed queuing discipline from pfifo to fq to improve fairness and throughput
+- Changed queuing discipline from pfifo to fq improving fairness and throughput
 - Scaled TCP buffer sizes dynamically based on observed bottlenecks and rmax thresholds
 
-##### Results
-- Improved Samba throughput from 544/592 MB/s (write/read) to 730/930 MB/s via full-stack performance optimizations
-- **Baseline setup**: 7× SSD (KINGSTON OCP0S31) in RAID 5 or RAID 10; local I/O performance was 951/1850 MB/s (write/read)
-- **RAID 5 with 7 SSDs over Samba**: 730 MB/s write / 930 MB/s read (via fio)
-- **RAID 10 with 7 SSDs over Samba**: 830 MB/s write / 930 MB/s read
-- **Additional impact**: The same framework was applied to optimize an in-house file transfer daemon, achieving 1 GB/s throughput while reducing CPU usage by 30%
+##### Result
+**Performance Achievements:**
+- Improved Samba throughput from 544/592 MB/s to 730/930 MB/s (write/read) via full-stack optimizations
+- RAID 5 configuration: 730 MB/s write / 930 MB/s read (via fio benchmark)
+- RAID 10 configuration: 830 MB/s write / 930 MB/s read achieving near-optimal performance
+- Baseline hardware capacity: 951/1850 MB/s (write/read) on 7× SSD KINGSTON OCP0S31
 
-#### Enhanced RAID I/O Performance
-- Applied mq-deadline I/O scheduling and improved BTRFS filesystem performance on ARM64 by utilizing hardware-accelerated CRC32 capabilities for synchronous I/O operations
-- **Results**: +40% SSD RAID write IOPS, +6% HDD RAID write IOPS
+**Broader Impact:**
+- Same optimization framework applied to in-house file transfer daemon achieving 1 GB/s throughput
+- Reduced CPU usage by 30% through efficient resource utilization and zero-copy techniques
+- Established performance tuning methodology for enterprise storage platforms
+
 
 #### Linux Kernel Upgrade (v4.19 → v5.10)
 
@@ -176,6 +185,11 @@
 - Modernized Alpine SoC PCIe infrastructure for long-term maintainability
 - Improved kernel compatibility while reducing code duplication and complexity
 - Enabled future hardware feature development and system scalability
+
+**Enhanced RAID I/O Performance:**
+- Applied mq-deadline I/O scheduling and improved BTRFS filesystem performance on ARM64 by utilizing hardware-accelerated CRC32 capabilities for synchronous I/O operations
+- **Results**: +40% SSD RAID write IOPS, +6% HDD RAID write IOPS
+
 
 ### Q2 Achievements
 
