@@ -72,6 +72,8 @@
 
 - **Automated testing**: Set up GitLab + Jenkins CI pipeline with containerized build system, executing builds, Coverity scans, unit tests, and performance benchmarks
 - **Container compatibility**: Verified FUSE compatibility in container environments
+- Built automated CI/CD pipelines with GitLab, Jenkins, and Docker. Only less than 20 client support need RD's
+  involvement.
 
 ### Code Optimization
 
