@@ -87,7 +87,7 @@
 - Identified abnormal usage patterns and optimized system behavior to significantly enhance stability
 - Reproduced and diagnosed Samba-related OOM issues under various system configurations
 - Pinpointed excessive memory consumption in the asynchronous I/O queue, which caused swap thrashing and severe performance degradation
-- Designed and implemented a resource control framework for the Drive application, reserving critical system resources and preventing swap-induced crashes under heavy I/O workloads
+- Designed and implemented a resource control framework for the Drive application, allocating 75% CPU and memory at most, reserving the rest for mission-critical system applications and preventing swap-induced crashes under heavy I/O workloads
 
 #### Resource Scheduling & I/O Optimization
 - Collaborated with the Drive team to integrate cgroup-based resource management, improving system-wide hardware utilization and enabling future workload separation between foreground and background services
@@ -95,10 +95,7 @@
 - Supported foreground/background I/O scheduling using systemd-compatible cgroup rules
 - Validated functionality using the Linux block layer test suite (blktests), laying a solid foundation for future NVMe performance validation and storage upgrades
 
-#### Automated Testing & Development Process Enhancement
-- Partnered with the SQA team to design and roll out automated stress and longevity tests for existing UNAS services
-- Increased test coverage and ensured service stability under long-term and high-load operation
-- Defined the long-term and high-load workloads of RAID and filesystem
+#### Development Process Enhancement
 - Deployed AI-powered code review workflows across multiple projects, enabling developers to receive immediate feedback and significantly reducing the review-development cycle while improving code quality
 
 #### Multi-Volume Support & System Flexibility
@@ -124,14 +121,14 @@
 
 ##### Situation
 - Single-threaded smbd process fundamentally limited by CPU core scaling
-- Network throughput bottlenecked at 544/592 MB/s (write/read) despite 951/1850 MB/s local I/O capacity
+- Network throughput bottlenecked at 544/592 MB/s (write/read) despite 951/1850 MB/s local I/O capacity, 1050/1025 MB/s
+  iperf3.
 - Hardware platform underutilized with suboptimal IRQ distribution and TCP configuration
 - Enterprise storage performance requirements demanding higher throughput and efficiency
 
 ##### Action
 **CPU Affinity & IRQ Optimization:**
 - Dedicated exclusive CPU core to RX interrupts preventing contention with smbd process
-- Implemented TX queue pinning (one TX queue per CPU) for improved TX-side efficiency
 - Avoided co-locating RX and smbd on same CPU to prevent performance degradation
 - Evaluated and discarded RPS/RFS due to high CPU overhead and lacking aRFS hardware support
 
@@ -147,6 +144,7 @@
 - Enabled tcp_zerocopy_recv for faster receive paths
 
 **System-wide Network Tuning:**
+- Implemented AL Ethernet adaptive RX coalescing with runtime configurability
 - Applied RX interrupt coalescing and adaptive RX for optimal packet processing
 - Switched congestion control algorithm from BBR to CUBIC for better burst handling
 - Changed queuing discipline from pfifo to fq improving fairness and throughput
@@ -178,21 +176,14 @@
 - Prepared and stabilized Linux kernel upgrade from 4.19 to 5.10
 - Resolved major compatibility and regression issues across Alpine SDK, PCI, RAID, PHY, and AHCI drivers
 
-**Alpine PCIe Driver Modernization:**
-- Migrated to modern PCI host bridge APIs (devm_pci_alloc_host_bridge, pci_host_probe)
-- Properly extracted and maintained ecam_base and io_base from devm allocations
-- Standardized driver data handling to match other PCIe controllers
-
-**Network Performance Enhancements:**
-- Implemented AL Ethernet adaptive RX coalescing with runtime configurability
-- Enhanced throughput with independent TX/RX coalescing based on workload
-- Provided ethtool architecture for dynamic tuning
-
-**Critical Bug Resolution:**
+**Driver Compatibility Updates:**
 - Fixed RAID5 50% performance regression by adjusting I/O size from 4K to 64K
 - Resolved Realtek PHY system crashes from ALDPS/EEE behaviors using kdump analysis
-- Fixed AHCI driver PCI IRQ vector setup through dynamic IRQ vector selection
-- Corrected PHY auto-negotiation regressions from generic framework upgrades
+- Fixed AHCI driver PCI IRQ vector setup through dynamic IRQ vector selection, replacing hardcoded vector assignments with conditional logic based on MULTI_MSI configuration
+- Corrected PHY auto-negotiation regressions (AR8033, RTL8211f) rooted from generic framework upgrades
+- Addressed PCA9575 chip compatibility issues by implementing byte-by-byte read mode to resolve auto-increment read operation failures
+- PCI Controller: Modernized resource management with devm_pci_alloc_host_bridge(), simplified probe flow, restored ecam_base/io_base handling
+- Ethernet Driver: Updated deprecated APIs (ndo_select_queue, getnstimeofday), enhanced PHY handling with phy_set_asym_pause, improved code quality
 
 **Comprehensive Validation:**
 - Backported and validated Linux kernel and BSP components for system reliability
@@ -201,8 +192,9 @@
 ##### Result
 **Enhanced System Capabilities:**
 - Enabled NVMe 1.4, multi-queue block layer, and cgroup resource control
+- Enabled multi-channel Samba, advanced TCP congestion control
 - Unlocked faster and more robust Btrfs functions (snapshots, space accounting, zoned devices)
-- Achieved extremely low scheduler latency and advanced TCP congestion control
+- Achieved extremely low scheduler tail latency
 - Successfully deployed stable Linux 5.10 with zero regression issues
 
 **Infrastructure Modernization:**
@@ -215,10 +207,10 @@
 - **Results**: +40% SSD RAID write IOPS, +6% HDD RAID write IOPS
 
 
-### Q2 Achievements
+### Q1Q2 Achievements
 
 #### Platform Stability Enhancement
-- Resolved out-of-memory (OOM) issues by reducing 93% of socket buffer memory waste on 64KB page-sized systems (e.g., UNAS, EFG), verified through packetdrill testing
+- Resolved out-of-memory (OOM) issues, reducing 93% of socket buffer memory waste on 64KB page-sized systems (e.g., UNAS, EFG), verified through packetdrill testing
 
 #### UniFi Drive Feature and Performance Improvements
 - Achieved a 10% performance improvement through lock-less client notification mechanisms
@@ -244,6 +236,11 @@
 - Accelerated Drive encryption feasibility by optimizing encryptFS with NEON instructions, resulting in a 4x performance boost
 - Reduced user-facing latency during Btrfs subvolume deletion, which previously scaled poorly with file count (e.g., 150K files: ~30s on SSD, ~30min on HDD)
 
+##### UniFi Drive Feature Development
+- Achieved a 10% performance improvement through lock-less client notification mechanisms
+- Added support for Btrfs CLI 5.16, including handling the newly required input format
+- Proposed a high-performance, reformat-free checksum specification for future Drive development
+
 #### Analytics and Testing Framework
 - Refined UNAS/UNVR Analytics Reports for GA Deployment
 - Resolved data contamination issues between network-console and storage-console reports
@@ -252,15 +249,8 @@
 - Created QA test plans for unifi-drive-config and filesystem validation on UNAS/UNVR platforms
 - Composed essential testing scripts based on xfstests to enable smoke testing, release verification, and robustness validation across firmware updates
 
-### Q1 Achievements
-
 #### Enhanced All Platform Stability
 - Resolved out-of-memory (OOM) issues by reducing 93% of socket buffer memory waste on 64KB page-sized systems (e.g., UNAS, EFG), verified through packetdrill testing
-
-#### UniFi Drive Feature Development
-- Achieved a 10% performance improvement through lock-less client notification mechanisms
-- Added support for Btrfs CLI 5.16, including handling the newly required input format
-- Proposed a high-performance, reformat-free checksum specification for future Drive development
 
 ## 2023
 
