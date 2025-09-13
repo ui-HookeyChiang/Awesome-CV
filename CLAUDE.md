@@ -1,12 +1,13 @@
-# Awesome-CV LaTeX Resume Project
+# Awesome-CV LaTeX Resume & Interview Presentation Project
 
 ## Project Overview
-This project uses the Awesome-CV LaTeX template to generate professional resumes and CVs. The main working files are in `src/` with milestone documentation in `milestone/`.
+This project uses the Awesome-CV LaTeX template to generate professional resumes and CVs, enhanced with an interactive HTML interview presentation system. The main working files are in `src/` with milestone documentation in `milestone/` and a comprehensive interview presentation (`interview-presentation.html`).
 
 ## File Structure
 - `src/resume.tex` - Main resume document
 - `src/resume/` - Individual resume sections (summary, experience, education, etc.)
 - `milestone/` - Career milestone documentation (summary.md, qnap.md, ubiquiti.md)
+- `interview-presentation.html` - Interactive HTML slideshow for technical interviews
 - `examples/` - Template examples and generated outputs
 
 ## Build Commands
@@ -86,43 +87,268 @@ Count only the rendered display text, excluding LaTeX markup, indentation, and l
 - XeLaTeX engine
 - Awesome-CV class file (`awesome-cv.cls`)
 
-## Interview Presentation Creation
+## Generic Interview Presentation Framework
 
-### PowerPoint Generation Process
-```bash
-# Create interview presentation from resume content and milestones
-# The presentation combines:
-# - Personal information and contact details from src/resume.tex
-# - Professional summary from src/resume/summary.tex
-# - Experience details from src/resume/experience.tex
-# - Education background from src/resume/education.tex
-# - Research projects from src/resume/scholar.tex
-# - Leadership experience from src/resume/leadership.tex
-# - Detailed achievements from milestone/ directory (summary.md, ubiquiti.md, qnap.md)
-```
+### HTML Presentation Generation
+The interview presentation (`interview-presentation.html`) is a professional, interactive HTML slideshow created from resume content and milestone documentation.
 
-### Presentation Structure
-The interview presentation (`interview-presentation.md`) includes:
-1. **About Me**: Personal information and professional summary
-2. **Education Background**: Academic credentials and achievements
-3. **Core Technical Expertise**: Key skills and specializations
-4. **Professional Experience Overview**: Company roles and impact
-5. **Detailed Achievements**: Year-by-year accomplishments from milestones
-6. **Technical Projects**: Research and development work
-7. **Leadership Experience**: Management and mentoring roles
-8. **Key Accomplishments Summary**: Quantified results and impact
+### Universal 11-Slide Structure (12-15 minutes total)
+1. **Cover Slide (30s)**: Name, position, tagline, contact information, key metrics overview
+2. **Self Introduction (1min)**: Educational background as bullet points, core expertise with highlighted technical terms
+3. **Core Technical Expertise (1-2min)**: Technical capabilities organized in 2x2 grid layout
+4. **Current Role Career Highlights (1-2min)**: Role description above metrics, quantified achievements without redundant bullet points
+5. **Previous Role Career Highlights (1-2min)**: Role description above metrics, performance improvements and scale achievements
+6. **Case Study 1 (2-3min)**: Primary technical domain using SAR framework with interactive flowchart
+7. **Case Study 2 (2-3min)**: Secondary technical domain using SAR framework with interactive flowchart
+8. **Case Study 3 (2-3min)**: Tertiary technical domain using SAR framework with interactive flowchart
+9. **Additional Achievements (1-2min)**: Most contributing items excluding case study overlaps, organized into 4 categories
+10. **Summary (1min)**: Professional tagline, three key strengths, and quantified metrics
+11. **Q&A (open)**: Interactive discussion with contact information and growth potential metrics
+
+## Storage & System Engineering Experience Implementation
+
+### Experience-Specific Slide Content
+1. **Cover Slide**: Senior System Engineer & Storage Architect (7+ years, 5K sales, 210K+ users) - *Use milestone/summary.md*
+2. **Self Introduction**: Computer Science background, storage/performance/QA expertise - *Use milestone/summary.md*
+3. **Technical Expertise**: Tools & DevOps (top-left), Storage & Filesystem (top-right), Programming & System Languages (bottom-left), Frameworks & Protocols (bottom-right) - *Use milestone/summary.md*
+4. **Ubiquiti Highlights**: UniFi-OS Storage Software Engineer achievements - *Use milestone/ubiquiti.md*
+5. **QNAP Highlights**: Cloud filesystem and performance engineering - *Use milestone/qnap.md*
+6. **Case Study 1: NAS Stability Testing**: Cross-team collaboration and platform stability - *Use milestone/ubiquiti.md, no charts (qualitative)*
+7. **Case Study 2: Linux Kernel Upgrade**: System infrastructure modernization (4.19 → 5.10) - *Use milestone/ubiquiti.md, no charts (qualitative)*
+8. **Case Study 3: Samba Performance**: Full-stack performance engineering - *Use milestone/ubiquiti.md, with performance comparison charts*
+9. **Additional Achievements**: Product Innovation & Leadership, Performance Engineering Excellence, Business Impact & Scalability, Technical Architecture & Innovation
+10. **Summary**: Customizable based on job requirements - *Align with role-specific needs*
+
+### SAR Framework for Case Studies
+Each major project follows the enhanced visual SAR structure presented in Situation → Action → Result order:
+
+#### 🔴 Situation (Problem Identification)
+- **Format**: 1-2 concise sentences with key terms highlighted in blue
+- **Content**: Brief problem description identifying technical limitations or gaps
+- **Visual**: Red border with light red gradient background + comparison charts only when meaningful numbers exist
+- **Charts**: Use thin bar charts (35px width) with proportional heights when comparing specific performance metrics
+- **Chart Guidelines**: 
+  - Only include charts for concrete comparable numbers (e.g., 544 MB/s vs 1850 MB/s)
+  - Remove charts for qualitative descriptions (Basic/Limited/None)
+  - Use solid color backgrounds with text shadows for number visibility
+  - One number per bar for clear individual comparisons
+- **Highlighting**: Technical terms marked with `color: var(--primary-color)` blue spans
+- **Goal**: Quickly establish context with highlighted technical focus areas, supported by data visualizations only when they add meaningful value
+
+#### 🔵 Action (Solution Implementation)
+- **Format**: Interactive enlarged flowchart boxes (160×80px) replacing bullet points + enhanced two-tier layout
+- **Content**: Self-contained technical solutions with clickable cheat sheet access
+- **Structure**:
+  - **Preparation Box**: Purple gradient (180×80px) showing initial analysis/baseline (e.g., "FIO Benchmark", "Btrfs Analysis", "Stability Gap Analysis")
+  - **Top Tier**: Core system-level optimizations (3 boxes horizontal)
+  - **Bottom Tier**: Application/validation-level optimizations (3 boxes horizontal)
+- **Visual**: Blue border with light blue gradient background + color-coded gradients per optimization stage
+- **Box Content**:
+  - Main title (0.9rem)
+  - Subtitle (0.9rem)
+  - Key detail summary (0.7rem, opacity 0.9)
+- **Goal**: Provide comprehensive technical methodology through visual workflow with deep-dive technical access via cheat sheets
+
+#### 🟢 Result (Impact Demonstration)
+- **Format**: Before/after bar charts + prominent percentage improvement metrics
+- **Content**: Quantified outcomes with visual before/after comparison plus impact metric boxes
+- **Visual**: Green border (`var(--success-color)`) with light green gradient background + dual chart/metrics layout
+- **Design**: Side-by-side performance comparison with percentage improvements prominently displayed
+- **Goal**: Make achievements visually striking and quantifiably memorable
+
+### Interactive Features
+
+#### Interactive Cheat Sheets (20 total)
+- **Modal overlays** with comprehensive technical detail accessible via click interactions
+- **Two Format Types**:
+  - **Technical Cheat Sheets**: Command-line examples with syntax highlighting for flowchart boxes
+  - **Summary Cheat Sheets**: Clean bullet-point lists for result metric boxes (no commands)
+- **Navigation**: ESC key and click-outside closing, proper focus management
+- **Clickable Elements**: Both flowchart boxes and result metric boxes support cheat sheet interaction
+
+#### Action Flowchart Cheat Sheet Rules
+- **Interactive Elements**: Each flowchart box clickable with `data-cheat` attributes linking to detailed technical cheat sheets
+- **Technical Cheat Sheets**: Modal overlays containing:
+  - Professional command-line examples with syntax highlighting
+  - Technical explanations and context for each optimization
+  - Production-ready Linux commands and configuration details
+- **Content Structure**: Step-by-step technical implementation with practical examples
+- **Code Examples**: Real commands and configurations used in production environments
+
+#### Result Box Cheat Sheet Rules  
+- **Summary Cheat Sheets**: Clean bullet-point lists without command-line examples
+- **Content Focus**: Simple lists of items/capabilities/issues without technical details
+- **Format**: Large font (1.2rem), good line spacing (line-height: 2), disc bullet points
+- **Examples**:
+  - **Multi-issue Discovered (Case Study 1)**: Simple list of critical issues found during testing
+  - **Product Scalability (Case Study 2)**: Clean list of Linux 5.10 capabilities enabled
+
+#### Result Metric Visualizations
+- **Before/after performance comparisons** + percentage improvement metric boxes
+- **Case Study 1**: 3-box layout (Multi-issue discovered with clickable list cheat sheet, Multi-day validation, Cross-platform stability)
+- **Case Study 2**: 4-box layout (checksum GB/s improvement, +40% SSD IOPS, Zero regressions, Linux 5.10 Capabilities with clickable list cheat sheet)
+- **Case Study 3**: 3-box layout (Samba read/write MB/s improvements, CPU utilization reduction)
+
+### Generic Presentation Guidelines
+
+#### Universal Presentation Standards
+- **Time Control**: 12-15 minutes optimal presentation length with 5-10 minutes for Q&A
+- **Navigation**: Arrow keys only (← →), ESC for fullscreen, no automatic slide changes
+- **Language**: English only for professional presentation with technical depth
+- **Story Structure**: Three comprehensive case studies demonstrating different technical domains
+
+#### Visual Design System
+- **Color Scheme**: Unified blue primary color (`var(--primary-color)` #3E6D9C) for all highlights, metrics, and technical terms
+- **List Styling**: Bold list titles use dark gray (`var(--text-dark)` #1f2937) instead of primary blue for better visual hierarchy
+- **Spacing Standards**: 20px padding, 30px gaps, 25px clearance for proper element spacing
+- **Interactive Elements**:
+  - **Hover Effects**: Enhanced visual feedback with transform and shadow changes
+  - **Flow Arrows**: Directional indicators showing logical progression between stages
+  - **Color Coding**: Distinct gradients per optimization stage for visual hierarchy
+
+#### Content Organization Principles
+- **Technical Depth**: Balance high-level overview with specific technical examples and quantified results
+- **Content Structure**:
+  - Self-introduction sections formatted as bullet point lists
+  - Career highlights with one-liner responsibility descriptions above metric boxes
+  - Technical expertise with brief descriptive words (e.g., "C/C++ system programming")
+- **Design Principle**: Self-contained boxes eliminate redundant bullet points while providing deeper technical access
+
+### Experience-Specific Guidelines
+
+#### Storage & System Engineering Focus
+- **Case Study Domains**: Three technical areas (testing infrastructure, system modernization, performance optimization)
+- **Specific Case Studies**: 
+  - **NAS Stability Testing**: Cross-team collaboration and platform stability validation
+  - **Linux Kernel Upgrade**: System infrastructure modernization (4.19 → 5.10)
+  - **Samba Performance**: Full-stack performance engineering optimization
+- **Technical Expertise Areas**: Storage architecture, filesystem engineering, performance optimization, quality assurance
+- **Key Metrics Integration**: 
+  - CI/CD pipeline achievement from QNAP (<20 support cases) properly attributed to QNAP experience
+  - Platform scaling (1→6 product variants, 3→5 engineering team growth)
+  - Performance improvements (544→730 MB/s Samba, +40% SSD IOPS, 300% metadata boost)
+
+### Technical Features
+- **Responsive Design**: Works on desktop, tablet, and mobile devices
+- **Keyboard Navigation**: ← → arrow keys, Space, Page Up/Down, Home, End
+- **Fullscreen Mode**: ESC key toggles fullscreen for presentation
+- **Interactive Elements**: Hover effects on cards, smooth transitions
+- **Print Friendly**: Optimized CSS for printing or PDF export
 
 ### Content Sources
-- **Resume sections**: All `.tex` files in `src/resume/` directory
-- **Milestone documentation**: All `.md` files in `milestone/` directory
-- **Personal details**: Contact information from `src/resume.tex`
+- **Resume sections**: All `.tex` files in `src/resume/` directory for professional summary and technical skills
+- **Milestone documentation**:
+  - `milestone/ubiquiti.md` and `milestone/qnap.md` and `milestone/summary.md` except core expertise sections for achievements and SAR case studies
+  - `milestone/summary.md` for: Cover slide, Self Introduction, Core Technical Expertise, and Summary slide
+  - **Content Guidelines**:
+    - Use `milestone/summary.md` for high-level expertise and capability descriptions
+    - Use specific milestone files (`ubiquiti.md`, `qnap.md`) for detailed achievements, case studies, and quantified results
+- **Personal details**: Contact information and professional positioning from `src/resume.tex`
+- **Technical depth**: Specific case studies from Ubiquiti milestone documentation (Stability Testing, Kernel Upgrade, Performance Optimization)
+- **Quantified metrics**: Business impact numbers (190K+ devices, 5K monthly sales, performance improvements, CI/CD automation results)
 
-### Presentation Features
-- Structured for 15-20 minute interview presentation
-- Emphasizes quantifiable achievements and technical impact
-- Includes specific performance improvements and business results
-- Organized chronologically with clear technical depth
-- Suitable for technical interviews and engineering roles
+#### Content Guidelines
+- **Focus**: Unique achievements not covered in the three main case studies (NAS Stability Testing, Linux Kernel Upgrade, Samba Performance)
+- **Sources**: Highest-impact contributions from both resume and milestone documentation
+- **Exclusions**: Academic achievements and content overlapping with case studies
+- **Metrics**: Include concrete numbers and business impact where available
+- **Organization**: Four balanced categories showcasing different aspects of technical leadership
+
+### Summary Slide (Slide 10) Structure
+
+The Summary slide uses a clean three-section format: tagline, key strengths, and supporting metrics:
+
+#### Professional Tagline Section
+A centered, prominent tagline that encapsulates your professional identity:
+- **Format**: Single line, centered text with large font (2.0rem)
+- **Content**: Concise statement of value delivery or professional approach
+- **Example**: "Delivering Stable and Efficient Solutions"
+- **Customization**: Adapt to match role requirements and company values
+
+#### Three Key Strengths Section  
+Horizontal display of core competencies with visual separators:
+- **Layout**: Three strengths displayed in single line with pipe separators (|)
+- **Format**: Emoji + Keyword for each strength
+- **Structure**: 🚀 Performance | 🔒 Reliability | 📈 Scalability
+- **Customization**: Select strengths most relevant to job requirements
+- **Visual Design**: Centered alignment, consistent spacing, accent color
+
+**Common Strength Categories:**
+- **Technical**: Performance, Architecture, Innovation, Automation
+- **Quality**: Reliability, Stability, Security, Testing  
+- **Business**: Scalability, Efficiency, Leadership, Impact
+
+#### Quantified Metrics Section
+Four key metrics displayed in metric boxes below the strengths:
+- **Experience Duration**: Years of relevant experience (e.g., "7+ Years Firmware Experience")
+- **Scale/Volume**: Production impact numbers (e.g., "210K+ Users Served", "6 Product Variants")
+- **Quality/Efficiency**: Process improvement metrics (e.g., "<20 Support Cases")  
+- **Technical Achievement**: Specific technical accomplishments (e.g., "120 Test Cases")
+
+#### Design Guidelines
+- **Clean Layout**: Minimal text, maximum impact through concise messaging
+- **Visual Hierarchy**: Tagline → Strengths → Supporting metrics progression
+- **Memorable Format**: Simple tagline + three keywords easy for interviewers to recall
+- **Professional Appeal**: Clean, centered design with consistent color scheme
+- **Job Alignment**: All content should directly address role requirements and demonstrate fit
+
+### Job Description Customization
+
+When a specific job description is provided, customize the presentation to align with the role requirements:
+
+#### Summary Slide (Slide 10) Customization
+When job description is explicitly provided, tailor the summary slide elements:
+
+**1. Professional Tagline**
+- Craft tagline to reflect key job requirements and company values
+- Examples:
+  - Test Automation Role: "Delivering Robust and Automated Solutions"
+  - Performance Engineering: "Optimizing Systems for Peak Performance"
+  - Platform Architecture: "Building Scalable and Reliable Platforms"
+  - DevOps Engineering: "Streamlining Development and Operations"
+
+**2. Three Key Strengths Selection**
+- Choose three strengths that directly address job requirements:
+  - **Technical Skills**: Performance, Architecture, Automation, Security
+  - **Quality Focus**: Reliability, Stability, Testing, Validation
+  - **Business Impact**: Scalability, Efficiency, Innovation, Leadership
+- Match strength keywords to job posting terminology
+- Prioritize strengths mentioned multiple times in job description
+
+**3. Quantified Metrics**
+- Prioritize metrics most relevant to the role
+- Adjust metric labels to match job context:
+  - For test automation roles: Emphasize coverage, efficiency, reliability improvements
+  - For infrastructure roles: Focus on system scale and performance gains
+  - For leadership roles: Highlight team growth and process improvements
+  - For firmware roles: Show platform experience and validation expertise
+
+#### Content Adaptation Guidelines
+- **Technical Keywords**: Incorporate key technologies and methodologies mentioned in job description
+- **Experience Level**: Emphasize achievements matching the required experience level
+- **Role Focus**: Adjust case study emphasis based on primary job responsibilities
+- **Company Context**: Consider company size, industry, and technical challenges when selecting relevant achievements
+- **Skills Alignment**: Ensure selected achievements demonstrate required hard and soft skills
+
+#### Example Adaptations
+**For Senior Infrastructure Engineer Role:**
+- Tagline: "Infrastructure Architect • Performance Engineer • System Reliability Expert"
+- Emphasis: Kernel upgrades, system optimization, large-scale deployments
+- Metrics: Focus on system stability, performance improvements, infrastructure scale
+
+**For Product Engineering Manager Role:**  
+- Tagline: "Product Engineering Leader • Platform Architect • Team Builder"
+- Emphasis: Product development, team leadership, business impact
+- Metrics: Highlight product growth, team scaling, user impact numbers
+
+### Navigation Controls
+- **← → Arrow Keys**: Primary navigation method
+- **Space/Page Down**: Next slide
+- **Page Up**: Previous slide
+- **Home**: First slide
+- **End**: Last slide
+- **ESC**: Toggle fullscreen mode
+- **No Auto-advance**: Manual control only to prevent accidental slide changes
 
 ## Interview Speech Script Creation
 
@@ -158,13 +384,30 @@ The interview speech script (`interview-speech.md`) includes:
 - **Speaking cues**: Clear section breaks and emphasis points for delivery
 
 ### Content Sources
-- **Base content**: `interview-presentation.md` structured presentation
+- **Base content**: `interview-presentation.html` structured presentation
 - **Speaking adaptation**: Natural language flow and timing considerations
-- **Technical examples**: Specific achievements with quantified results
-- **Professional framing**: Interview-appropriate opening and closing
+- **High-level content**: `milestone/summary.md` core expertise for opening, self-introduction, expertise overview, and closing sections
+- **Technical examples**: Specific achievements with quantified results from `milestone/ubiquiti.md` and `milestone/qnap.md`
+- **Professional framing**: Interview-appropriate opening and closing using summary expertise descriptions
+- **Content Guidelines**: 
+  - Use `milestone/summary.md` for capability descriptions in introduction/summary sections
+  - Use specific milestone files for detailed case studies and achievements
 
-## Output
-- Primary output: `src/resume.pdf`
-- Interview presentation: `interview-presentation.md`
-- Interview speech script: `interview-speech.md`
-- Example outputs available in `examples/` directory
+## Output Files
+- **Primary resume**: `src/resume.pdf`
+- **Interview presentation**: `interview-presentation.html` (interactive slideshow)
+- **Interview speech script**: `interview-speech.md` (speaking notes)
+- **Example outputs**: Available in `examples/` directory
+
+## Usage Instructions
+
+### Building Resume
+```bash
+cd src && xelatex resume.tex
+```
+
+### Using Interview Presentation
+1. Open `interview-presentation.html` in any modern web browser
+2. Use ← → arrow keys to navigate between slides
+3. Press ESC for fullscreen presentation mode
+4. No automatic slide changes - full manual control for interview safety
