@@ -16,26 +16,48 @@
 
 ##### Situation
 - Ubiquiti NAS platform lacked comprehensive stability testing for real-world deployment scenarios
-- Product reliability issues affecting customer satisfaction and generating frequent support escalations
-- Insufficient validation of multi-service interactions under sustained high-load conditions
-- Critical stability gaps in RAID operations, filesystem interactions, and cross-platform client compatibility
 
 ##### Action
-**Cross-Team Collaboration & Framework Design:**
+**Stability Gap Analysis:**
+- Identified lack of comprehensive stability testing for real-world deployment scenarios
+- Analyzed product reliability concerns affecting customer satisfaction and generating support escalations
+- Assessed insufficient validation of multi-service interactions under sustained high-load conditions
+- Documented critical stability gaps in RAID operations, filesystem interactions, and cross-platform client compatibility
+
+**QA Planning & Framework:**
+- Drafted comprehensive QA plans for hardware and software stress testing covering all system layers
+- Secured product reliability focus and human resource allocation through PDM collaboration
+- Designed platform-wide testing strategy for robust coverage across NAS-series product releases
+- Established testing methodology framework for continuous stability validation
+
+**Cross-Team Collaboration:**
 - Co-led comprehensive test planning with SQA team designing platform-wide stress testing framework
+- Established cross-functional team integration with shared communication channels and responsibilities
+- Implemented shared testing infrastructure with joint ownership of testing framework and result analysis
+- Created collaborative workflow between development and QA teams for maximum effectiveness
+
+**Test Automation:**
 - Established automated testing infrastructure supporting multi-day continuous validation cycles
 - Implemented comprehensive coverage across storage, network, and filesystem layers
+- Deployed continuous monitoring and alerting for real-time issue detection during extended testing periods
+- Created automated reporting systems for consistent test result analysis
 
-**Multi-Platform Stress Testing Implementation:**
-- Multi-day I/O stress loops with concurrent RAID expansion and snapshot creation/deletion operations
-- Cross-platform validation using concurrent Linux/Mac/Windows clients running FIO workloads
-- Comprehensive testing across encrypted and non-encrypted volumes validating security performance
-- Mac Time Machine backup validation across all supported drive types and configurations
-
-**Filesystem & Storage Validation:**
+**Storage Testing:**
+- Implemented multi-day I/O stress loops with concurrent RAID expansion and snapshot creation/deletion operations
 - Integrated xfstests for Btrfs subvolume operations, balance, and scrub under sustained stress
-- Implemented comprehensive RAID expansion testing with concurrent high-throughput I/O operations
 - Validated filesystem integrity across power cycles and service interruptions
+- Performed comprehensive RAID expansion testing with concurrent high-throughput I/O operations
+
+**Cross-Platform Testing:**
+- Cross-platform validation using concurrent Linux/Mac/Windows clients running FIO workloads
+- Mac Time Machine backup validation across all supported drive types and configurations
+- Comprehensive testing across encrypted and non-encrypted volumes validating security performance
+- Protocol compatibility validation across SMB/NFS/AFP and different OS versions
+
+**Stability Validation:**
+- Systematic identification and resolution of critical stability problems discovered during testing
+- Enhanced platform stability through comprehensive edge case identification and resolution
+- Implemented fixes for discovered issues including RAID crashes, eCryptFS lock-ups, and Samba file locking problems
 
 ##### Result
 **Critical Issue Discovery & Resolution:**
@@ -127,10 +149,27 @@
 - Enterprise storage performance requirements demanding higher throughput and efficiency
 
 ##### Action
+**Benchmark Baseline Analysis:**
+- Measured network throughput via Samba achieving 544/592 MB/s (write/read)
+- Established local storage capacity baseline of 951/1850 MB/s using direct I/O benchmarks
+- Validated network infrastructure capacity at 1050/1025 MB/s with iperf3 testing
+- Identified 43-68% performance gap indicating Samba layer optimization potential
+
 **CPU Affinity & IRQ Optimization:**
 - Dedicated exclusive CPU core to RX interrupts preventing contention with smbd process
 - Avoided co-locating RX and smbd on same CPU to prevent performance degradation
 - Evaluated and discarded RPS/RFS due to high CPU overhead and lacking aRFS hardware support
+
+**System-wide Network Tuning:**
+- Implemented AL Ethernet adaptive RX coalescing with runtime configurability
+- Applied RX interrupt coalescing and adaptive RX for optimal packet processing
+- Switched congestion control algorithm from BBR to CUBIC for better burst handling
+- Changed queuing discipline from pfifo to fq improving fairness and throughput
+
+**Hardware Optimization:**
+- Applied RX interrupt coalescing and adaptive RX for optimal packet processing at hardware level
+- Tuned NIC settings for maximum throughput efficiency with optimized ring buffer sizes
+- Implemented hardware-specific optimizations for enterprise storage requirements
 
 **Samba-Layer Performance Tuning:**
 - Enabled zero-copy data transfer from socket buffer to page cache
@@ -143,12 +182,10 @@
 - Disabled tcp_cork to favor lower latency over packet efficiency
 - Enabled tcp_zerocopy_recv for faster receive paths
 
-**System-wide Network Tuning:**
-- Implemented AL Ethernet adaptive RX coalescing with runtime configurability
-- Applied RX interrupt coalescing and adaptive RX for optimal packet processing
-- Switched congestion control algorithm from BBR to CUBIC for better burst handling
-- Changed queuing discipline from pfifo to fq improving fairness and throughput
+**Dynamic Buffer Scaling:**
 - Scaled TCP buffer sizes dynamically based on observed bottlenecks and rmax thresholds
+- Implemented TCP buffer sizing based on bottleneck analysis and rmax thresholds
+- Applied dynamic buffer pressure management for high-throughput enterprise storage workloads
 
 ##### Result
 **Performance Achievements:**
@@ -166,33 +203,55 @@
 #### Linux Kernel Upgrade (v4.19 → v5.10)
 
 ##### Situation
+- Evaluated fast Btrfs checksum feature for data integrity and CPU resource-saving.
 - Alpine SoC running outdated Linux 4.19 kernel limiting system capabilities
 - Required Btrfs enhancements for xxhash checksum and inline file scrubbing blocked by kernel limitations
 - Legacy codebase too complex for backporting upstream commits
-- Compatibility issues preventing future hardware feature development
 
 ##### Action
-**System Upgrade & Modernization:**
-- Prepared and stabilized Linux kernel upgrade from 4.19 to 5.10
-- Resolved major compatibility and regression issues across Alpine SDK, PCI, RAID, PHY, and AHCI drivers
+**Btrfs Feature Analysis:**
+- Evaluated fast Btrfs checksum feature for data integrity and CPU resource-saving improvements
+- Identified kernel limitations with required features blocked by Linux 4.19 limitations
+- Assessed backport complexity involving thousands of commits and xarray changes across modules
+- Determined kernel upgrade as optimal path forward over complex backporting
 
-**Driver Compatibility Updates:**
-- Fixed RAID5 50% performance regression by adjusting I/O size from 4K to 64K
-- Resolved Realtek PHY system crashes from ALDPS/EEE behaviors using kdump analysis
-- Fixed AHCI driver PCI IRQ vector setup through dynamic IRQ vector selection, replacing hardcoded vector assignments with conditional logic based on MULTI_MSI configuration
-- Corrected PHY auto-negotiation regressions (AR8033, RTL8211f) rooted from generic framework upgrades
-- Addressed PCA9575 chip compatibility issues by implementing byte-by-byte read mode to resolve auto-increment read operation failures
+**Kernel Upgrade (4.19 → 5.10):**
+- Prepared and stabilized Linux kernel upgrade from 4.19 to 5.10 with Alpine SDK compatibility
+- Maintained compatibility with existing build infrastructure and development workflows
+- Confirmed xxhash checksum and inline scrubbing feature availability in target kernel
+- Successfully integrated upgraded kernel with Alpine SoC platform requirements
+
+**Driver Modernization:**
 - PCI Controller: Modernized resource management with devm_pci_alloc_host_bridge(), simplified probe flow, restored ecam_base/io_base handling
 - Ethernet Driver: Updated deprecated APIs (ndo_select_queue, getnstimeofday), enhanced PHY handling with phy_set_asym_pause, improved code quality
+- AHCI Driver: Updated API compatibility and modernized interrupt handling procedures
+
+**Hardware Compatibility:**
+- Addressed PCA9575 chip compatibility issues by implementing byte-by-byte read mode to resolve auto-increment read operation failures
+- Corrected PHY auto-negotiation regressions (AR8033, RTL8211f) rooted from generic framework upgrades
+- Verified full compatibility with existing network infrastructure and hardware components
+
+**Critical Bug Resolution:**
+- Fixed RAID5 50% performance regression by adjusting I/O size from 4K to 64K optimal chunks
+- Resolved Realtek PHY system crashes from ALDPS/EEE behaviors using kdump analysis
+- Fixed AHCI driver PCI IRQ vector setup through dynamic IRQ vector selection, replacing hardcoded vector assignments with conditional logic based on MULTI_MSI configuration
 
 **Comprehensive Validation:**
-- Backported and validated Linux kernel and BSP components for system reliability
-- Performed extensive validation using stress-ng, fio, xfstests, packetdrill, and Phoronix Test Suite
+- Multi-framework testing approach using extensive validation with stress-ng, fio, xfstests, packetdrill, and Phoronix Test Suite
+- Btrfs functionality validated with complete xfstests suite ensuring filesystem reliability
+- Network stack validation with packetdrill for edge case TCP behavior scenarios
+
+**Stable Deployment:**
+- Successfully deployed stable Linux 5.10 with zero regression issues in production environment
+- Confirmed all target Btrfs features successfully enabled and operational
+- Validated +40% SSD RAID write IOPS improvement using ARM64 hardware-accelerated CRC32
 
 ##### Result
 **Enhanced System Capabilities:**
-- Enabled NVMe 1.4, multi-queue block layer, and cgroup resource control
-- Enabled multi-channel Samba, advanced TCP congestion control
+- Enabled NVMe 1.4, multi-queue block layer, multi-channel Samba
+- More tracepoints, pressure-stall-information
+- Enabled cgroup resource control
+- Enabled advanced TCP congestion control
 - Unlocked faster and more robust Btrfs functions (snapshots, space accounting, zoned devices)
 - Achieved extremely low scheduler tail latency
 - Successfully deployed stable Linux 5.10 with zero regression issues
@@ -202,9 +261,9 @@
 - Improved kernel compatibility while reducing code duplication and complexity
 - Enabled future hardware feature development and system scalability
 
-**Enhanced RAID I/O Performance:**
+**Enhanced RAID I/O and Btrfs Checksumming Performance:**
 - Applied mq-deadline I/O scheduling and improved BTRFS filesystem performance on ARM64 by utilizing hardware-accelerated CRC32 capabilities for synchronous I/O operations
-- **Results**: +40% SSD RAID write IOPS, +6% HDD RAID write IOPS
+- **Results**: +40% SSD RAID write IOPS, +6% HDD RAID write IOPS, 0.19->6.10 checksum GiB/s
 
 
 ### Q1Q2 Achievements
