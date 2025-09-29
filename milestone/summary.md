@@ -25,8 +25,8 @@
 
 ### Key Achievements
 
-#### **Ubiquiti (2022-Present) - UNAS Platform Engineer**
-- **Product Success**: Contributed to 5K monthly unit sales and product portfolio expansion from 1 to 6 variants, scaling engineering team from 3 to 5 members
+#### **Ubiquiti (2022-Present) - UniFi-OS Platform Engineer**
+- **Product Success**: Contributed to 5K monthly unit sales and product portfolio expansion from 1 to 6 variants, scaling engineering team from 3 to 5 members, impacting software on 2M UniFi-OS devices.
 - **Storage Architecture**: Led Btrfs-based filesystem layout design supporting user/group management, snapshots, file services (Samba/NFS), encryption, and backups, with seamless multi-volume support across enterprise deployments
 - **System Bring-up**: Enabled hardware for UNAS Pro/Studio platforms, including U-Boot, Linux kernel, and complete firmware stack integration
 - **Build System Innovation**: Solved platform-wide package management limitations, enabling secure backported updates and resolving critical Samba issues including large file uploads and network reconnection failures
