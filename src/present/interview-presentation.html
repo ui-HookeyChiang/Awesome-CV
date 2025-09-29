@@ -1,0 +1,1992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hookey Chiang - Interview Presentation</title>
+    <style>
+        :root {
+            --primary-color: #3E6D9C;
+            --accent-color: #2563eb;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --bg-light: #f8fafc;
+            --border-color: #e5e7eb;
+            --success-color: #059669;
+            --highlight-color: #059669;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow-x: hidden;
+        }
+
+        .presentation {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .slide {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            min-height: 80vh;
+            width: 100%;
+            max-width: 100%;
+            display: flex;
+            flex-direction: column;
+            page-break-after: always;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        .slide h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .slide h2 {
+            color: var(--accent-color);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            margin-top: 30px;
+            font-weight: 600;
+        }
+
+        .slide h3 {
+            color: var(--text-dark);
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        /* Ensure consistent content width */
+        .slide > * {
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        
+        /* Interactive flowchart boxes */
+        .flow-box {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .flow-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15) !important;
+        }
+        
+        /* Cheat sheet modal */
+        .cheat-sheet-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .cheat-sheet-content {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .cheat-sheet-header {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+        
+        .cheat-sheet-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+            transition: color 0.2s;
+        }
+        
+        .cheat-sheet-close:hover {
+            color: #dc2626;
+        }
+        
+        .cheat-sheet-item {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .cheat-sheet-command {
+            font-family: 'Courier New', monospace;
+            background: #1f2937;
+            color: #10b981;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            margin: 8px 0;
+            display: block;
+        }
+        
+        .sar-format {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            width: 100%;
+        }
+        
+        .sar-item {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .section-break {
+            margin: 20px 0;
+            border-bottom: 1px solid var(--bg-light);
+        }
+
+        .intro-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .name {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .title {
+            font-size: 1.6rem;
+            color: var(--text-light);
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.1rem;
+            padding: 10px 20px;
+            background: var(--bg-light);
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+        }
+
+        .summary-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 40px;
+            border-radius: 12px;
+            border-left: 6px solid var(--primary-color);
+            margin: 30px 0;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .point-card {
+            background: var(--bg-light);
+            padding: 30px;
+            border-radius: 12px;
+            border-left: 5px solid var(--success-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .point-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .point-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .metrics-row {
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .metric-box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            text-align: center;
+            min-width: 140px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .metric-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            display: block;
+            line-height: 1;
+        }
+
+        .metric-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        .story-section {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 40px;
+            border-radius: 12px;
+            margin: 30px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .story-header {
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .sar-format {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin: 25px 0;
+        }
+
+        .sar-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--success-color);
+        }
+
+        .sar-item strong {
+            color: var(--primary-color);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .sar-situation {
+            grid-column: 1 / -1;
+            border-left: 4px solid #dc2626; /* Red for Situation - Problems/Challenges */
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        }
+
+        .sar-action {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid var(--accent-color); /* Blue for Action - Methods/Technologies */
+            margin-top: 20px;
+        }
+
+        .sar-result {
+            grid-column: 1 / -1;
+            border-left: 4px solid var(--success-color); /* Green for Result - Outcomes/Impact */
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            margin-top: 20px;
+        }
+
+        .tech-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 25px 0;
+        }
+
+        .tech-skill {
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(62, 109, 156, 0.3);
+        }
+
+        .closing-section {
+            text-align: center;
+            padding: 60px 0;
+        }
+
+        .closing-title {
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .closing-subtitle {
+            font-size: 1.8rem;
+            color: var(--text-light);
+            margin-bottom: 50px;
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .navigation-hint {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(62, 109, 156, 0.9);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            z-index: 1000;
+        }
+
+        ul {
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        li strong {
+            color: var(--text-dark);
+        }
+
+        /* Prevent single words on lines */
+        .text-flow {
+            text-align: justify;
+            hyphens: none;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        @media (max-width: 768px) {
+            .presentation {
+                padding: 15px;
+                max-width: 100%;
+            }
+            
+            .slide {
+                padding: 20px 15px;
+                margin-bottom: 20px;
+                min-height: 70vh;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            
+            .name {
+                font-size: 2.8rem;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+            
+            .metrics-row {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .slide h1 {
+                font-size: 2.2rem;
+            }
+
+            .sar-format {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media print {
+            body { background: white; }
+            .presentation {
+                max-width: none;
+                padding: 0;
+            }
+            .slide { 
+                box-shadow: none; 
+                border: 1px solid var(--border-color);
+                min-height: auto;
+                width: 100%;
+                margin-bottom: 20px;
+                page-break-after: always;
+            }
+            .navigation-hint { display: none; }
+        }
+        
+        @media (min-width: 1400px) {
+            .presentation {
+                max-width: 1300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation-hint">
+        Use ← → arrow keys to navigate slides
+    </div>
+    
+    <div class="presentation">
+        <!-- Slide 1: Cover -->
+        <div class="slide">
+            <div class="slide-number">1 / 11</div>
+            <div class="intro-header">
+                <h1 class="name">Tsunghan Chiang (Hookey)</h1>
+                <p class="title">Operating System & Software & Firmware Engineer</p>
+                <div style="margin-top: 30px; font-size: 1.8rem; color: var(--primary-color); font-weight: 600;">
+                    "Delivering Solutions of Quality and Innovation"
+                </div>
+            </div>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <span>📧</span> hookey.chiang@gmail.com
+                </div>
+                <div class="contact-item">
+                    <span>💼</span> GitHub: ui-HookeyChiang
+                </div>
+                <div class="contact-item">
+                    <span>🔗</span> LinkedIn: hookey-chiang
+                </div>
+            </div>
+
+            <div class="metrics-row">
+                <div class="metric-box">
+                    <span class="metric-number" style="color: var(--primary-color);">7+</span>
+                    <span class="metric-label">Years Experience</span>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number" style="color: var(--primary-color);">5K</span>
+                    <span class="metric-label">Monthly Sales</span>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number" style="color: var(--primary-color);">210K+</span>
+                    <span class="metric-label">Users Impacted</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Self Introduction -->
+        <div class="slide">
+            <div class="slide-number">2 / 11</div>
+            <h1>Self Introduction</h1>
+            
+            <div class="summary-box">
+                <h3>Educational Background</h3>
+                <ul style="margin: 15px 0; font-size: 1rem; line-height: 1.8;">
+                    <li><strong>M.S. Computer Science and Information Engineering</strong> - National Taiwan University (GPA: 3.84/4.30)</li>
+                    <li><strong>B.S. Electrical Engineering and Computer Science</strong> - National Chiao Tung University (90.2%)</li>
+                    <li><strong>Exchange Student</strong> - University of Illinois at Urbana-Champaign</li>
+                </ul>
+            </div>
+
+            <div class="summary-box">
+                <h3>Core Experience</h3>
+                <ul style="margin: 15px 0; font-size: 1rem; line-height: 1.8;">
+                    <li><strong>Quality Assurance</strong>: <span style="color: var(--primary-color); font-weight:
+                        700;">Unit testing, integration testing, work review and product validation</span></li>
+                    <li><strong>Platform Development</strong>: <span style="color: var(--primary-color); font-weight:
+                        700;">NAS solutions and file services</span></li>
+                    <li><strong>Performance Engineering</strong>: <span style="color: var(--primary-color); font-weight:
+                        700;">Tuning and bottleneck analysis</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 3: Core Technical Expertise -->
+        <div class="slide">
+            <div class="slide-number">3 / 11</div>
+            <h1>Technical Experience</h1>
+
+            <div class="key-points">
+                <div class="point-card">
+                    <h4>⚡ Tools & DevOps</h4>
+                    <div class="tech-skills" style="margin: 25px 0;">
+                        <span class="tech-skill">Test suites</span>
+                        <span class="tech-skill">AI tools</span>
+                        <span class="tech-skill">Docker</span>
+                        <span class="tech-skill">GitLab CI/CD</span>
+                    </div>
+                </div>
+
+                <div class="point-card">
+                    <h4>💾 Operating System</h4>
+                    <div class="tech-skills" style="margin: 25px 0;">
+                        <span class="tech-skill">Debian</span>
+                        <span class="tech-skill">Linux Kernel</span>
+                        <span class="tech-skill">Filesystem</span>
+                        <span class="tech-skill">Block Layer</span>
+                    </div>
+                </div>
+
+                <div class="point-card">
+                    <h4>💻 Programming & System Languages</h4>
+                    <div class="tech-skills" style="margin: 25px 0;">
+                        <span class="tech-skill">C/C++</span>
+                        <span class="tech-skill">Go</span>
+                        <span class="tech-skill">Shell Scripting</span>
+                        <span class="tech-skill">SQL</span>
+                        <span class="tech-skill">Python</span>
+                    </div>
+                </div>
+
+                <div class="point-card">
+                    <h4>🌐 Frameworks & Protocols</h4>
+                    <div class="tech-skills" style="margin: 25px 0;">
+                        <span class="tech-skill">gRPC</span>
+                        <span class="tech-skill">Samba/NFS</span>
+                        <span class="tech-skill">libev</span>
+                        <span class="tech-skill">FUSE</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Ubiquiti Career Highlights -->
+        <div class="slide">
+            <div class="slide-number">4 / 11</div>
+            <h1>Ubiquiti Career Highlights (2022-Present)</h1>
+
+
+            <div class="key-points">
+                <div class="point-card">
+                    <h4>🚀 UniFi-OS Storage Engineer</h4>
+                    <p style="margin: 15px 0; font-size: 1rem; color: var(--text-dark); line-height: 1.6;">First NAS!
+                    Did firmware integration, led software development, filesystem design, system optimization, and quality assurance initiatives</p>
+                    <div class="metrics-row" style="margin: 25px 0; justify-content: flex-start; gap: 20px; flex-wrap: wrap;">
+                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                            <span class="metric-number" style="color: var(--primary-color);">1→6</span>
+                            <span class="metric-label">Product Variants</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                            <span class="metric-number" style="color: var(--primary-color);">100</span>
+                            <span class="metric-label">Support Cases</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                            <span class="metric-number" style="color: var(--primary-color);">+40%</span>
+                            <span class="metric-label"><strong>SSD</strong> IOPS</span>
+                        </div>
+                    </div>
+                    
+                            
+                    <div class="metrics-row" style="margin: 25px 0; justify-content: flex-start; gap: 20px; flex-wrap: wrap;">
+                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                            <span class="metric-number" style="color: var(--primary-color);">3→5</span>
+                            <span class="metric-label">Team Scaling</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                            <span class="metric-number" style="color: var(--primary-color);">3</span>
+                            <span class="metric-label"><strong>OOM</strong> issues</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                            <span class="metric-number" style="color: var(--primary-color);">544→830</span>
+                            <span class="metric-label">MB/s <strong>Samba</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: QNAP Career Highlights -->
+        <div class="slide">
+            <div class="slide-number">5 / 11</div>
+            <h1>QNAP Career Highlights (2018-2022)</h1>
+
+
+            <div class="key-points">
+                <div class="point-card">
+                    <h4>☁️ File System Engineer</h4>
+                    <p style="margin: 15px 0; font-size: 1rem; color: var(--text-dark); line-height: 1.6;">Architected
+                    FUSE-based cloud storage gateway with advanced caching, encryption, and comprehensive performance optimization</p>
+                    <div class="metrics-row" style="margin: 25px 0; justify-content: flex-start; gap: 20px; flex-wrap: wrap;">
+                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                            <span class="metric-number" style="color: var(--primary-color);">190K+</span>
+                            <span class="metric-label">Devices</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                            <span class="metric-number" style="color: var(--primary-color);">50M+</span>
+                            <span class="metric-label">Files</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                            <span class="metric-number" style="color: var(--primary-color);">+300%</span>
+                            <span class="metric-label"><strong>Metadata</strong> Boost</span>
+                        </div>
+                    </div>
+                    
+                            
+                    <div class="metrics-row" style="margin: 25px 0; justify-content: flex-start; gap: 20px; flex-wrap: wrap;">
+                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                            <span class="metric-number" style="color: var(--primary-color);"><20</span>
+                            <span class="metric-label"><strong>Support</strong> Involvement</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                            <span class="metric-number" style="color: var(--primary-color);">-36%</span>
+                            <span class="metric-label"><strong>Latency</strong> Cut</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                            <span class="metric-number" style="color: var(--primary-color);">22s→1s</span>
+                            <span class="metric-label"><strong>Dir Deletion</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Case Study 1 - NAS Stability Testing -->
+        <div class="slide">
+            <div class="slide-number">6 / 11</div>
+            <h1>Case Study 1: NAS Stability Testing</h1>
+            
+            <div class="sar-format">
+                <div class="sar-item sar-situation" style="border: 2px solid #dc2626; background: linear-gradient(135deg, #fef2f2, #ffffff); padding: 20px; border-radius: 12px;">
+                    <h3 style="color: var(--primary-color); font-size: 1.3rem; margin-bottom: 15px; font-weight: 600;">🔴 Situation</h3>
+                    <p style="margin: 10px 0; font-size: 1rem; line-height: 1.5;">
+                        <span style="color: var(--primary-color); font-weight: 700;">NAS platform</span> lacked
+                        comprehensive <span style="color: var(--primary-color); font-weight: 700;">stability
+                        testing</span> under IO stress.
+                    </p>
+                </div>
+                
+                <div class="sar-item sar-action" style="border: 2px solid var(--accent-color); background: linear-gradient(135deg, #eff6ff, #ffffff); padding: 20px; border-radius: 12px;">
+                    <h3 style="color: var(--primary-color); font-size: 1.3rem; margin-bottom: 15px; font-weight: 600;">🔵 Action</h3>
+                    
+                    <div style="background: white; border: 1px solid #e0f2fe; border-radius: 8px; padding: 20px; margin-top: 20px;">
+                        <!-- NAS Stability Testing & Validation Flow -->
+                        
+                        <!-- Preparation Step -->
+                        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" data-cheat="stability-analysis" style="width: 180px; height: 80px; background: linear-gradient(135deg, #6366f1, #4f46e5); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3); padding: 8px;">
+                                    <div style="font-size: 0.9rem; margin-bottom: 4px;">Stability Gap</div>
+                                    <div style="font-size: 0.9rem; margin-bottom: 2px;">Analysis</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Flow Separator -->
+                        <div style="display: flex; justify-content: center; margin-bottom: 25px;">
+                            <div style="font-size: 1.6rem; color: var(--accent-color); font-weight: 700;">↓</div>
+                        </div>
+                        
+                        <!-- Top Row: Planning & Framework -->
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" data-cheat="qa-planning" style="width: 160px; height: 80px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3); padding: 8px;">
+                                    <div style="font-size: 0.9rem; margin-bottom: 4px;">Test</div>
+                                    <div style="font-size: 0.9rem; margin-bottom: 2px;">Draft</div>
+                                    <div style="font-size: 0.7rem; opacity: 0.9;">Hardware + software</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: #6b7280; margin: 0 5px;">→</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" data-cheat="cross-team-collaboration" style="width: 160px; height: 80px; background: linear-gradient(135deg, #7c3aed, #5b21b6); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(124, 58, 237, 0.3); padding: 8px;">
+                                    <div style="font-size: 0.9rem; margin-bottom: 4px;">Human Resource</div>
+                                    <div style="font-size: 0.9rem; margin-bottom: 2px;">Allocation</div>
+                                    <div style="font-size: 0.7rem; opacity: 0.9;">SQA partnership</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: #6b7280; margin: 0 5px;">→</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" data-cheat="test-automation" style="width: 160px; height: 80px; background: linear-gradient(135deg, #059669, #047857); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(5, 150, 105, 0.3); padding: 8px;">
+                                    <div style="font-size: 0.9rem; margin-bottom: 4px;">Test</div>
+                                    <div style="font-size: 0.9rem; margin-bottom: 2px;">Finalization</div>
+                                    <div style="font-size: 0.7rem; opacity: 0.9;">Multi-day cycles</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Central Flow Arrow -->
+                        <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+                            <div style="font-size: 1.6rem; color: var(--accent-color); font-weight: 700;">↓</div>
+                        </div>
+                        
+                        <!-- Bottom Row: Testing & Validation -->
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" data-cheat="storage-testing" style="width: 160px; height: 80px; background: linear-gradient(135deg, #dc2626, #991b1b); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(220, 38, 38, 0.3); padding: 8px;">
+                                    <div style="font-size: 0.9rem; margin-bottom: 4px;">Storage</div>
+                                    <div style="font-size: 0.9rem; margin-bottom: 2px;">Testing</div>
+                                    <div style="font-size: 0.7rem; opacity: 0.9;">RAID + Btrfs stress</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: #6b7280; margin: 0 5px;">→</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" data-cheat="cross-platform-testing" style="width: 160px; height: 80px; background: linear-gradient(135deg, #ea580c, #c2410c); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(234, 88, 12, 0.3); padding: 8px;">
+                                    <div style="font-size: 0.9rem; margin-bottom: 4px;">Cross-Platform</div>
+                                    <div style="font-size: 0.9rem; margin-bottom: 2px;">Testing</div>
+                                    <div style="font-size: 0.7rem; opacity: 0.9;">Linux/Mac/Windows</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: #6b7280; margin: 0 5px;">→</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" data-cheat="stability-validation" style="width: 160px; height: 80px; background: linear-gradient(135deg, #0891b2, #0e7490); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(8, 145, 178, 0.3); padding: 8px;">
+                                    <div style="font-size: 0.9rem; margin-bottom: 4px;">Stability</div>
+                                    <div style="font-size: 0.9rem; margin-bottom: 2px;">Validation</div>
+                                    <div style="font-size: 0.7rem; opacity: 0.9;">Issue discovery</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Testing Flow Description -->
+                        <div style="text-align: center; margin-top: 20px; font-size: 0.85rem; color: var(--text-light); font-weight: 500;">
+                            NAS Stability Engineering: Analysis → Planning → Automation → Validation
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sar-item sar-result" style="border: 2px solid var(--success-color); background: linear-gradient(135deg, #f0fdf4, #ffffff); padding: 20px; border-radius: 12px;">
+                    <h3 style="color: var(--primary-color); font-size: 1.3rem; margin-bottom: 15px; font-weight: 600;">🟢 Result</h3>
+                    <div class="metrics-row" style="margin-top: 20px; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                        <div class="metric-box" style="min-width: 130px; flex: 1; cursor: pointer;" data-cheat="multi-issue-discovered">
+                            <span class="metric-number" style="color: var(--primary-color);">Multi-issue</span>
+                            <span class="metric-label"><strong>Discovered</strong></span>
+                        </div>
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                            <span class="metric-number" style="color: var(--primary-color);">Multi-day</span>
+                            <span class="metric-label"><strong>Validation</strong></span>
+                        </div>
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                            <span class="metric-number" style="color: var(--primary-color);">3</span>
+                            <span class="metric-label"><strong>Cross-platform Stability</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Case Study 2 - Linux Kernel Upgrade -->
+        <div class="slide">
+            <div class="slide-number">7 / 11</div>
+            <h1>Case Study 2: Linux Kernel Upgrade</h1>
+            
+            <div class="sar-format">
+                <div class="sar-item sar-situation" style="border: 2px solid #dc2626; background: linear-gradient(135deg, #fef2f2, #ffffff); padding: 20px; border-radius: 12px;">
+                    <h3 style="color: var(--primary-color); font-size: 1.3rem; margin-bottom: 15px; font-weight: 600;">🔴 Situation</h3>
+                    <p style="margin: 10px 0; font-size: 1rem; line-height: 1.5;">
+                        Evaluated fast Btrfs checksum feature for data integrity and CPU resource-saving.
+                    </p>
+                </div>
+                
+                <div class="sar-item sar-action" style="border: 2px solid var(--accent-color); background: linear-gradient(135deg, #eff6ff, #ffffff); padding: 20px; border-radius: 12px;">
+                    <h3 style="color: var(--primary-color); font-size: 1.3rem; margin-bottom: 15px; font-weight: 600;">🔵 Action</h3>
+                    <div style="background: white; border: 1px solid #e0f2fe; border-radius: 8px; padding: 20px; margin-top: 20px;">
+                        <!-- Kernel Upgrade & Modernization Flow -->
+                        
+                        <!-- Preparation Step -->
+                        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" data-cheat="btrfs-analysis" style="width: 180px; height: 80px; background: linear-gradient(135deg, #6366f1, #4f46e5); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3); padding: 8px;">
+                                    <div style="font-size: 0.9rem; margin-bottom: 4px;">Btrfs Feature</div>
+                                    <div style="font-size: 0.9rem; margin-bottom: 2px;">Backporting</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Flow Separator -->
+                        <div style="display: flex; justify-content: center; margin-bottom: 25px;">
+                            <div style="font-size: 1.6rem; color: var(--accent-color); font-weight: 700;">↓</div>
+                        </div>
+                        
+                        <!-- Top Row: Core Upgrade Stages -->
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" data-cheat="kernel-upgrade" style="width: 160px; height: 80px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3); padding: 8px;">
+                                    <div style="font-size: 0.9rem; margin-bottom: 4px;">Kernel Upgrade</div>
+                                    <div style="font-size: 0.9rem; margin-bottom: 2px;">4.19 → 5.10</div>
+                                    <div style="font-size: 0.7rem; opacity: 0.9;">Alpine SDK compat</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: #6b7280; margin: 0 5px;">→</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" data-cheat="driver-modernization" style="width: 160px; height: 80px; background: linear-gradient(135deg, #7c3aed, #5b21b6); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(124, 58, 237, 0.3); padding: 8px;">
+                                    <div style="font-size: 0.9rem; margin-bottom: 4px;">API</div>
+                                    <div style="font-size: 0.9rem; margin-bottom: 2px;">Compatibility</div>
+                                    <div style="font-size: 0.7rem; opacity: 0.9;">PCI + AHCI + PHY</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: #6b7280; margin: 0 5px;">→</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" data-cheat="hardware-compat" style="width: 160px; height: 80px; background: linear-gradient(135deg, #059669, #047857); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(5, 150, 105, 0.3); padding: 8px;">
+                                    <div style="font-size: 0.9rem; margin-bottom: 4px;">Driver</div>
+                                    <div style="font-size: 0.9rem; margin-bottom: 2px;">Modernization</div>
+                                    <div style="font-size: 0.7rem; opacity: 0.9;">PCA9575 + RTL8211F</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Central Flow Arrow -->
+                        <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+                            <div style="font-size: 1.6rem; color: var(--accent-color); font-weight: 700;">↓</div>
+                        </div>
+                        
+                        <!-- Bottom Row: Bug Resolution & Validation -->
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" data-cheat="bug-fixes" style="width: 160px; height: 80px; background: linear-gradient(135deg, #dc2626, #991b1b); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(220, 38, 38, 0.3); padding: 8px;">
+                                    <div style="font-size: 0.9rem; margin-bottom: 4px;">Critical Bug</div>
+                                    <div style="font-size: 0.9rem; margin-bottom: 2px;">Resolution</div>
+                                    <div style="font-size: 0.7rem; opacity: 0.9;">RAID5 + PHY fixes</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: #6b7280; margin: 0 5px;">→</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" data-cheat="comprehensive-validation" style="width: 160px; height: 80px; background: linear-gradient(135deg, #ea580c, #c2410c); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(234, 88, 12, 0.3); padding: 8px;">
+                                    <div style="font-size: 0.9rem; margin-bottom: 4px;">Comprehensive</div>
+                                    <div style="font-size: 0.9rem; margin-bottom: 2px;">Validation</div>
+                                    <div style="font-size: 0.7rem; opacity: 0.9;">stress-ng + xfstests</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: #6b7280; margin: 0 5px;">→</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" data-cheat="stable-deployment" style="width: 160px; height: 80px; background: linear-gradient(135deg, #0891b2, #0e7490); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(8, 145, 178, 0.3); padding: 8px;">
+                                    <div style="font-size: 0.9rem; margin-bottom: 4px;">Stable</div>
+                                    <div style="font-size: 0.9rem; margin-bottom: 2px;">Deployment</div>
+                                    <div style="font-size: 0.7rem; opacity: 0.9;">Zero regression</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Kernel Upgrade Flow Description -->
+                        <div style="text-align: center; margin-top: 20px; font-size: 0.85rem; color: var(--text-light); font-weight: 500;">
+                            Kernel Infrastructure Modernization: Analysis → Upgrade → Validation → Deployment
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sar-item sar-result" style="border: 2px solid var(--success-color); background: linear-gradient(135deg, #f0fdf4, #ffffff); padding: 20px; border-radius: 12px;">
+                    <h3 style="color: var(--primary-color); font-size: 1.3rem; margin-bottom: 15px; font-weight: 600;">🟢 Result</h3>
+                    <div class="metrics-row" style="margin-top: 20px; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                        <div class="metric-box" style="min-width: 110px; flex: 1;">
+                            <span class="metric-number" style="color: var(--primary-color);">0.19→6.10</span>
+                            <span class="metric-label"><strong>checksum GB/s</strong> </span>
+                        </div>
+                        <div class="metric-box" style="min-width: 110px; flex: 1;">
+                            <span class="metric-number" style="color: var(--primary-color);">0</span>
+                            <span class="metric-label"><strong>Regression</strong></span>
+                        </div>
+                        <div class="metric-box" style="min-width: 110px; flex: 1; cursor: pointer;" data-cheat="product-scalability">
+                          <span class="metric-number" style="color: var(--primary-color);">Future</span>
+                            <span class="metric-label"><strong>Scalability</strong></span>
+                        </div>
+                        <div class="metric-box" style="min-width: 110px; flex: 1;">
+                            <span class="metric-number" style="color: var(--primary-color);">+40%</span>
+                            <span class="metric-label"><strong>SSD IOPS</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Case Study 3 - Samba Performance -->
+        <div class="slide">
+            <div class="slide-number">8 / 11</div>
+            <h1>Case Study 3: Samba Performance</h1>
+            
+            <div class="sar-format">
+                <div class="sar-item sar-situation" style="border: 2px solid #dc2626; background: linear-gradient(135deg, #fef2f2, #ffffff); padding: 20px; border-radius: 12px;">
+                    <h3 style="color: var(--primary-color); font-size: 1.3rem; margin-bottom: 15px; font-weight: 600;">🔴 Situation</h3>
+                    <p style="margin: 10px 0; font-size: 1rem; line-height: 1.5;">
+                        <span style="color: var(--primary-color); font-weight: 700;">Samba throughput</span> limited to
+                        <span style="color: var(--primary-color); font-weight: 700;">544/592 MB/s</span> despite
+                        <span style="color: var(--primary-color); font-weight: 700;">1050/1025 MB/s</span> network capacity, <span style="color: var(--primary-color); font-weight: 700;">951/1850 MB/s</span> storage capacity and high CPU utilization.
+                    </p>
+                    <div style="background: white; border: 1px solid #fee2e2; border-radius: 8px; padding: 15px; margin-top: 15px;">
+                        <div style="text-align: center; margin-bottom: 15px; font-weight: 600; color: #374151;">Network vs Local I/O Performance Gap</div>
+                        <div style="display: flex; align-items: end; justify-content: space-between; gap: 20px; padding: 0 20px;">
+                            <div style="text-align: center; flex: 1;">
+                                <div style="font-size: 0.8rem; font-weight: 600; color: #dc2626; margin-bottom: 8px;">Network Write</div>
+                                <div style="height: 35px; width: 35px; background: #dc2626; border-radius: 4px; position: relative; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                                    <span style="color: white; font-size: 0.65rem; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">544</span>
+                                </div>
+                            </div>
+                            <div style="text-align: center; flex: 1;">
+                                <div style="font-size: 0.8rem; font-weight: 600; color: #dc2626; margin-bottom: 8px;">Network Read</div>
+                                <div style="height: 38px; width: 35px; background: #dc2626; border-radius: 4px; position: relative; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                                    <span style="color: white; font-size: 0.65rem; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">592</span>
+                                </div>
+                            </div>
+                            <div style="text-align: center; flex: 1;">
+                                <div style="font-size: 0.8rem; font-weight: 600; color: #059669; margin-bottom: 8px;">Local Write</div>
+                                <div style="height: 61px; width: 35px; background: #059669; border-radius: 4px; position: relative; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                                    <span style="color: white; font-size: 0.65rem; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">951</span>
+                                </div>
+                            </div>
+                            <div style="text-align: center; flex: 1;">
+                                <div style="font-size: 0.8rem; font-weight: 600; color: #059669; margin-bottom: 8px;">Local Read</div>
+                                <div style="height: 120px; width: 35px; background: #059669; border-radius: 4px; position: relative; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                                    <span style="color: white; font-size: 0.65rem; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,0.3);">1850</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sar-item sar-action" style="border: 2px solid var(--accent-color); background: linear-gradient(135deg, #eff6ff, #ffffff); padding: 20px; border-radius: 12px;">
+                    <h3 style="color: var(--primary-color); font-size: 1.3rem; margin-bottom: 15px; font-weight: 600;">🔵 Action</h3>
+
+                    <div style="background: white; border: 1px solid #e0f2fe; border-radius: 8px; padding: 20px; margin-top: 20px;">
+                        <!-- Performance Analysis & Optimization Flow -->
+                        
+                        <!-- Preparation Step -->
+                        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" data-cheat="fio-benchmark" style="width: 180px; height: 80px; background: linear-gradient(135deg, #6366f1, #4f46e5); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3); padding: 8px;">
+                                    <div style="font-size: 0.9rem; margin-bottom: 4px;">Benchmark</div>
+                                    <div style="font-size: 0.9rem; margin-bottom: 2px;">Baseline Analysis</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Flow Separator -->
+                        <div style="display: flex; justify-content: center; margin-bottom: 25px;">
+                            <div style="font-size: 1.6rem; color: var(--accent-color); font-weight: 700;">↓</div>
+                        </div>
+                        
+                        <!-- Top Row: Core Performance Stages -->
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" data-cheat="cpu-irq" style="width: 160px; height: 80px; background: linear-gradient(135deg, #dc2626, #b91c1c); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(220, 38, 38, 0.3); padding: 8px;">
+                                    <div style="font-size: 0.9rem; margin-bottom: 4px;">CPU</div>
+                                    <div style="font-size: 0.9rem; margin-bottom: 2px;">Affinity</div>
+                                    <div style="font-size: 0.7rem; opacity: 0.9;">Exclusive core dedication</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: #6b7280; margin: 0 5px;">→</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" data-cheat="hardware-optimize" style="width: 160px; height: 80px; background: linear-gradient(135deg, #059669, #047857); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(5, 150, 105, 0.3); padding: 8px;">
+                                    <div style="font-size: 0.9rem; margin-bottom: 4px;">IRQ</div>
+                                    <div style="font-size: 0.9rem; margin-bottom: 2px;">Optimization</div>
+                                    <div style="font-size: 0.7rem; opacity: 0.9;">RX coalescing + adaptive</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: #6b7280; margin: 0 5px;">→</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" data-cheat="network-tuning" style="width: 160px; height: 80px; background: linear-gradient(135deg, #ea580c, #dc2626); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(234, 88, 12, 0.3); padding: 8px;">
+                                    <div style="font-size: 0.9rem; margin-bottom: 4px;">Network</div>
+                                    <div style="font-size: 0.9rem; margin-bottom: 2px;">Tuning</div>
+                                    <div style="font-size: 0.7rem; opacity: 0.9;">CUBIC + fq queuing</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Central Flow Arrow -->
+                        <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+                            <div style="font-size: 1.6rem; color: var(--accent-color); font-weight: 700;">↓</div>
+                        </div>
+                        
+                        <!-- Bottom Row: Protocol & Application Layer -->
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                          <div style="text-align: center;">
+                              <div class="flow-box" data-cheat="tcp-optimize" style="width: 160px; height: 80px; background: linear-gradient(135deg, #7c3aed, #5b21b6); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(124, 58, 237, 0.3); padding: 8px;">
+                                  <div style="font-size: 0.9rem; margin-bottom: 4px;">TCP</div>
+                                  <div style="font-size: 0.9rem; margin-bottom: 2px;">Socket</div>
+                                  <div style="font-size: 0.7rem; opacity: 0.9;">quickack + nodelay</div>
+                              </div>
+                          </div>
+                          <div style="font-size: 1.6rem; color: #6b7280; margin: 0 5px;">→</div>
+                          <div style="text-align: center;">
+                              <div class="flow-box" data-cheat="buffer-scaling" style="width: 160px; height: 80px; background: linear-gradient(135deg, #0891b2, #0e7490); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(8, 145, 178, 0.3); padding: 8px;">
+                                  <div style="font-size: 0.9rem; margin-bottom: 4px;">TCP Buffer</div>
+                                  <div style="font-size: 0.9rem; margin-bottom: 2px;">Scaling</div>
+                                  <div style="font-size: 0.7rem; opacity: 0.9;">rw mem</div>
+                              </div>
+                          </div>
+                          <div style="font-size: 1.6rem; color: #6b7280; margin: 0 5px;">→</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" data-cheat="zero-copy" style="width: 160px; height: 80px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3); padding: 8px;">
+                                    <div style="font-size: 0.9rem; margin-bottom: 4px;">Samba</div>
+                                    <div style="font-size: 0.9rem; margin-bottom: 2px;">Tuning</div>
+                                    <div style="font-size: 0.7rem; opacity: 0.9;">Zero-copy + async I/O</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Performance Flow Description -->
+                        <div style="text-align: center; margin-top: 20px; font-size: 0.85rem; color: var(--text-light); font-weight: 500;">
+                            Full-Stack Performance Engineering: System → Protocol → Application
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sar-item sar-result" style="border: 2px solid var(--success-color); background: linear-gradient(135deg, #f0fdf4, #ffffff); padding: 20px; border-radius: 12px;">
+                    <h3 style="color: var(--primary-color); font-size: 1.3rem; margin-bottom: 15px; font-weight: 600;">🟢 Result</h3>
+                    <div class="metrics-row" style="margin-top: 20px; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                            <span class="metric-number" style="color: var(--primary-color);">544→830</span>
+                            <span class="metric-label"><strong>Read MB/s</strong></span>
+                        </div>
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                          <span class="metric-number" style="color: var(--primary-color);">592→930</span>
+                            <span class="metric-label"><strong>Write MB/s</strong></span>
+                        </div>
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                            <span class="metric-number" style="color: var(--primary-color);">-30%</span>
+                            <span class="metric-label"><strong>CPU Utilization</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Additional Achievements -->
+        <div class="slide">
+            <div class="slide-number">9 / 11</div>
+            <h1>Additional Achievements Overview</h1>
+
+            <div class="key-points">
+                <div class="point-card">
+                    <h4>🚀 Innovation & Business Impact</h4>
+                    <ul style="line-height: 1.8; margin: 25px 0;">
+                        <li>🔧 <strong>Build System Upgrade:</strong> Resolved years-disabled backport package installation
+                        <li>🤖 <strong>AI Integration:</strong> Deployed automated code review workflows across multiple projects</li>
+                        <li>📊 <strong>Support Excellence:</strong> SOPs reduced escalations</li>
+                        <li>🏗️ <strong>Complete Platform Development:</strong> U-boot through kernel to user-space applications for manufacturing and deployment</li>
+                        <li>🔄 <strong>Extensible Architecture:</strong> Seamless NFS/Samba/Drive apps integration with Btrfs and ZFS</li>
+                    </ul>
+                </div>
+                <div class="point-card">
+                    <h4>⚡ Product Reliability & Performance Engineering</h4>
+                    <ul style="line-height: 1.8; margin: 25px 0;">
+                        <li>🤖 <strong>CI Automation:</strong> GitLab + Jenkins pipelines with automated validation
+                          using standard test frameworks</li>
+                        <li>🔧 <strong>gRPC Event Streamer:</strong> Replaced Python poller with microsecond-latency, reducing CPU usage by 65%</li>
+                        <li>📈 <strong>Metadata Performance:</strong> 300% improvement through multi-layer caching and database optimization</li>
+                        <li>💾 <strong>Memory Optimization:</strong> 93% socket buffer waste reduction eliminating crashes on 64KB page systems</li>
+                        <li>⏱️ <strong>Latency Optimization:</strong> Directory deletion from 22s to 1s, download latency reduced by 36%</li>
+                        <li>🏆 <strong>Production Scale:</strong> Storage solutions capable of 50M+ files at 200 files/sec processing</li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Summary -->
+        <div class="slide">
+            <div class="slide-number">10 / 11</div>
+            <h1>Summary</h1>
+            
+            <!-- Tagline -->
+            <div style="text-align: center; margin: 40px 0;">
+                <h2 style="color: var(--primary-color); font-size: 2.0rem; font-weight: 700; line-height: 1.4;">
+                    Delivering Solutions of Quality and Innovation
+                </h2>
+            </div>
+            
+            <!-- Three Key Strengths -->
+            <div style="display: flex; justify-content: center; align-items: center; gap: 40px; margin: 40px 0; font-size: 1.4rem; font-weight: 600; color: var(--accent-color);">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span>🚀</span>
+                    <span>Performance</span>
+                </div>
+                <div style="color: var(--text-light); font-size: 1.5rem;">|</div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span>🔒</span>
+                    <span>Reliability</span>
+                </div>
+                <div style="color: var(--text-light); font-size: 1.5rem;">|</div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span>📈</span>
+                    <span>Scalability</span>
+                </div>
+            </div>
+
+            <!-- 3. Quantified Metrics -->
+            <div class="metrics-row" style="margin-top: 40px;">
+                <div class="metric-box">
+                    <span class="metric-number" style="color: var(--primary-color);">7+</span>
+                    <span class="metric-label">Years Firmware Experience</span>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number" style="color: var(--primary-color);">210K+</span>
+                    <span class="metric-label">Users Served</span>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number" style="color: var(--primary-color);">120</span>
+                    <span class="metric-label">Support Cases</span>
+                </div>
+                <div class="metric-box">
+                    <span class="metric-number" style="color: var(--primary-color);">6</span>
+                    <span class="metric-label">Product Variants</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Q&A -->
+        <div class="slide">
+            <div class="slide-number">11 / 11</div>
+            <div class="closing-section">
+                <h1 class="closing-title">Questions & Discussion</h1>
+                <p class="closing-subtitle">Ready to explore how I can contribute to your team</p>
+                
+                <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); padding: 60px; border-radius: 20px; margin: 40px 0; text-align: center;">
+                    <div style="font-size: 4rem; margin-bottom: 30px;">🤝</div>
+                    <h2 style="color: var(--primary-color); margin-bottom: 20px;">Let's Connect</h2>
+                    
+                    <div style="display: flex; justify-content: center; gap: 25px; margin: 30px 0; flex-wrap: wrap;">
+                    </div>
+                </div>
+
+                <div class="contact-info" style="margin-top: 60px;">
+                    <div class="contact-item">
+                        <span>📧</span> hookey.chiang@gmail.com
+                    </div>
+                    <div class="contact-item">
+                        <span>💼</span> GitHub: ui-HookeyChiang
+                    </div>
+                    <div class="contact-item">
+                        <span>🔗</span> LinkedIn: hookey-chiang
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cheat Sheet Modal -->
+    <div id="cheatSheetModal" class="cheat-sheet-modal">
+        <div class="cheat-sheet-content">
+            <div class="cheat-sheet-close" onclick="closeCheatSheet()">&times;</div>
+            <div class="cheat-sheet-header" id="cheatSheetTitle"></div>
+            <div id="cheatSheetBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced navigation and presentation features
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        // Cheat Sheet Data
+        const cheatSheets = {
+            'stability-analysis': {
+                title: '🔍 Stability Gap Analysis',
+                content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Identified lack of comprehensive stability testing:</strong>
+                        <p>NAS platform needed real-world deployment scenario validation</p>
+                        <code class="cheat-sheet-command"># Initial stability assessment</code>
+                        <code class="cheat-sheet-command">uptime && cat /proc/loadavg</code>
+                        <code class="cheat-sheet-command"># Check for previous crashes or issues</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Product reliability concerns:</strong>
+                        <p>Customer satisfaction issues from frequent support escalations</p>
+                        <code class="cheat-sheet-command"># System stability metrics</code>
+                        <code class="cheat-sheet-command">journalctl --since="30 days ago" | grep -i error</code>
+                        <code class="cheat-sheet-command"># Analysis of failure patterns</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Multi-service interaction gaps:</strong>
+                        <p>Insufficient validation under sustained high-load conditions</p>
+                        <code class="cheat-sheet-command"># Service interaction monitoring</code>
+                        <code class="cheat-sheet-command">systemctl list-units --failed</code>
+                        <code class="cheat-sheet-command"># Inter-service dependency analysis</code>
+                    </div>
+                `
+            },
+            'qa-planning': {
+                title: '📋 QA Planning & Framework',
+                content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Drafted QA plans for hardware and software stress testing:</strong>
+                        <p>Comprehensive testing framework design covering all system layers</p>
+                        <code class="cheat-sheet-command"># Test plan structure</code>
+                        <code class="cheat-sheet-command">mkdir -p /qa-plans/{hardware,software,integration}</code>
+                        <code class="cheat-sheet-command">vim qa-plans/master-test-plan.md</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Resource allocation with PDM focus:</strong>
+                        <p>Secured product reliability focus and human resource allocation</p>
+                        <code class="cheat-sheet-command"># Resource planning documentation</code>
+                        <code class="cheat-sheet-command">cat > resource-allocation.md << 'EOF'</code>
+                        <code class="cheat-sheet-command"># PDM: Product reliability priority</code>
+                        <code class="cheat-sheet-command"># Team: Dedicated QA resources</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Platform-wide testing strategy:</strong>
+                        <p>Designed comprehensive coverage across NAS-series product releases</p>
+                        <code class="cheat-sheet-command"># Testing strategy framework</code>
+                        <code class="cheat-sheet-command">echo "Unit → Integration → System → Acceptance" > test-levels.txt</code>
+                    </div>
+                `
+            },
+            'cross-team-collaboration': {
+                title: '🤝 Cross-Team Collaboration',
+                content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Co-led comprehensive test planning with SQA team:</strong>
+                        <p>Joint planning sessions designing platform-wide stress testing framework</p>
+                        <code class="cheat-sheet-command"># Collaboration workflow</code>
+                        <code class="cheat-sheet-command">git clone sqa-team/stability-tests.git</code>
+                        <code class="cheat-sheet-command">cd stability-tests && git checkout -b joint-planning</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Cross-functional team integration:</strong>
+                        <p>Established communication channels and shared responsibilities</p>
+                        <code class="cheat-sheet-command"># Team communication setup</code>
+                        <code class="cheat-sheet-command">slack-cli create-channel #nas-stability-qa</code>
+                        <code class="cheat-sheet-command">confluence create-space "NAS QA Collaboration"</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Shared testing infrastructure:</strong>
+                        <p>Joint ownership of testing framework and result analysis</p>
+                        <code class="cheat-sheet-command"># Shared infrastructure setup</code>
+                        <code class="cheat-sheet-command">docker-compose up -d test-infrastructure</code>
+                        <code class="cheat-sheet-command"># Both teams access same test environment</code>
+                    </div>
+                `
+            },
+            'test-automation': {
+                title: '🤖 Test Automation',
+                content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Multi-day continuous validation cycles:</strong>
+                        <p>Automated testing infrastructure supporting extended stress testing</p>
+                        <code class="cheat-sheet-command"># Multi-day automation setup</code>
+                        <code class="cheat-sheet-command">crontab -e</code>
+                        <code class="cheat-sheet-command"># 0 */6 * * * /qa/scripts/stability-cycle.sh</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Automated testing infrastructure:</strong>
+                        <p>Comprehensive coverage across storage, network, and filesystem layers</p>
+                        <code class="cheat-sheet-command"># Automation framework</code>
+                        <code class="cheat-sheet-command">./automation/run-stability-suite.sh --duration=72h</code>
+                        <code class="cheat-sheet-command"># Automated reporting and alerting</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Continuous monitoring and alerting:</strong>
+                        <p>Real-time issue detection during extended testing periods</p>
+                        <code class="cheat-sheet-command"># Monitoring setup</code>
+                        <code class="cheat-sheet-command">prometheus --config.file=qa-monitoring.yml</code>
+                        <code class="cheat-sheet-command">alertmanager --config.file=qa-alerts.yml</code>
+                    </div>
+                `
+            },
+            'storage-testing': {
+                title: '💾 Storage Testing',
+                content: `
+                    <div class="cheat-sheet-item">
+                        <strong>RAID expansion testing with concurrent I/O:</strong>
+                        <p>Multi-day I/O stress loops with RAID expansion and snapshot operations</p>
+                        <code class="cheat-sheet-command"># RAID expansion stress test</code>
+                        <code class="cheat-sheet-command">mdadm --grow /dev/md0 --raid-devices=6 &</code>
+                        <code class="cheat-sheet-command">fio --name=concurrent-io --rw=randrw --bs=4k --runtime=72h</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Btrfs filesystem validation:</strong>
+                        <p>Integrated xfstests for subvolume operations, balance, and scrub</p>
+                        <code class="cheat-sheet-command"># Btrfs stress testing</code>
+                        <code class="cheat-sheet-command">./check -btrfs -g stress</code>
+                        <code class="cheat-sheet-command">btrfs scrub start /mnt/nas &</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Filesystem integrity validation:</strong>
+                        <p>Power cycle testing and service interruption scenarios</p>
+                        <code class="cheat-sheet-command"># Power failure simulation</code>
+                        <code class="cheat-sheet-command">echo b > /proc/sysrq-trigger # Immediate reboot</code>
+                        <code class="cheat-sheet-command">fsck.btrfs /dev/sda1 # Post-crash validation</code>
+                    </div>
+                `
+            },
+            'cross-platform-testing': {
+                title: '🖥️ Cross-Platform Testing',
+                content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Cross-platform validation using concurrent clients:</strong>
+                        <p>Linux/Mac/Windows clients running FIO workloads simultaneously</p>
+                        <code class="cheat-sheet-command"># Multi-platform client coordination</code>
+                        <code class="cheat-sheet-command"># Linux: fio --client=nas-server --name=linux-test</code>
+                        <code class="cheat-sheet-command"># Mac: fio --client=nas-server --name=mac-test</code>
+                        <code class="cheat-sheet-command"># Windows: fio.exe --client=nas-server --name=win-test</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Mac Time Machine backup validation:</strong>
+                        <p>Comprehensive testing across all supported drive types and configurations</p>
+                        <code class="cheat-sheet-command"># Time Machine test setup</code>
+                        <code class="cheat-sheet-command">tmutil setdestination /Volumes/NAS-TimeMachine</code>
+                        <code class="cheat-sheet-command">tmutil startbackup --block # Full backup test</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Protocol compatibility validation:</strong>
+                        <p>SMB/NFS/AFP protocol testing across different OS versions</p>
+                        <code class="cheat-sheet-command"># Protocol testing matrix</code>
+                        <code class="cheat-sheet-command">smbclient -L nas-server # SMB discovery</code>
+                        <code class="cheat-sheet-command">showmount -e nas-server # NFS exports</code>
+                    </div>
+                `
+            },
+            'stability-validation': {
+                title: '✅ Stability Validation',
+                content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Critical issue discovery and resolution:</strong>
+                        <p>Systematic identification and fixing of stability problems</p>
+                        <code class="cheat-sheet-command"># Issue tracking and resolution</code>
+                        <code class="cheat-sheet-command">grep -r "RAID expansion crashes" /var/log/</code>
+                        <code class="cheat-sheet-command"># Fix: Concurrent I/O throttling during expansion</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>eCryptFS lock-up prevention:</strong>
+                        <p>Resolved filesystem hangs during RAID operations</p>
+                        <code class="cheat-sheet-command"># eCryptFS stability fix</code>
+                        <code class="cheat-sheet-command">echo 0 > /sys/fs/ecryptfs/global_auth_tok_list_mutex_debug</code>
+                        <code class="cheat-sheet-command"># Prevent deadlock during RAID operations</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Samba file locking issue resolution:</strong>
+                        <p>Fixed client connection durability problems causing lock issues</p>
+                        <code class="cheat-sheet-command"># Samba locking fix</code>
+                        <code class="cheat-sheet-command">echo "oplocks = no" >> /etc/samba/smb.conf</code>
+                        <code class="cheat-sheet-command">echo "level2 oplocks = no" >> /etc/samba/smb.conf</code>
+                    </div>
+                `
+            },
+            'btrfs-analysis': {
+                title: '🔍 Btrfs Feature Analysis',
+                content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Evaluated fast Btrfs checksum feature:</strong>
+                        <p>For data integrity and CPU resource-saving improvements</p>
+                        <code class="cheat-sheet-command"># xxhash checksum algorithm evaluation</code>
+                        <code class="cheat-sheet-command">mount -o checksum=xxhash /dev/sda1 /mnt</code>
+                        <code class="cheat-sheet-command"># 15-20% performance improvement over crc32c</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Identified kernel limitations:</strong>
+                        <p>Required features blocked by Linux 4.19 limitations</p>
+                        <code class="cheat-sheet-command"># Required kernel features missing</code>
+                        <code class="cheat-sheet-command">grep -r "xxhash" /usr/src/linux-4.19/fs/btrfs/</code>
+                        <code class="cheat-sheet-command"># No results - feature not available</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Backport complexity assessment:</strong>
+                        <p>Thousands of commits involving xarray changes across modules</p>
+                        <code class="cheat-sheet-command"># Dependency analysis</code>
+                        <code class="cheat-sheet-command">git log --oneline v4.19..v5.10 -- fs/btrfs/ | wc -l</code>
+                        <code class="cheat-sheet-command"># Result: 3000+ commits to review and backport</code>
+                    </div>
+                `
+            },
+            'kernel-upgrade': {
+                title: '⚙️ Kernel Upgrade 4.19 → 5.10',
+                content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Prepared and stabilized Linux kernel upgrade:</strong>
+                        <p>From 4.19 to 5.10 with Alpine SDK compatibility</p>
+                        <code class="cheat-sheet-command"># Kernel build preparation</code>
+                        <code class="cheat-sheet-command">make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- defconfig</code>
+                        <code class="cheat-sheet-command">make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j8</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Alpine SDK integration:</strong>
+                        <p>Maintained compatibility with existing build infrastructure</p>
+                        <code class="cheat-sheet-command"># SDK compatibility testing</code>
+                        <code class="cheat-sheet-command">./build-system/alpine-sdk/test-kernel-compat.sh v5.10</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Feature enablement validation:</strong>
+                        <p>Confirmed xxhash and inline scrubbing availability</p>
+                        <code class="cheat-sheet-command"># Verify new Btrfs features</code>
+                        <code class="cheat-sheet-command">grep -r "BTRFS_CHECKSUM_XXHASH" /usr/src/linux-5.10/</code>
+                        <code class="cheat-sheet-command">mount -o checksum=xxhash # Now supported</code>
+                    </div>
+                `
+            },
+            'bug-fixes': {
+                title: '🔧 Critical Bug Resolution',
+                content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Fixed RAID5 50% performance regression:</strong>
+                        <p>By adjusting I/O size from 4K to 64K optimal chunks</p>
+                        <code class="cheat-sheet-command"># RAID5 I/O size optimization</code>
+                        <code class="cheat-sheet-command">echo 64 > /sys/block/md0/queue/optimal_io_size</code>
+                        <code class="cheat-sheet-command"># Result: 2x throughput improvement</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Resolved Realtek PHY system crashes:</strong>
+                        <p>From ALDPS/EEE behaviors using kdump analysis</p>
+                        <code class="cheat-sheet-command"># PHY power management fix</code>
+                        <code class="cheat-sheet-command">ethtool -s eth0 eee off</code>
+                        <code class="cheat-sheet-command"># Disable aggressive low power modes</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Fixed AHCI driver PCI IRQ vector setup:</strong>
+                        <p>Through dynamic IRQ vector selection replacing hardcoded assignments</p>
+                        <code class="cheat-sheet-command"># AHCI IRQ configuration</code>
+                        <code class="cheat-sheet-command">cat /proc/interrupts | grep ahci</code>
+                        <code class="cheat-sheet-command"># Verify proper MSI-X vector assignment</code>
+                    </div>
+                `
+            },
+            'driver-modernization': {
+                title: '🚀 Driver Modernization',
+                content: `
+                    <div class="cheat-sheet-item">
+                        <strong>PCI Controller modernization:</strong>
+                        <p>Updated resource management with devm_pci_alloc_host_bridge()</p>
+                        <code class="cheat-sheet-command"># PCI controller resource management</code>
+                        <code class="cheat-sheet-command">lspci -vv | grep -A5 "Host bridge"</code>
+                        <code class="cheat-sheet-command"># Verify modern resource allocation</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Ethernet Driver updates:</strong>
+                        <p>Updated deprecated APIs and enhanced PHY handling with phy_set_asym_pause</p>
+                        <code class="cheat-sheet-command"># PHY asymmetric pause support</code>
+                        <code class="cheat-sheet-command">ethtool eth0 | grep "Pause"</code>
+                        <code class="cheat-sheet-command"># Asymmetric pause frame support enabled</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>API compatibility updates:</strong>
+                        <p>Modernized ndo_select_queue and getnstimeofday deprecated API usage</p>
+                        <code class="cheat-sheet-command"># Network device queue selection</code>
+                        <code class="cheat-sheet-command">cat /proc/net/dev | grep eth0</code>
+                        <code class="cheat-sheet-command"># Multi-queue operation verified</code>
+                    </div>
+                `
+            },
+            'hardware-compat': {
+                title: '🔌 Hardware Compatibility',
+                content: `
+                    <div class="cheat-sheet-item">
+                        <strong>PCA9575 chip compatibility fixes:</strong>
+                        <p>Implemented byte-by-byte read mode to resolve auto-increment failures</p>
+                        <code class="cheat-sheet-command"># PCA9575 I2C communication fix</code>
+                        <code class="cheat-sheet-command">i2cget -y 1 0x20 0x00</code>
+                        <code class="cheat-sheet-command"># Single-byte read mode active</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>PHY auto-negotiation regression fixes:</strong>
+                        <p>Corrected AR8033 and RTL8211f issues from generic framework upgrades</p>
+                        <code class="cheat-sheet-command"># PHY auto-negotiation status</code>
+                        <code class="cheat-sheet-command">ethtool eth0 | grep "Auto-negotiation"</code>
+                        <code class="cheat-sheet-command"># Link partner advertisement</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Ethernet controller validation:</strong>
+                        <p>Verified full compatibility with existing network infrastructure</p>
+                        <code class="cheat-sheet-command"># Network interface validation</code>
+                        <code class="cheat-sheet-command">ethtool -i eth0</code>
+                        <code class="cheat-sheet-command">mii-tool eth0</code>
+                    </div>
+                `
+            },
+            'comprehensive-validation': {
+                title: '🧪 Comprehensive Validation',
+                content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Multi-framework testing approach:</strong>
+                        <p>Extensive validation using stress-ng, xfstests, and packetdrill</p>
+                        <code class="cheat-sheet-command"># Comprehensive stress testing</code>
+                        <code class="cheat-sheet-command">stress-ng --cpu 8 --io 4 --vm 2 --timeout 24h</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Filesystem validation:</strong>
+                        <p>Btrfs functionality validated with complete xfstests suite</p>
+                        <code class="cheat-sheet-command"># Btrfs filesystem testing</code>
+                        <code class="cheat-sheet-command">./check -btrfs tests/btrfs/</code>
+                        <code class="cheat-sheet-command"># 180+ tests passed, 3 known issues</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Network stack validation:</strong>
+                        <p>TCP behavior validated with packetdrill for edge case scenarios</p>
+                        <code class="cheat-sheet-command"># Network protocol testing</code>
+                        <code class="cheat-sheet-command">packetdrill tcp-connection-established.pkt</code>
+                        <code class="cheat-sheet-command"># All TCP state machine tests passed</code>
+                    </div>
+                `
+            },
+            'stable-deployment': {
+                title: '🎯 Stable Deployment',
+                content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Zero regression deployment:</strong>
+                        <p>Successfully deployed stable Linux 5.10 with zero regression issues</p>
+                        <code class="cheat-sheet-command"># Production deployment validation</code>
+                        <code class="cheat-sheet-command">uname -r</code>
+                        <code class="cheat-sheet-command"># Output: 5.10.x-alpine-custom</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Feature enablement confirmation:</strong>
+                        <p>All target Btrfs features successfully enabled and operational</p>
+                        <code class="cheat-sheet-command"># Btrfs feature verification</code>
+                        <code class="cheat-sheet-command">btrfs filesystem show</code>
+                        <code class="cheat-sheet-command">mount | grep checksum=xxhash</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Performance improvements validated:</strong>
+                        <p>+40% SSD RAID write IOPS using ARM64 hardware-accelerated CRC32</p>
+                        <code class="cheat-sheet-command"># Performance validation</code>
+                        <code class="cheat-sheet-command">fio --name=raid-test --rw=randwrite --bs=4k --iodepth=32</code>
+                        <code class="cheat-sheet-command"># Baseline: 25K IOPS → New: 35K IOPS</code>
+                    </div>
+                `
+            },
+            'fio-benchmark': {
+                title: '📊 FIO Benchmark Baseline Analysis',
+                content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Network throughput measurement:</strong>
+                        <p>Identified performance gap between network and local I/O capacity</p>
+                        <code class="cheat-sheet-command"># Network throughput via Samba</code>
+                        <code class="cheat-sheet-command">smbclient //server/share -c "put largefile.dat"</code>
+                        <code class="cheat-sheet-command"># Result: 544 MB/s write, 592 MB/s read</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Local storage capacity baseline:</strong>
+                        <p>Established maximum hardware throughput potential</p>
+                        <code class="cheat-sheet-command"># Direct storage I/O benchmark</code>
+                        <code class="cheat-sheet-command">fio --name=test --ioengine=libaio --iodepth=32 --rw=write --bs=1M --size=10G</code>
+                        <code class="cheat-sheet-command"># Result: 951 MB/s write, 1850 MB/s read</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Network capacity validation:</strong>
+                        <p>Confirmed network infrastructure was not the bottleneck</p>
+                        <code class="cheat-sheet-command"># Raw network throughput</code>
+                        <code class="cheat-sheet-command">iperf3 -c server -P 4 -t 60</code>
+                        <code class="cheat-sheet-command"># Result: 1050 MB/s write, 1025 MB/s read</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Performance gap analysis:</strong>
+                        <p>Identified 48% underutilization of available throughput</p>
+                        <code class="cheat-sheet-command"># Gap calculation: (951-544)/951 = 43% write gap</code>
+                        <code class="cheat-sheet-command"># Gap calculation: (1850-592)/1850 = 68% read gap</code>
+                        <p><strong>Conclusion:</strong> Samba layer optimization potential identified</p>
+                    </div>
+                `
+            },
+            'cpu-irq': {
+                title: '🔧 CPU Affinity & IRQ Optimization',
+                content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Dedicated exclusive CPU core to RX interrupts:</strong>
+                        <p>Prevents contention between network interrupts and smbd process</p>
+                        <code class="cheat-sheet-command"># Set IRQ affinity to specific CPU core</code>
+                        <code class="cheat-sheet-command">echo 2 > /proc/irq/24/smp_affinity</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Avoided co-locating RX and smbd on same CPU:</strong>
+                        <p>Prevents performance degradation from CPU core competition</p>
+                        <code class="cheat-sheet-command"># Bind smbd to different cores</code>
+                        <code class="cheat-sheet-command">taskset -c 0,2-7 /usr/sbin/smbd</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Evaluated and discarded RPS/RFS:</strong>
+                        <p>Due to high CPU overhead and lacking aRFS hardware support</p>
+                        <code class="cheat-sheet-command"># RPS/RFS disabled for performance</code>
+                        <code class="cheat-sheet-command">echo 0 > /sys/class/net/eth0/queues/rx-0/rps_cpus</code>
+                    </div>
+                `
+            },
+            'network-tuning': {
+                title: '🌐 System-wide Network Tuning',
+                content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Implemented AL Ethernet adaptive RX coalescing:</strong>
+                        <p>With runtime configurability for optimal packet processing</p>
+                        <code class="cheat-sheet-command"># Enable adaptive RX coalescing</code>
+                        <code class="cheat-sheet-command">ethtool -C eth0 adaptive-rx on</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Applied RX interrupt coalescing and adaptive RX:</strong>
+                        <p>For optimal packet processing efficiency</p>
+                        <code class="cheat-sheet-command"># Configure interrupt coalescing</code>
+                        <code class="cheat-sheet-command">ethtool -C eth0 rx-usecs 50 rx-frames 25</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Switched congestion control algorithm from BBR to CUBIC:</strong>
+                        <p>For better burst handling in enterprise environments</p>
+                        <code class="cheat-sheet-command"># Set CUBIC congestion control</code>
+                        <code class="cheat-sheet-command">sysctl net.ipv4.tcp_congestion_control=cubic</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Changed queuing discipline from pfifo to fq:</strong>
+                        <p>Improving fairness and throughput characteristics</p>
+                        <code class="cheat-sheet-command"># Apply fair queuing discipline</code>
+                        <code class="cheat-sheet-command">tc qdisc replace dev eth0 root fq</code>
+                    </div>
+                `
+            },
+            'hardware-optimize': {
+                title: '⚡ IRQ Optimization',
+                content: `
+                    <div class="cheat-sheet-item">
+                        <strong>RX interrupt coalescing and adaptive RX:</strong>
+                        <p>For optimal packet processing at hardware level</p>
+                        <code class="cheat-sheet-command"># Configure interrupt coalescing</code>
+                        <code class="cheat-sheet-command">ethtool -C eth0 rx-usecs 50 rx-frames 25</code>
+                        <code class="cheat-sheet-command">ethtool -C eth0 adaptive-rx on</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Hardware-level packet processing optimization:</strong>
+                        <p>Tuning NIC settings for maximum throughput efficiency</p>
+                        <code class="cheat-sheet-command"># Optimize ring buffer sizes</code>
+                        <code class="cheat-sheet-command">ethtool -G eth0 rx 4096 tx 4096</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Network interface performance tuning:</strong>
+                        <p>Hardware-specific optimizations for enterprise storage</p>
+                        <code class="cheat-sheet-command"># Check current NIC settings</code>
+                        <code class="cheat-sheet-command">ethtool -k eth0 | grep -E "(tcp|gso|tso|gro)"</code>
+                    </div>
+                `
+            },
+            'zero-copy': {
+                title: '📋 Samba-Layer Performance Tuning',
+                content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Enabled zero-copy data transfer:</strong>
+                        <p>From socket buffer to page cache for maximum efficiency</p>
+                        <code class="cheat-sheet-command"># Samba configuration</code>
+                        <code class="cheat-sheet-command">use sendfile = yes</code>
+                        <code class="cheat-sheet-command">getwd cache = yes</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Leveraged asynchronous I/O:</strong>
+                        <p>With increased negotiated packet sizes including jumbo frame support</p>
+                        <code class="cheat-sheet-command"># Async I/O configuration</code>
+                        <code class="cheat-sheet-command">aio read size = 16384</code>
+                        <code class="cheat-sheet-command">aio write size = 16384</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Optimized Samba configuration:</strong>
+                        <p>For high-throughput workloads and large file transfers</p>
+                        <code class="cheat-sheet-command"># Large buffer support</code>
+                        <code class="cheat-sheet-command">large readwrite = yes</code>
+                        <code class="cheat-sheet-command">max xmit = 131072</code>
+                    </div>
+                `
+            },
+            'tcp-optimize': {
+                title: '🔌 TCP Socket Behavior Optimization',
+                content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Enabled tcp_quickack:</strong>
+                        <p>To combine ACKs with responses reducing round-trip latency</p>
+                        <code class="cheat-sheet-command"># Enable quick ACK</code>
+                        <code class="cheat-sheet-command">sysctl net.ipv4.tcp_quickack=1</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Enabled tcp_nodelay:</strong>
+                        <p>To reduce latency by avoiding buffering writes</p>
+                        <code class="cheat-sheet-command"># Disable Nagle's algorithm</code>
+                        <code class="cheat-sheet-command">sysctl net.ipv4.tcp_nodelay=1</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Disabled tcp_cork:</strong>
+                        <p>To favor lower latency over packet efficiency</p>
+                        <code class="cheat-sheet-command"># Disable TCP cork</code>
+                        <code class="cheat-sheet-command">sysctl net.ipv4.tcp_cork=0</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Enabled tcp_zerocopy_recv:</strong>
+                        <p>For faster receive paths and improved throughput</p>
+                        <code class="cheat-sheet-command"># Enable zero-copy receive</code>
+                        <code class="cheat-sheet-command">sysctl net.ipv4.tcp_zerocopy_receive=1</code>
+                    </div>
+                `
+            },
+            'buffer-scaling': {
+                title: '📊 Dynamic Buffer Scaling',
+                content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Scaled TCP buffer sizes dynamically:</strong>
+                        <p>Based on observed bottlenecks and rmax thresholds</p>
+                        <code class="cheat-sheet-command"># TCP receive memory scaling</code>
+                        <code class="cheat-sheet-command">sysctl net.ipv4.tcp_rmem="4096 87380 16777216"</code>
+                        <code class="cheat-sheet-command">sysctl net.ipv4.tcp_wmem="4096 65536 16777216"</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>TCP buffer sizing based on bottleneck analysis:</strong>
+                        <p>And rmax thresholds for optimal memory utilization</p>
+                        <code class="cheat-sheet-command"># Enable auto tuning</code>
+                        <code class="cheat-sheet-command">sysctl net.ipv4.tcp_moderate_rcvbuf=1</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Dynamic buffer pressure management:</strong>
+                        <p>To handle high-throughput enterprise storage workloads</p>
+                        <code class="cheat-sheet-command"># Increase network backlog</code>
+                        <code class="cheat-sheet-command">sysctl net.core.netdev_max_backlog=30000</code>
+                        <code class="cheat-sheet-command">sysctl net.core.rmem_max=134217728</code>
+                    </div>
+                `
+            },
+            'product-scalability': {
+                title: '🚀 Linux 5.10 Capabilities Enabled',
+                content: `
+                    <div style="padding: 30px;">
+                        <ul style="font-size: 1.2rem; line-height: 2; margin: 0; list-style-type: disc; padding-left: 20px;">
+                            <li>NVMe 1.4 support for next-generation storage performance</li>
+                            <li>Multi-queue block layer (blk-mq) for improved I/O scalability</li>
+                            <li>Multi-channel Samba for enhanced SMB performance</li>
+                            <li>Advanced TCP congestion control (BBR and CUBIC algorithms)</li>
+                            <li>Enhanced cgroup resource control and priority management</li>
+                            <li>Extremely low scheduler tail latency for real-time responsiveness</li>
+                        </ul>
+                    </div>
+                `
+            },
+            'multi-issue-discovered': {
+                title: '🔍 Critical Issues Discovered',
+                content: `
+                    <div style="padding: 30px;">
+                        <ul style="font-size: 1.2rem; line-height: 2; margin: 0; list-style-type: disc; padding-left: 20px;">
+                            <li>RAID expansion crashes during concurrent high I/O operations</li>
+                            <li>eCryptFS lock-ups during RAID operations preventing system hangs</li>
+                            <li>Samba file locking issues caused by non-durable client connections</li>
+                            <li>Cross-platform client compatibility problems (Linux/Mac/Windows)</li>
+                        </ul>
+                    </div>
+                `
+            }
+        };
+
+        // Cheat Sheet Functions
+        function showCheatSheet(cheatKey) {
+            const cheatSheet = cheatSheets[cheatKey];
+            if (cheatSheet) {
+                document.getElementById('cheatSheetTitle').innerHTML = cheatSheet.title;
+                document.getElementById('cheatSheetBody').innerHTML = cheatSheet.content;
+                document.getElementById('cheatSheetModal').style.display = 'flex';
+                
+                // Prevent background scrolling
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeCheatSheet() {
+            document.getElementById('cheatSheetModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside content
+        document.getElementById('cheatSheetModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeCheatSheet();
+            }
+        });
+
+        // Navigation functions
+        function showSlide(n) {
+            if (n >= 0 && n < totalSlides) {
+                currentSlide = n;
+                slides[currentSlide].scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        // Enhanced Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            // Check if modal is open first
+            if (document.getElementById('cheatSheetModal').style.display === 'flex') {
+                if (e.key === 'Escape') {
+                    e.preventDefault();
+                    closeCheatSheet();
+                }
+                return; // Don't process other keys when modal is open
+            }
+
+            switch(e.key) {
+                case 'ArrowRight':
+                case ' ':
+                case 'PageDown':
+                    e.preventDefault();
+                    nextSlide();
+                    break;
+                case 'ArrowLeft':
+                case 'PageUp':
+                    e.preventDefault();
+                    prevSlide();
+                    break;
+                case 'Home':
+                    e.preventDefault();
+                    showSlide(0);
+                    break;
+                case 'End':
+                    e.preventDefault();
+                    showSlide(totalSlides - 1);
+                    break;
+                case 'Escape':
+                    // Toggle fullscreen
+                    if (!document.fullscreenElement) {
+                        document.documentElement.requestFullscreen();
+                    } else {
+                        document.exitFullscreen();
+                    }
+                    break;
+            }
+        });
+
+        // Visual feedback for interactive elements
+        document.querySelectorAll('.point-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Add click handlers for flow boxes
+        document.querySelectorAll('.flow-box').forEach(box => {
+            box.addEventListener('click', function() {
+                const cheatKey = this.getAttribute('data-cheat');
+                if (cheatKey) {
+                    showCheatSheet(cheatKey);
+                }
+            });
+        });
+
+        // Add click handlers for clickable metric boxes
+        document.querySelectorAll('.metric-box[data-cheat]').forEach(box => {
+            box.addEventListener('click', function() {
+                const cheatKey = this.getAttribute('data-cheat');
+                if (cheatKey) {
+                    showCheatSheet(cheatKey);
+                }
+            });
+        });
+
+        // Presentation mode indicator
+        function updateNavigationHint() {
+            const hint = document.querySelector('.navigation-hint');
+            hint.innerHTML = `
+                Slide ${currentSlide + 1} of ${totalSlides} | 
+                Use ← → arrow keys to navigate | 
+                Press ESC for fullscreen
+            `;
+        }
+
+        // Initialize
+        updateNavigationHint();
+        
+        // Update navigation hint when slide changes
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const slideIndex = Array.from(slides).indexOf(entry.target);
+                    if (slideIndex !== -1) {
+                        currentSlide = slideIndex;
+                        updateNavigationHint();
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+
+        slides.forEach(slide => observer.observe(slide));
+
+        console.log('🚀 Interview presentation loaded successfully!');
+        console.log('📱 Navigation: Use ← → arrow keys only');
+        console.log('🎯 Total slides:', totalSlides);
+    </script>
+</body>
+</html>
