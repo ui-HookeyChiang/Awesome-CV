@@ -22,10 +22,13 @@
           }
           \begin{itemize}
           \item {
-            Designed, implemented and tested frameworks and features from U-boot through Linux kernel to user-space applications, ensuring robust manufacturing and field deployment.
+            Designed, implemented and tested full-stack features from BSP firmware through Linux kernel to UniFi-OS applications, collaborating across teams for robust manufacturing and field
+            deployment.
           }
           \item {
-            Co-led stress testing framework with SQA team, implementing multi-day I/O stress loops, RAID expansion tests, and filesystem validation using xfstests and stress-ng toolsets.
+            Co-led testing frameworks with SQA team, implementing I/O stress loops, RAID expansion tests, validation of
+            Btrfs and ZFS, and fullstack
+            performance profiling using xfstests, stress-ng and fio.
           }
           \item {
             Established SOPs for support engineers, enabling the team to focus
@@ -50,15 +53,15 @@
             Reduced Btrfs subvolume deletion latency and write amplification from cross-subvolume moves.
             }
           \item {
-            Eliminated OOM crashes, including 93\% socket buffer waste and
-            filesystem-abusing updates.
+            Eliminated OOM crashes by optimizing socket buffer usage and
+            abusive filesystem requests.
           }
           \item {
-            Led performance profiling across NIC, RAID, SSD-cache, Btrfs and file services.
+            Applied cgroup V2 to guarantee quality of system services, preventing swap-induced latencies under heavy I/O and enabling foreground/background service prioritization.
           }
           \end{itemize}
         \item {
-          Enhanced system reliability, scalability and performance across all UniFi-OS products.
+          Enhanced system reliability, scalability and performance across all 2M+ UniFi-OS machines.
           }
           \begin{itemize}
           \item {
@@ -66,8 +69,11 @@
             minimizing latency to microseconds.
           }
           \item {
-            Optimized the build system with AI reviewers and supporting backport packages
-            installation.
+            Optimized the build system with FIT-image firmware, enabling
+            backport package updates.
+          }
+          \item {
+            Conducted 280 code reviews annaully and deployed AI reviewers to boost 400 PRs quarterly.
           }
           \end{itemize}
       \end{cvitems}
@@ -94,12 +100,12 @@
             mounting, client-side encryption, smart synchronization with predownload/autoupdate, cache pinning, and partial downloads.
             }
           \item {
-            Designed and implemented CI pipelines using GitLab, Jenkins, and Docker with
-            automated validation using pjdfstest, filebench, and custom test frameworks.
+            Implemented CI pipelines using GitLab, Jenkins, and Docker with
+            filesystem validation suites.
             }
         \end{itemize}
         \item {
-          Delivered 300\% metadata and 50\% I/O performance improvements through automated testing and validation of
+          Delivered 300\% metadata and 50\% I/O performance improvements via multi-threading,
           multi-layer caching, algorithm optimization, and database performance tuning.
           }
         \begin{itemize}
@@ -108,19 +114,16 @@
             case-sensitivity and cache invalidation.
             }
           \item {
-            Resolved cyclic deadlocks between FUSE xattr and RPC-based daemon queries through redesign.
+            Resolved cyclic deadlocks between FUSE xattr and IPC daemons via architectural redesign.
             }
           \item {
-            Enabled 50M+ files at 200 files/sec through metadata redesign, eliminating inode count limits.
+            Redesigned metadata storage layout to eliminate inode limits, supporting 50M+ files at 200 files/s.
             }
           \item {
             Optimized download latency by 36\% using centralized state machine with condition variables.
             }
           \item {
-            Reduced recursive deletion from 22s to 1s implementing one-shot delete API for 1000 directories.
-            }
-          \item {
-            Improved NFS directory listing from 1s to 0.3s through readdirplus syscall optimization.
+            Reduced recursive deletion from 22s to 1s by batching operations and syscall reduction.
             }
         \end{itemize}
       \end{cvitems}
