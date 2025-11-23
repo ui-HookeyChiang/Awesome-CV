@@ -1,6 +1,85 @@
 # Ubiquiti Experience
 
+## Github Metrics
+
+| Year | Total Contributions | Code Reviews | Commits | Pull Requests |
+|------|---------------------|--------------|---------|---------------|
+| 2025 | 812                 | 47%          | 30%     | 22%           |
+| 2024 | 722                 | 36%          | 36%     | 28%           |
+| 2023 | 619                 | 31%          | 41%     | 28%           |
+| 2022 | 308                 | 20%          | 52%     | 28%           |
+
 ## 2025
+
+### Q3 Achievements
+
+#### Storage & Filesystem Optimization
+
+##### ZFS Implementation
+- Implemented full ZFS support with complete feature parity to existing Btrfs backend
+- Preserved identical user-facing behavior and functionality for seamless migration
+- Added enterprise-level storage capabilities with advanced data protection features
+
+##### Btrfs Enhancement
+- Collaborated with PM to define snapshot number limit specifications based on CPU/IO impact analysis and HDD slot scalability
+- Designed effective snapshot pruning mechanism to maintain optimal performance and manageability
+- Analyzed system resource consumption patterns across different storage configurations
+
+##### NFS Performance Tuning
+- Optimized UNASPro series NFS performance achieving significant throughput improvements:
+  - Sequential write performance improved by 45–70%
+  - Random read performance improved by 5–8% for page-cached workloads
+- Fine-tuned network and filesystem layer interactions for optimal data transfer efficiency
+
+##### Samba Optimization
+- Analyzed performance characteristics of asynchronous I/O mode under various workload patterns
+- Identified inefficiency under random I/O workloads requiring configuration adjustments
+- Provided recommendations for workload-specific optimization strategies
+
+##### UNAS4 Performance Enhancement
+- Improved sequential write performance by 100%, fully saturating 2.5GbE network bandwidth
+- Achieved breakthrough through significant reduction of I/O operations and merge counts
+- Optimized filesystem and block layer interactions for maximum throughput efficiency
+
+#### Network & Hardware Enhancement
+
+##### PHY Driver Support
+- Added comprehensive auto-negotiation and pause frame support for UNASPro platforms
+- Enhanced rtl8211f driver for UNASPro with improved link negotiation capabilities
+- Improved ar8033 driver for UNASPro4 with flow control optimization
+
+#### System Performance & Validation
+
+##### UNASPro8 Comprehensive Evaluation
+- Conducted end-to-end system performance evaluation on UNASPro8 with SSD Cache configuration
+- Identified critical performance bottlenecks across system layers:
+  - Network throughput: Rx 1400 MB/s, Tx 2150 MB/s
+  - CPU processing limitations under high-load conditions
+  - Storage subsystem optimization opportunities
+- Measured SSD/HDD/SSD-cache performance across Samba and NFS protocols:
+  - Quantified random I/O and sequential read performance gains with caching
+  - Identified sequential write performance degradation requiring chunk size tuning
+  - Provided actionable insights for random I/O optimization strategies
+
+#### Automation & Tooling
+
+##### QA Automation Framework
+- Developed comprehensive automation scripts for file service and SSD-cache performance testing
+- Reduced QA verification time from one week to one day across UNAS4/UNASPro4/UNASPro8 platforms
+- Enabled rapid regression testing and performance validation for releases
+
+##### Development Tooling
+- Created ZFS filesystem functionality verification framework for ENAS platform
+- Automated repetitive testing procedures reducing manual effort and human error
+- Accelerated development iteration cycles through streamlined validation processes
+
+#### AI-Assisted Development
+
+##### Code Review Enhancement
+- Deployed AI code reviewers across multiple projects for automated analysis
+- Automatically generated contextual code summaries and architectural flowcharts
+- Significantly reduced cognitive load and improved code review efficiency
+- Enhanced code quality through consistent automated analysis patterns
 
 ### Q2 Achievements
 
