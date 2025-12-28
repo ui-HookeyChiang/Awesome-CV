@@ -18,50 +18,51 @@
     {
       \begin{cvitems} % Description(s) of tasks/responsibilities
         \item {
-            Pioneered Ubiquiti's first NAS platform with 3 members, scaling the product line to 6 model variants.
+            Pioneered Ubiquiti's first NAS platform with 2 members, scaling the product line to 6 model variants.
           }
           \begin{itemize}
           \item {
-            Designed, implemented and tested full-stack features from BSP firmware through Linux kernel to UniFi-OS applications, collaborating across teams for robust manufacturing and field
-            deployment.
+            Developed across the UniFi-APPs, Debian OS, Linux kernel and BSP
+            layers, collaborating for robust manufacturing and field
+            deployment, reshaping product strategy with performance insights.
           }
           \item {
-            Co-led testing frameworks with SQA team, implementing I/O stress loops, RAID expansion tests, validation of
-            Btrfs and ZFS, and fullstack
-            performance profiling using xfstests, stress-ng and fio.
+            Co-led testing frameworks with SQA team, implementing I/O stress
+            loops, RAID expansion tests, and validation of BTRFS, ZFS and
+            eCryptFS filesystems using xfstest and fio.
           }
           \item {
-            Established SOPs for support engineers, enabling the team to focus
-            on high-complexity issues.
+            Established performance checklists for support engineers, handling 100+
+            escalations.
           }
           \item {
-            Upgraded kernel 4.19 to 5.10, resolving driver issues,
-            unleashing storage and network capabilities.
+            Upgraded Linux 4.19 to 5.10 along with drivers, unleashing
+            OS capability and eBPF observability.
           }
           \end{itemize}
         \item {
-          Delivered exceptional performance gains through full-stack system optimization and resource control.
+          Delivered exceptional performance gains through full-stack system tunings and resource control.
           }
           \begin{itemize}
           \item {
-            Boosted Samba file transfer throughput from 544/592 MB/s to 830/930 MB/s.
+            Boosted Samba/NFS file transfer throughput from 544/592 MB/s to
+            830/930 MB/s with tunings.
           }
           \item {
-            Enhanced SSD-RAID write IOPS by 40\% using mq-deadline scheduler and ARM64 CRC32.
-            }
-          \item {
-            Reduced Btrfs subvolume deletion latency and write amplification from cross-subvolume moves.
-            }
-          \item {
-            Eliminated OOM crashes by optimizing socket buffer usage and
-            abusive filesystem requests.
+            Enhanced SSD-RAID BTRFS write IOPS by 40\% via mq-deadline scheduler and ARM64 CRC32.
           }
           \item {
-            Applied cgroup V2 to guarantee quality of system services, preventing swap-induced latencies under heavy I/O and enabling foreground/background service prioritization.
+            Optimized BTRFS subvolume deletion tail latency and cases of write amplification.
+          }
+          \item {
+            Reduced OOM crashes by optimizing socket buffer usage and metadata-heavy requests.
+          }
+          \item {
+            Applied cgroup V2 to guarantee quality of system services, preventing swap-induced latencies under heavy I/O and enabling foreground/background prioritization.
           }
           \end{itemize}
         \item {
-          Enhanced system reliability, scalability and performance across all 2M+ UniFi-OS machines.
+          Enhanced system reliability, scalability and efficiency across all 2M+ UniFi-OS machines.
           }
           \begin{itemize}
           \item {
@@ -69,11 +70,10 @@
             minimizing latency to microseconds.
           }
           \item {
-            Optimized the build system with FIT-image firmware, enabling
-            backport package updates.
+            Enabled build system with Debian backport package updates and Trixie support.
           }
           \item {
-            Conducted 280 code reviews annaully and deployed AI reviewers to boost 400 PRs quarterly.
+            Conducted 280 code reviews annually and deployed AI reviewers to boost 400 PRs quarterly.
           }
           \end{itemize}
       \end{cvitems}
@@ -114,16 +114,16 @@
             case-sensitivity and cache invalidation.
             }
           \item {
-            Resolved cyclic deadlocks between FUSE xattr and IPC daemons via architectural redesign.
+            Resolved cyclic deadlocks between FUSE xattr and IPC daemons via API flow redesign.
             }
           \item {
-            Redesigned metadata storage layout to eliminate inode limits, supporting 50M+ files at 200 files/s.
+            Eliminated the inode limit and indexing bottleneck, scaling 50M+ files at 200 files/s.
             }
           \item {
             Optimized download latency by 36\% using centralized state machine with condition variables.
             }
           \item {
-            Reduced recursive deletion from 22s to 1s by batching operations and syscall reduction.
+            Reduced recursive deletion from 22s to 1s by batching operations and syscalls.
             }
         \end{itemize}
       \end{cvitems}
