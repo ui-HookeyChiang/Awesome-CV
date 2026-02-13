@@ -34,7 +34,7 @@ Read all files in `journal/` (or `journal/raw/` if already structured). Classify
 |--------------|------|---------------|
 | `weekly-report_*.md` | Weekly logs | Refine then integrate |
 | `work-report_*.md` | Auto-generated host reports | Keep in raw (reference data) |
-| `annaual_summary.md` | Raw annual data | Keep in raw (reference data) |
+| `annual_summary.md` | Raw annual data | Keep in raw (reference data) |
 | `*-performance.csv` | fio benchmark data | Keep in raw, refine into `refined/performance-summary.md` |
 
 Create the directory structure if it doesn't exist:
@@ -142,7 +142,7 @@ When processing journals that contain performance tuning work, use `journal/refi
 |--------|---------|
 | `journal/raw/btrfs-drive-performance.csv` | Raw fio benchmark data (BW, IOPS, latency, cache hit, CPU) |
 | `journal/refined/performance-summary.md` | Refined summary with before/after tuning stats |
-| `journal/raw/annaual_summary_*.md` | Historical tuning results by year |
+| `journal/raw/annual_summary_*.md` | Historical tuning results by year |
 | `journal/raw/work-report_*.md` | Detailed work streams with tuning parameters |
 
 ### Performance Tuning Categories

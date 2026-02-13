@@ -53,6 +53,18 @@ Count only the rendered display text, excluding LaTeX markup, indentation, and l
 
 ## Formatting Rules
 1. Break lines at natural word boundaries when approaching character limits
-2. Never let LaTeX hyphenate words across lines
+2. **Never break a word with a hyphen to the next line.** LaTeX may auto-hyphenate long words at line ends (e.g., "perfor-\nmance", "infra-\nstructure"). Prevent this by rewording, using shorter synonyms, or adjusting nearby text so the word fits on one line. If a build shows hyphenated breaks in `resume.log` (Overfull/Underfull warnings), fix them.
 3. Maintain consistent indentation within each environment type
 4. Use action verbs and quantifiable results where possible
+5. **Avoid hyphenated compound words** (e.g., "low-latency", "full-stack", "cross-team") at positions where LaTeX may line-break them — the hyphen becomes a line-end break point, splitting the compound across lines and hurting readability. Rephrase instead (e.g., "Delivered measurable latency gains" instead of "Low-latency gains").
+6. **In multi-sentence blocks (summary, paragraphs), each sentence should start from the left margin.** If a sentence ends mid-line and the next sentence starts near the right edge, readers' eyes have to jump awkwardly. Adjust wording so sentence boundaries align with line starts. This rule applies to `cvparagraph` (summary) and any multi-sentence content — NOT to single-sentence sub-bullets where a short second line is fine.
+
+## LaTeX Rendering Warning
+
+Character counts alone do NOT guarantee page fit. LaTeX line-breaking depends on word lengths, hyphenation points, and justification — two texts with identical character counts can render to different numbers of lines.
+
+**Key lessons:**
+- A 91-char sub-bullet with short words may render as 1 line, but the same count with long words may render as 2 lines
+- Swapping "streamlined the dev" for "enabling secure" (same length) can add an extra rendered line
+- The only reliable test is `xelatex` + `pdfinfo | grep Pages`
+- When editing job-targeted resumes, build-and-check after every text change — the layout has zero margin for overflow
