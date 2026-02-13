@@ -131,6 +131,60 @@ After milestone integration, update `milestone/summary.md`:
    - Milestone file has new quarter sections
    - Summary file has new highlights
 
+## Performance Tuning Reference
+
+When processing journals that contain performance tuning work, use `journal/refined/performance-summary.md` as the canonical reference and follow these guidelines.
+
+### Data Sources
+
+| Source | Content |
+|--------|---------|
+| `journal/btrfs-drive-performance.csv` | Raw fio benchmark data (BW, IOPS, latency, cache hit, CPU) |
+| `journal/refined/performance-summary.md` | Refined summary with before/after tuning stats |
+| `journal/raw/annaual_summary_*.md` | Historical tuning results by year |
+| `journal/raw/work-report_*.md` | Detailed work streams with tuning parameters |
+
+### Performance Tuning Categories
+
+When extracting tuning achievements from journals, classify into these categories:
+
+| Category | Examples | Key Metrics |
+|----------|----------|-------------|
+| Network Stack | CPU affinity, IRQ pinning, qdisc, rx-usecs, adaptive RX coalescing | Throughput (Gb/s, MB/s), pause frames |
+| TCP Tuning | tcp_quickack, tcp_nodelay, tcp_cork, tcp_zerocopy_recv, buffer scaling, congestion control | Latency (ms), throughput (MB/s), CPU % |
+| Storage I/O | mq-deadline, CRC32 acceleration, chunk size, I/O merge, noatime, space_cache_v2 | IOPS, BW (MB/s), checksum (GiB/s) |
+| Memory Management | vm.min_free_kbytes, SK_MEM_QUANTUM, cgroup memHigh, subvol rm throttling | OOM count, memory waste %, stability |
+| Filesystem | eCryptfs NEON, Btrfs trashcan, subvol deletion, metadata ops | Throughput multiplier, latency (s) |
+| Service Optimization | ustd CLI, Samba async I/O, zero-copy, CFS bandwidth | CPU %, memory %, load average |
+
+### Writing Before/After Tuning in Milestones
+
+Use this format for tuning results in SAR sections:
+
+```markdown
+**Network Stack Tuning:**
+- [parameter]: [old value] → [new value] — [impact with metric]
+- Example: qdisc pfifo → fq — improved fairness under mixed workloads
+- Example: iperf 1.9 → 2.3 Gb/s (+21%) via CPU affinity (console-ui IRQ → CPU 1)
+```
+
+For tabular tuning summaries (use in Result sections):
+
+```markdown
+| Metric | Before | After | Improvement |
+|--------|--------|-------|-------------|
+| Samba seq write | 544 MB/s | 730 MB/s | **+34%** |
+```
+
+### Tuning Integration Rules
+
+- **Always include before/after numbers** — avoid vague "improved performance"
+- **Specify the tuning parameter** — not just the category (e.g., "rx-usecs 60 µs" not "network tuning")
+- **Note device-specific differences** — same tuning may have different effects per platform (e.g., rx-usecs: 60 µs on UNAS24, 15 µs on UNAS4)
+- **Flag regressions** — document tunings that hurt (e.g., SSD cache on UNAS-4 RAID5x4)
+- **Cross-reference ticket IDs** — e.g., `[UOF-4034][5.0.11]`
+- **Update `performance-summary.md`** when new benchmark data or tuning results are processed
+
 ## Example User Requests
 
 | Request | Action |
@@ -140,3 +194,4 @@ After milestone integration, update `milestone/summary.md`:
 | "add Q1 2026 to milestones" | Stage 3 only |
 | "update career summary" | Stage 4 only |
 | "process new journal entries" | Triage new files, run full pipeline |
+| "update performance summary" | Regenerate `performance-summary.md` from CSV + milestones |
