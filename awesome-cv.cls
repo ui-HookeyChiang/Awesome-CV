@@ -81,29 +81,36 @@
 \defaultfontfeatures{
   Renderer=HarfBuzz,
 }
-\setmainfont{Source Sans 3}[
-  UprightFont=*,
-  ItalicFont=* Italic,
-  BoldFont=* Bold,
-  BoldItalicFont=* Bold Italic,
-  FontFace={l}{n}{Font=* Light},
-  FontFace={l}{it}{Font=* Light Italic},
+% Use Source Sans Pro from TeX Live (static fonts with proper weights)
+\setmainfont{SourceSansPro}[
+  Path = /usr/local/texlive/2025/texmf-dist/fonts/opentype/adobe/sourcesanspro/,
+  Extension = .otf,
+  UprightFont = *-Regular,
+  BoldFont = *-Bold,
+  ItalicFont = *-RegularIt,
+  BoldItalicFont = *-BoldIt,
 ]
-\setsansfont{Source Sans 3}[
-  UprightFont=*,
-  ItalicFont=* Italic,
-  BoldFont=* Bold,
-  BoldItalicFont=* Bold Italic,
-  FontFace={l}{n}{Font=* Light},
-  FontFace={l}{it}{Font=* Light Italic},
+\setsansfont{SourceSansPro}[
+  Path = /usr/local/texlive/2025/texmf-dist/fonts/opentype/adobe/sourcesanspro/,
+  Extension = .otf,
+  UprightFont = *-Regular,
+  BoldFont = *-Bold,
+  ItalicFont = *-RegularIt,
+  BoldItalicFont = *-BoldIt,
 ]
-\newfontfamily\roboto{Roboto}[
-  UprightFont=*,
-  ItalicFont=* Italic,
-  BoldFont=* Bold,
-  BoldItalicFont=* Bold Italic,
-  FontFace={l}{n}{Font=* Light},
-  FontFace={l}{it}{Font=* Light Italic},
+\newfontfamily\roboto{SourceSansPro}[
+  Path = /usr/local/texlive/2025/texmf-dist/fonts/opentype/adobe/sourcesanspro/,
+  Extension = .otf,
+  UprightFont = *-Regular,
+  BoldFont = *-Bold,
+  ItalicFont = *-RegularIt,
+  BoldItalicFont = *-BoldIt,
+]
+\newfontfamily\robotolight{SourceSansPro}[
+  Path = /usr/local/texlive/2025/texmf-dist/fonts/opentype/adobe/sourcesanspro/,
+  Extension = .otf,
+  UprightFont = *-Light,
+  ItalicFont = *-LightIt,
 ]
 % Needed for the photo ID
 \RequirePackage[skins]{tcolorbox}
@@ -120,13 +127,8 @@
 % Solves issues Warning: File `cv.out' has changed
 \RequirePackage{bookmark}
 
-% check by `fc-list | grep "venir Next"`
-\newfontfamily\avenir[
-  UprightFont=* Regular,
-  ItalicFont=* Italic,
-  BoldFont=* Bold,
-  BoldItalicFont=* Bold Italic,
-]{Avenir Next}
+% check by `fc-list | grep "Avenir Next"`
+\newfontfamily\avenir{Avenir Next}
 
 %-------------------------------------------------------------------------------
 %                Configuration for directory locations
@@ -215,9 +217,7 @@
 \newcommand*{\sectionstyle}[1]{%
   \def\@acvSectionTmp{#1}
   \ifthenelse{\boolean{acvSectionColorHighlight}}{%
-    \StrSplit{\@acvSectionTmp}{3}{\acvSectionStringAwesome}{\acvSectionStringPlain}%
-      \color{awesome}\sectionstyleface{\acvSectionStringAwesome%
-      \color{text}{\acvSectionStringPlain}}}%
+    \color{awesome}\sectionstyleface{\@acvSectionTmp}}%
       {\color{text}\sectionstyleface{\@acvSectionTmp}}}
 \newcommand*{\subsectionstyle}[1]{{\fontsize{12pt}{1em}\bodyfont\scshape\textcolor{text}{#1}}}
 \newcommand*{\paragraphstyle}{\fontsize{11pt}{1.33em}\bodyfontlight\upshape\color{text}}
