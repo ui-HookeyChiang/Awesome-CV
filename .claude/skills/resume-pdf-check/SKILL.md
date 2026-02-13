@@ -5,10 +5,11 @@ description: Build resume PDF and validate. Handles backup/copy/xelatex/restore 
 
 # Resume Build & Check
 
-Use this skill to build a resume PDF and validate it. Covers two scenarios:
+Use this skill to build a resume PDF and validate it. Covers three scenarios:
 
-- **Jobs build** — build from customized `.tex` files under `resumes/<target>/`
-- **Direct build** — build from `src/resume/` as-is (e.g., after manual edits)
+- **GP build** — build from canonical `resumes/general/resume/` (sync to `src/resume/` first)
+- **Job-targeted build** — build from customized `.tex` files under `resumes/<company>/`
+- **Direct build** — build from `src/resume/` as-is (e.g., quick iteration)
 
 ## Layout Rule
 
@@ -17,46 +18,60 @@ Use this skill to build a resume PDF and validate it. Covers two scenarios:
 | 1 | Summary, Work Experience |
 | 2 | Education, Scholarship, Leadership |
 
-## Source Files (Read-Only During Build)
-
-Never modify `src/resume/*.tex` permanently — always restore from `.bak` after build.
+## Source Files
 
 | File | Role |
 |------|------|
-| `src/resume/summary.tex` | Default summary template |
-| `src/resume/experience.tex` | Default experience template |
-| `src/resume/scholar.tex` | Default scholar template |
+| `resumes/general/resume/*.tex` | **Canonical GP** (all 5 .tex files) |
+| `src/resume/*.tex` | Build mirror — synced from GP canonical |
 | `src/resume.tex` | Main document (page layout, imports) |
 | `awesome-cv.cls` | Class file (do not modify) |
 
+**Rule:** `resumes/general/resume/` is the source of truth. `src/resume/` is a build mirror kept in sync. For job-targeted builds, backup `src/resume/` before overwriting, then restore after build.
+
 ---
 
-## Jobs Build Procedure
+## GP Build Procedure
 
-When building from `resumes/<target>/resume/` (where `<target>` is `general` or a company name):
+GP files live in `resumes/general/resume/` (canonical) and `src/resume/` (build mirror). After editing GP files, sync and build:
 
 ```bash
-# Backup originals
+# Sync canonical → build mirror
+cp resumes/general/resume/summary.tex src/resume/summary.tex
+cp resumes/general/resume/experience.tex src/resume/experience.tex
+cp resumes/general/resume/scholar.tex src/resume/scholar.tex
+
+# Build
+cd src && xelatex resume.tex
+
+# Copy output
+cp resume.pdf ../resumes/general/resume.pdf
+```
+
+## Job-Targeted Build Procedure
+
+When building from `resumes/<company>/resume/`:
+
+```bash
+# Backup GP mirror
 cp src/resume/summary.tex src/resume/summary.tex.bak
 cp src/resume/experience.tex src/resume/experience.tex.bak
 cp src/resume/scholar.tex src/resume/scholar.tex.bak
 
 # Copy tailored versions
-cp resumes/<target>/resume/summary.tex src/resume/summary.tex
-cp resumes/<target>/resume/experience.tex src/resume/experience.tex
-
-# If scholar was customized
-if [ -f resumes/<target>/resume/scholar.tex ]; then
-  cp resumes/<target>/resume/scholar.tex src/resume/scholar.tex
+cp resumes/<company>/resume/summary.tex src/resume/summary.tex
+cp resumes/<company>/resume/experience.tex src/resume/experience.tex
+if [ -f resumes/<company>/resume/scholar.tex ]; then
+  cp resumes/<company>/resume/scholar.tex src/resume/scholar.tex
 fi
 
 # Build
 cd src && xelatex resume.tex
 
 # Copy output
-cp resume.pdf ../resumes/<target>/resume.pdf
+cp resume.pdf ../resumes/<company>/resume.pdf
 
-# Restore originals
+# Restore GP mirror
 mv resume/summary.tex.bak resume/summary.tex
 mv resume/experience.tex.bak resume/experience.tex
 mv resume/scholar.tex.bak resume/scholar.tex
@@ -64,11 +79,13 @@ mv resume/scholar.tex.bak resume/scholar.tex
 
 ## Direct Build
 
-When building after manual edits to `src/resume/*.tex`:
+When iterating on `src/resume/*.tex` directly (e.g., quick edits during GP update):
 
 ```bash
 cd src && xelatex resume.tex
 ```
+
+After iteration is complete, sync back to canonical: `cp src/resume/*.tex resumes/general/resume/`
 
 ---
 

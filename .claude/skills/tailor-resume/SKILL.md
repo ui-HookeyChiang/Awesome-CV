@@ -34,8 +34,8 @@ All output goes under `resumes/`.
 
 ```
 resumes/
-├── general/                         # General-purpose
-│   ├── resume/                      # summary.tex, experience.tex, [scholar.tex]
+├── general/                         # General-purpose (canonical)
+│   ├── resume/                      # all 5 .tex files (canonical GP)
 │   ├── resume.pdf
 │   ├── interview-presentation.html
 │   └── interview-speech.md
@@ -50,15 +50,16 @@ resumes/
     └── interview-speech.md
 ```
 
-## Source Files (Do Not Modify In-Place)
+## Source Files
 
 | File | Purpose |
 |------|---------|
-| `src/resume/summary.tex` | Default summary template |
-| `src/resume/experience.tex` | Default experience template |
-| `src/resume/scholar.tex` | Default scholar template |
+| `resumes/general/resume/*.tex` | **Canonical GP resume** (all 5 .tex files) |
+| `src/resume/*.tex` | Build mirror — kept in sync with GP canonical |
 | `src/present/interview-presentation.html` | Default presentation template |
 | `milestone/*.md` | Achievement data |
+
+**Important:** `resumes/general/resume/` is the canonical location for all GP .tex files. After editing GP files, sync them to `src/resume/` so the build works. For job-targeted builds, the backup/copy/restore procedure in **resume-pdf-check** handles this automatically.
 
 ---
 
@@ -68,18 +69,19 @@ resumes/
 mkdir -p resumes/general/resume
 ```
 
-1. **Read** milestone files + current `src/resume/*.tex` templates
+1. **Read** milestone files + current `resumes/general/resume/*.tex` (canonical GP)
 2. **Create summary** → `resumes/general/resume/summary.tex`
    - Refresh from milestones, keep general-purpose
    - Follow **resume-content-rules**
 3. **Create experience** → `resumes/general/resume/experience.tex`
    - Update bullets with latest achievements, order by impact
    - Follow **resume-content-rules**, do NOT change titles/dates
-4. **Build PDF** → `resumes/general/resume.pdf`
-   - Follow **resume-pdf-check** (backup, build, restore, validate 2 pages)
-5. **Generate presentation** → `resumes/general/interview-presentation.html`
+4. **Sync to build mirror** — copy updated files to `src/resume/`
+5. **Build PDF** → `resumes/general/resume.pdf`
+   - Follow **resume-pdf-check** (build, validate 2 pages)
+6. **Generate presentation** → `resumes/general/interview-presentation.html`
    - Follow **interview-presentation** skill, use latest milestones
-6. **Generate speech** → `resumes/general/interview-speech.md`
+7. **Generate speech** → `resumes/general/interview-speech.md`
    - Follow **interview-speech** skill, derive from presentation
 
 ---
