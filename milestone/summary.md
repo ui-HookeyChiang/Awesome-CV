@@ -36,6 +36,13 @@
 - **Resource Management**: Implemented cgroup-based resource isolation and prioritization, enabling quality-of-service for multi-service operation
 - **Memory Optimization**: Resolved OOM issues by reducing 93% of socket memory consumption and optimizing whole-filesystem attribute updates
 - **Support Excellence**: Developed SOPs and performance checklists, reducing support escalations to fewer than 10 cases requiring R&D involvement
+- **Debian Trixie Migration**: Ported 6+ packages (ZFS, Samba, wsdd2, UDC, rclone, ustd) from Bullseye to Trixie, handling CLI breaking changes and cross-build compatibility
+- **NAS Performance Engineering**: Designed CPU affinity framework (smbd/nfsd/IRQ pinning), network tuning (qdisc fq, TCP buffers, rx-usecs), improving iperf throughput from 1.9 to 2.3 Gb/s
+- **SSD Cache Benchmark Framework**: Created 4-scenario test methodology (basic/empty/full/warm) with I/O migration tuning, enabling systematic cache performance validation
+- **ZFS Filesystem Support**: Implemented full ZFS backend (245 commits, 8 PRs) with dataset management, snapshot system, quota enforcement via Samba dfree, and 2-step deletion workflow achieving complete feature parity with Btrfs
+- **Kernel Development**: Implemented eCryptfs nanosecond timestamps and fallocate support, enabled BTF/eBPF for filesystem event auditing, added CFS bandwidth control
+- **NAS Performance Testing Platform**: Built end-to-end automated benchmarking infrastructure (3,787 lines of scripts, 11 AI skills) completing 4 test sessions across 16 managed devices with 854 log files
+- **Support at Scale**: Analyzed 180 support bundles across 60+ unique issues (63 GB diagnostic data) spanning storage, Samba, NFS, performance, and network categories
 
 #### **QNAP (Cloud File System) - Lead Performance Engineer**
 - **Product Success**: Delivered cloud filesystem deployed on 190K+ QNAP NAS devices, establishing it as a core platform service
@@ -43,6 +50,8 @@
 - **Performance Optimization**: Achieved 300% metadata performance improvement through multi-layer caching, async garbage collection, and database optimization
 - **Scalability**: Enabled support for 50M+ files at 200 files/sec processing rate through filesystem redesign and resource optimization
 - **Reliability**: Resolved critical deadlock scenarios in FUSE-daemon interactions and implemented robust state management for production deployment
+- **Filesystem Research**: Developed Golang FUSE framework, studied SplitFS/NOVA achieving 2x performance, implemented dedup FS with writeback cache and chunk defragmentation (-50% codebase)
+- **IPFS Exploration**: Researched IPFS for NAS private cloud with P2P content-based indexing, Hybridmount-style global filesystem interface integrating backup, versioning, and deduplication
 
 ### Technical Leadership
 

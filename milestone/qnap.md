@@ -84,3 +84,19 @@
 ### Quality Assurance
 
 - **Comprehensive testing**: Developed and ran stress/unit tests using standard tools such as pjdfstest, filebench, and nfstest to ensure filesystem compatibility and product reliability
+
+## Research & Technical Exploration
+
+### IPFS Private File Sharing Network
+
+- Researched IPFS technology, ecosystem, and NAS-applicable development directions
+- IPFS uses P2P connections with content-based indexing; proven as an effective distributed storage solution (e.g., BIGTERA, Arbol), integrable with blockchain and databases
+- Identified NAS use case: building private cloud on NAS, exposed as a global filesystem via Hybridmount-style FUSE interface, integrating backup, file versioning, and deduplication
+
+### Linux Filesystem Research
+
+- Developed FUSE framework in Golang for rapid prototyping of filesystem concepts
+- Analyzed overlayfs version progression and operational principles; assessed impact of version changes on container workloads
+- Studied SplitFS architecture (metadata/data operations split across ext4 DAX and FUSE); compared with NOVA achieving nearly **2x performance**
+- Implemented key features in dedup FS: writeback cache and chunk defragmentation
+- Refactored read/write operations: **-50% codebase**, fixing data assembly issues at chunk edges

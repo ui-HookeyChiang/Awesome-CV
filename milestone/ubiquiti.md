@@ -4,10 +4,147 @@
 
 | Year | Total Contributions | Code Reviews | Commits | Pull Requests |
 |------|---------------------|--------------|---------|---------------|
+| 2026 | 538+ (Nov–Feb)      | —            | 538     | 51            |
 | 2025 | 812                 | 47%          | 30%     | 22%           |
 | 2024 | 722                 | 36%          | 36%     | 28%           |
 | 2023 | 619                 | 31%          | 41%     | 28%           |
 | 2022 | 308                 | 20%          | 52%     | 28%           |
+
+## 2026
+
+### Q1 Achievements
+
+#### NAS Performance Engineering
+
+##### Situation
+- UNAS4 and UNAS24 storage performance limited by suboptimal CPU scheduling, network configuration, and IRQ distribution
+- smbd/nfsd services experiencing hangs under sustained load due to pause frames and CPU contention
+- iperf throughput on UNAS4 limited to 1.9 Gb/s despite 2.5GbE hardware capability
+
+##### Action
+**CPU Affinity & Scheduling:**
+- Pinned smbd/nfsd to dedicated cores (2,3), SPI IRQ to core 1, and rx/tx processing to core 0 on UNAS24
+- Identified console-ui generating 6x more IRQs than network; isolated console-ui IRQ to CPU 1
+- Enabled CFS bandwidth control (CONFIG_CFS_BANDWIDTH) for CPU quota management and service isolation
+- Enabled soft lockup and hung task detection for diagnosing 60s request latency events
+
+**Network Stack Tuning:**
+- Scaled ring buffers, reducing pause frames from 4M to 3K
+- Eliminated pause frames entirely, accepting TCP congestion control (cwnd/2, fast retransmit) tradeoffs
+- Switched qdisc to `fq` for improved fairness under mixed workloads
+- Optimized TCP buffers (read 32 MB, write 4 MB) and set `rx-usecs` to 60 µs on UNAS24
+- Fixed `rx-usecs` regression (was 15 µs in 5.0) on UNAS4
+
+**Memory Management:**
+- Aligned `vm.min_free_kbytes` across platforms to delay OOM-killer (Pro8: 128 MB, others: 64 MB)
+- Resolved 500–750 MB/s → 20 MB/s throughput drops via page cache adjustment
+
+##### Result
+- iperf throughput improved from 1.9 to 2.3 Gb/s on UNAS4 (+21%)
+- Eliminated smbd/nfsd hang conditions under sustained stress workloads
+- Established CPU affinity and network tuning framework applicable across all UNAS platforms
+
+#### SSD Cache Benchmarking Framework
+
+##### Situation
+- No systematic methodology existed to evaluate SSD cache performance across different cache states
+- Performance regressions in specific cache scenarios went undetected
+
+##### Action
+- Defined four standardized test scenarios: **basic** (cold cache, first write), **empty** (cache miss, no demotion), **full** (cache miss with demotion), **warm** (cache hit)
+- Root-caused bad performance in specific scenarios through systematic scenario isolation
+- Tuned I/O migration threshold from 2048 to 1536 for 4K blocks, reducing p99 latency
+- Added 15-min sleep between write tests to allow SLC free, improving measurement accuracy
+- Ran 20+ stress iterations validating stability across cache states
+
+##### Result
+- Established repeatable benchmark methodology for SSD cache validation across all UNAS platforms
+- Identified and resolved I/O migration latency issue that degraded p99 performance
+- Created comprehensive test framework enabling continuous regression testing for cache features
+
+#### NAS Storage Performance Testing Platform
+
+##### Situation
+- No end-to-end automated infrastructure existed for systematic NAS storage benchmarking across multiple devices and configurations
+- Manual testing was time-consuming and inconsistent, limiting coverage and reproducibility
+- SSD cache behavior across different states (cold/warm/full) was untested at scale
+
+##### Action
+**Test Automation Scripts:**
+- Developed `fio.sh` (2,284 lines): automated fio test runner with SSD cache state management (cold/warm/full), CSV/JSON output, and CPU monitoring
+- Developed `preflight.sh` (727 lines): pre-test validation covering RAID health, resync detection, NIC speed, free space, and SMART checks
+- Developed `discover-client.sh` (575 lines): auto-detect fastest server-client NIC pair on shared subnet
+- Developed `gather-results.sh` (201 lines): collect results from remote clients into organized directory structure
+
+**AI-Assisted Workflow:**
+- Built 11 Claude Skills covering the full workflow: build → deploy → configure → test → analyze
+- Enabled AI-driven test orchestration reducing manual intervention across the entire pipeline
+
+**Multi-Device Test Campaigns:**
+- `20260208_multi_device_test`: 4 devices (Pro8, Pro7, UNAS4, UNAS2), 8 test runs across RAID5/RAID1 and 10G/2.5G configurations
+- `20260209_raid_perf_test`: RAID configuration comparison across 2 devices
+- `20260210_fullsize_assume_clean`: Full-size array performance with `--assume-clean`
+- `UNASPro8-86-Office-fullsize`: SSD cache with/without comparison
+
+##### Result
+- Established repeatable, automated benchmarking platform across 16 managed NAS devices
+- Completed 4 test sessions with 18 test runs producing 854 log files (26 MB of structured results)
+- Reduced test setup and execution from days of manual work to automated single-command campaigns
+- Created reusable infrastructure enabling continuous performance regression testing for all UNAS platforms
+
+**Cross-Device Benchmark Findings (6 configs, 4 devices):**
+
+| Metric | UNAS-2 | UNAS-4 | UNAS-Pro | Pro-8 |
+|--------|--------|--------|----------|-------|
+| Seq Read | 279 MB/s | 272 MB/s | 679 MB/s | **744 MB/s** |
+| Seq Write | 163 MB/s | 229 MB/s | **649 MB/s** | 589 MB/s (cache) |
+| Rand Read | 1,277 IOPS | 2,102 IOPS | 4,874 IOPS | **8,736 IOPS** (cache) |
+| Rand Write | 1,839 IOPS | 1,591 IOPS | 2,161 IOPS | **3,613 IOPS** (cache) |
+| NIC | 2.5GbE | 2.5GbE | 10GbE | 10GbE |
+
+**SSD Cache Effectiveness (device-dependent):**
+- **Pro-8 (RAID5x8, 10GbE)**: highly effective when warm — rand read +64% (8,736 IOPS), rand write +11% (3,613 IOPS), seq read 672 MB/s; **avoid cache-full state** (seq write collapses to 187 MB/s)
+- **UNAS-4 (RAID5x4, 2.5GbE)**: no benefit or counterproductive — NIC-limited ceiling at ~280 MB/s; cache hit rates too low (3–29%); rand read **worse** with cache (2,102 → 1,543 IOPS)
+
+**Key Insights Delivered to RD/PM:**
+- 2.5GbE devices are NIC-bottlenecked, not storage-bottlenecked — SSD cache investment has low ROI
+- RAID5 scaling shows diminishing returns for sequential but strong gains for random I/O (5x4→5x7→5x8)
+- Old/existing file writes 3–6x slower than new files across all configs (Btrfs fragmentation)
+- Pro-8 no-cache seq read (744 MB/s) exceeds Pro-8 cache warm (672 MB/s) — cache adds overhead for sequential workloads
+
+#### Kernel Development
+
+##### eBPF & BTF Support
+- Added BPF Type Format (BTF) support for compile-once-run-anywhere eBPF tools on NAS kernel
+- Enabled eBPF-based filesystem event auditing for UNAS Pro (working for BE dev)
+- Identified and addressed kernel image size constraints on ENAS (fwupdate failure due to oversized zfs.ko)
+
+##### CFS Bandwidth Control & Diagnostics
+- Enabled CONFIG_CFS_BANDWIDTH for CPU quota management, enabling per-service CPU limits
+- Enabled soft lockup and hung task detection to diagnose long-latency smbd/nfsd events
+- Configured qdisc kernel modules (`=m` vs `=y`) to avoid kernel image bloat preventing boot
+
+#### ustd RAID Helpers
+- Added `--assume-clean` flag to skip RAID resync during `ustackctl deploy` for immediate testing
+- Added `--size` flag to limit RAID member size for rapid functional test array creation
+- Enabled 4-session multi-device test campaigns across Pro8, Pro7, UNAS4, UNAS2
+
+#### AI-Driven QA Automation Concept
+- Proposed "No More Human Labors" project: QA-agent discovers better configs and bugs, RD-agent modifies code, builds firmware, deploys, and re-iterates
+- Designed iterative testing loop between AI agents for continuous quality improvement
+
+#### Drive Space Accounting Fixes
+- Fixed incorrect UDC quota API usage (per-drive vs. multi-drive discrepancy)
+- Resolved `statfs` vs. ZFS property discrepancy (1 MB diff)
+- Addressed quota rescan failures preventing accurate space reporting
+
+#### Support Excellence
+- Diagnosed transfer hangs resolved by updating UDMP firmware
+- Root-caused fio stress failures (EINVAL, EHOSTDOWN) to client-side mount options and packet drops
+- Provided Btrfs + mdadm troubleshooting guide for ENVRcore dev team
+- Updated performance checklists with ethernet naming conventions and client-side info requirements
+- Handled 10+ support cases across Samba, NFS, network with systematic diagnostic SOPs
+- Cumulative support scale (2024–2026): analyzed 180 support bundles across 60+ unique issues (63 GB diagnostic data), categorized as: 18 storage/filesystem, 17 Samba/SMB, 10 device performance, 6 NFS, 5 network/connectivity, 8 system issues
 
 ## 2025
 
@@ -61,6 +198,10 @@
   - Identified sequential write performance degradation requiring chunk size tuning
   - Provided actionable insights for random I/O optimization strategies
 
+#### Support & Troubleshooting
+- Handled ~100 cross-platform support cases involving network, storage, filesystem, Windows client, and 3rd-party software
+- Diagnosed and resolved: slow performance (network bottlenecks, SMB signing, timeouts, cross-VLAN, RAID configuration), file lock release failures, NTFS extended attribute size limitations, 3rd-party backup integration, and Samba aio performance problems
+
 #### Automation & Tooling
 
 ##### QA Automation Framework
@@ -80,6 +221,108 @@
 - Automatically generated contextual code summaries and architectural flowcharts
 - Significantly reduced cognitive load and improved code review efficiency
 - Enhanced code quality through consistent automated analysis patterns
+
+### Q4 Achievements
+
+#### Debian Trixie Migration
+
+##### Situation
+- Ubiquiti NAS platform needed migration from Debian Bullseye to Trixie (testing) for long-term support
+- Multiple interdependent packages required porting with breaking API and CLI changes
+
+##### Action
+**Package Porting (6 weeks of PRs):**
+- Ported ZFS and ustoragecore with Trixie build support, disabling broken pyzfs (Python 3.13), adding libunwind/dbgsym debugging and shared library dependencies
+- Ported Samba AD support by removing bullseye-backports apt preference and installing via package dependencies
+- Upgraded wsdd2 with service aliasing; created wsdd as dummy package depending on wsdd2
+- Ported UDC with Btrfs CLI output compatibility and rclone for BE
+- Fixed dpkg git hash missing when building both Bullseye and Trixie simultaneously
+- Added ustd `mkfs.btrfs` block size support for Trixie
+
+**Btrfs CLI Compatibility:**
+- Investigated breaking changes: qgroup ID format, quota dump format, `mkfs` default values
+- Updated UDC for Btrfs CLI 5.15+ compatibility including winbind dependency management
+
+##### Result
+- Successfully ported 6+ packages (ZFS, ustoragecore, Samba, wsdd2, UDC, rclone, ustd) to Debian Trixie
+- Maintained backward compatibility with Bullseye builds throughout migration
+- Enabled long-term platform sustainability on modern Debian release
+
+#### Kernel Development
+
+##### eCryptfs Enhancements
+- Implemented nanosecond timestamp support by propagating `s_time_gran` from lower filesystem, resolving timestamp precision loss
+- Added `fallocate()` support to reduce truncate latency by passing fallocate through to lower filesystem and skipping decrypt on all-zero pages
+
+##### NFS Stability
+- Backported upstream kernel patch to fix kernel panic while stopping nfsd on UNAS2/UNAS4/ENAS
+
+#### ZFS Filesystem Support
+
+##### Situation
+- Ubiquiti NAS platform supported only Btrfs as the filesystem backend
+- Enterprise customers required ZFS for advanced data protection, snapshots, and storage management
+- Full feature parity with existing Btrfs backend needed without disrupting user-facing workflows
+
+##### Action
+**Core Implementation (245 commits, 8 PRs):**
+- **Dataset management**: create, destroy, rename operations with automatic rollback on failure
+- **Property system**: batch ZFS property operations, field mask filtering, quota/refquota management
+- **Snapshot system**: create, destroy, rollback, coverage analysis, symlink migration during renames
+- **Space management**: quota enforcement via Samba dfree integration, logicalused tracking, space reclamation after destroy
+- **Deletion workflow**: 2-step deletion (BeginDeletion → CommitDeletion) with deferred cleanup strategy
+
+**Integration & Compatibility:**
+- Updated `unifi-protobufs` for new ZFS property types
+- Supported non-ASCII drive mapping to ASCII dataset naming
+- Fixed snapshot creation failure after drive rename
+- Implemented force unmount on dataset remove/rename (EBUSY handling)
+- Fixed UDC operation failures where BE was not waiting for `zpool import` and `zfs mount`
+
+##### Result
+- Delivered full ZFS filesystem backend with complete feature parity to Btrfs
+- Preserved identical user-facing behavior and functionality for seamless adoption
+- Added enterprise-level storage capabilities (ZFS snapshots, properties, quota management)
+- 245 commits and 8 merged PRs with +21,873/-6,913 lines changed in unifi-drive-config
+
+#### NAS Performance & Stability
+
+##### RX Buffer & Connection Uptime
+- Increased RX buffer across all UNAS models to ensure nfsd/smbd connection uptime
+- Resolved NFS x2, SQA I/O stress x2 failures, and Samba file-locked issues
+- Spared CPU 1 from Btrfs kthread for UNAS Pro to reduce nfsd contention
+
+##### Annapurna PCIe Optimization
+- Tested Annapurna PCIe patch on UNAS Pro 4, achieving 5% improvement on random I/O over service
+
+##### cgroup CPU Quota Scaling
+- Set ENAS `app.slice` CPU quota to 540%/8 CPUs to contain runaway Drive CPU usage
+- Scaled down UNAS2/UNAS4 `app.slice` CPU quota from 360% to 270%
+
+##### ustorage Analytics
+- Fixed `ustorage inspect` for analytics across all UNAS models
+
+#### EXT4 SD Card Investigation
+- Root-caused SD card crash on UDR7 / UCG Industrial / UDR5G Max
+- Identified crash occurs when caching out-of-order extents with journal on large (1 TB) partitions
+- Verified: 1 TB with journal → crash, 8 GB with journal → OK, 1 TB without journal → OK
+- Confirmed hardware defect via f3 (Fight Flash Fraud) test failure
+- Provided workaround: format SD card with f2fs or ext4 without journal
+
+#### SMB Performance Analysis
+- Quantified SMB2/3 signing and encryption performance impact:
+  - SMB2 signing: transfer fails
+  - SMB3 signing: 85% performance degradation
+  - SMB3 encryption: 70% degradation (with AES-NI acceleration)
+- Investigated macOS Finder slow folder listing with many small files (metadata-heavy xattr operations)
+- Fixed deduplication storage pool accounting UX showing negative values (algorithm fix for dataset usage summation)
+
+#### Support Excellence
+- Handled 17+ support cases across Samba, NFS, Btrfs with SOPs and cross-team diagnostics
+- Samba cases: performance complaints with complex multi-NAS setups, small packet analysis, transfer hangs from tx_pause/rx_pause, enterprise security evaluation (50-100 unit purchase)
+- NFS cases: high queue time from page cache flushes, server not responding from nfsd socket shutdown, OOM investigation
+- Btrfs cases: space full recovery with temp space workflow, designed UX alert with Lewis
+- Network: diagnosed cross-subnet routing causing rx_pause, identified 30% small-packet and 1% drop rate issues
 
 ### Q2 Achievements
 
@@ -196,7 +439,9 @@
 - Supported foreground/background I/O scheduling using systemd-compatible cgroup rules
 - Validated functionality using the Linux block layer test suite (blktests), laying a solid foundation for future NVMe performance validation and storage upgrades
 
-#### Development Process Enhancement
+#### Automated Testing & Development Process Enhancement
+- Partnered with the SQA team to design and roll out automated stress and longevity tests for existing UNAS services
+- Defined long-term and high-load workloads for RAID and filesystem validation
 - Deployed AI-powered code review workflows across multiple projects, enabling developers to receive immediate feedback and significantly reducing the review-development cycle while improving code quality
 
 #### Multi-Volume Support & System Flexibility
@@ -349,6 +594,8 @@
 
 #### Platform Stability Enhancement
 - Resolved out-of-memory (OOM) issues, reducing 93% of socket buffer memory waste on 64KB page-sized systems (e.g., UNAS, EFG), verified through packetdrill testing
+- Root cause: page shift mismatch between 4K and 64K regarding SK_MEM_QUANTUM caused 16x memory consumption increase
+- Fix: `net: set SK_MEM_QUANTUM to 4096`; minimized sk_forward_alloc to keep idle sockets at zero allocation
 
 #### UniFi Drive Feature and Performance Improvements
 - Achieved a 10% performance improvement through lock-less client notification mechanisms
