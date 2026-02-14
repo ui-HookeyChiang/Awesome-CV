@@ -118,6 +118,8 @@ For jobs builds, save the shrunk version to `resumes/<target>/resume/scholar.tex
 
 The current resume is at the **absolute 2-page limit**. Even tiny text changes can push it to 3 pages due to LaTeX line-breaking differences. Key lessons:
 
+- **Summary `\\` line breaks can cause overflow** — each `\\` forces a new rendered line, potentially adding vertical space. If adding `\\` to a summary pushes to 3 pages, shorten sentences (fewer words, shorter synonyms) rather than removing the `\\`. The left-margin rule is more important than word count.
+
 - **Reordering bullets is safe** — swapping the order of top-level bullet groups (with their sub-bullets intact) does not change rendered length
 - **Rewriting sub-bullet text is allowed but must be incremental** — even same-length text can render differently (e.g., "streamlined the dev" vs "enabling secure" break at different points, adding an extra rendered line)
 - **Always build-and-check after each edit** — rewrite one sub-bullet, build, verify `Pages: 2`. If overflow, shorten that bullet before moving to the next.

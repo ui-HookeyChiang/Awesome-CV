@@ -7,44 +7,26 @@ description: Rules for editing LaTeX resume files in src/resume/. Ensures proper
 
 Use this skill when editing LaTeX resume files in `src/resume/` directory. These rules ensure proper formatting and prevent hyphenated word breaks.
 
-## Line Length Requirements
-To prevent hyphenated word breaks, maintain these character limits per complete item of continuous text.
-Count only the rendered display text, excluding LaTeX markup, indentation, and line numbers.
+## Line Length Reference
+Character counts are **reference guidance** for fitting rendered content into whole lines, not strict validation rules. The goal is that each sentence or bullet renders as exactly 1 or 2 complete lines, so the next item starts from the left margin. Always verify with `xelatex` build.
 
-### Environment-Specific Character Limits
+### Approximate Characters Per Rendered Line
 
-- **cvparagraph environment**: 95-102, 190-204, or 285-306 characters per complete item
-  - Used in: `resume/summary.tex`
-  - Purpose: Professional summary paragraphs and first impression
-  - Target: Aim for lower multiples (95-102 preferred over 190-204 over 285-306)
-  - Maximum: Total paragraph should not exceed 510 characters (approximately 5 lines)
-  - Measurement: Count all text within `\cvparagraph{}` that appears in final output
+| Environment | ~1 line | ~2 lines | ~3 lines |
+|-------------|---------|----------|----------|
+| **cvparagraph** | 95-102 | 190-204 | 285-306 |
+| **cvitems** | 95-100 | 190-200 | 285-300 |
+| **itemize** (sub-bullets) | 91-96 | 182-192 | 273-288 |
 
-- **cvitems environment**: 95-100, 190-200, or 285-300 characters per complete item
-  - Used in: `experience.tex`, `education.tex`, `scholar.tex`, `leadership.tex`
-  - Purpose: Main bullet points summarizing roles, achievements, or milestones
-  - Target: Aim for lower multiples (95-102 preferred over 190-204 over 285-306)
-  - Measurement: Count all text within `\item{}` braces that appears in final output
-  - Line breaks: Use natural word boundaries, maintain proper indentation
-
-- **itemize environment**: 91-96, 182-192, or 273-288 characters per complete item
-  - Used within: cvitems blocks for detailed sub-points
-  - Purpose: Specific achievements, technical details, or supporting evidence
-  - Target: Aim for lower multiples (91-96 preferred over 182-192 over 273-288)
-  - Measurement: Count all text within nested `\item{}` braces that appears in final output
-  - Line breaks: Maintain proper indentation and break at natural word boundaries
-
-### Character Counting Methodology
-- **Include**: All letters, numbers, spaces, punctuation marks, special characters (%, \, /)
-- **Exclude**: LaTeX commands (`\item`, `\cvparagraph`, `\begin`, `\end`), all braces (`{}`), indentation spaces, line numbers
-- **Validation**: Each complete item must fall within one of the specified character ranges
-- **Preference**: Choose the lowest suitable multiple that accommodates the content appropriately
+- These are approximate — proportional fonts mean character count alone does not guarantee fit
+- Use as a starting estimate, then build and visually verify
+- Prefer fewer lines (1-line over 2-line over 3-line) for conciseness
 
 ### Quality Guidelines
-- **Conciseness**: Shorter content within range is preferred over longer content
-- **Natural breaks**: Line breaks should occur at natural word boundaries
-- **Content density**: Pack meaningful information efficiently within character limits
-- **Technical accuracy**: Maintain precision while respecting character constraints
+- **Conciseness**: Shorter content is preferred over longer content
+- **Natural breaks**: Content should fill whole rendered lines, not leave large gaps
+- **Content density**: Pack meaningful information efficiently
+- **Technical accuracy**: Maintain precision while respecting length
 
 ## Content Structure
 - **cvparagraph**: Overall summarizing.
@@ -57,14 +39,25 @@ Count only the rendered display text, excluding LaTeX markup, indentation, and l
 3. Maintain consistent indentation within each environment type
 4. Use action verbs and quantifiable results where possible
 5. **Avoid hyphenated compound words** (e.g., "low-latency", "full-stack", "cross-team") at positions where LaTeX may line-break them — the hyphen becomes a line-end break point, splitting the compound across lines and hurting readability. Rephrase instead (e.g., "Delivered measurable latency gains" instead of "Low-latency gains").
-6. **In multi-sentence blocks (summary, paragraphs), each sentence should start from the left margin.** If a sentence ends mid-line and the next sentence starts near the right edge, readers' eyes have to jump awkwardly. Adjust wording so sentence boundaries align with line starts. This rule applies to `cvparagraph` (summary) and any multi-sentence content — NOT to single-sentence sub-bullets where a short second line is fine.
+6. **Every sentence in the summary must start from the left margin.** This is the core readability rule for `cvparagraph`. Enforce with `\\` after each sentence's period (except the last). Only break between sentences — never between clauses of the same sentence. Each sentence should fit within 1-2 rendered lines (~95-204 chars). LaTeX source line breaks alone have no effect on justified text rendering; only `\\` forces a new line.
+
+## Common Pitfalls (Do NOT Repeat)
+
+| Pitfall | Why It Fails | Fix |
+|---------|-------------|-----|
+| Changing source line breaks in `.tex` to align sentences | Source newlines have zero effect on justified paragraph rendering | Use `\\` after sentence periods |
+| Rewording sentences to control where the next starts | Proportional fonts make character-count prediction unreliable | Use `\\` — the only reliable method |
+| Removing all hyphenated compounds (e.g., "AI-aided") | Rule #5 only applies at LaTeX line-break positions, not everywhere | Keep compounds; only rephrase if at a break point |
+| Inserting `\\` before a clause continuation (e.g., "spanning Btrfs...") | Splits one sentence across forced breaks, ruining readability | `\\` goes only after sentence-ending periods |
+| Adding `\\` without checking page count | Each `\\` adds vertical space that can push tight-margin resumes to 3 pages | Build-and-check after adding `\\`; shorten sentences if overflow |
 
 ## LaTeX Rendering Warning
 
-Character counts alone do NOT guarantee page fit. LaTeX line-breaking depends on word lengths, hyphenation points, and justification — two texts with identical character counts can render to different numbers of lines.
+Character counts are approximate — LaTeX line-breaking depends on word widths, hyphenation points, and justification. Two texts with identical character counts can render differently.
 
 **Key lessons:**
-- A 91-char sub-bullet with short words may render as 1 line, but the same count with long words may render as 2 lines
-- Swapping "streamlined the dev" for "enabling secure" (same length) can add an extra rendered line
-- The only reliable test is `xelatex` + `pdfinfo | grep Pages`
+- Same-length text can render to different line counts due to proportional font widths
+- The only reliable test is `xelatex` + visual check of the rendered PDF
+- Source line breaks (newlines in `.tex`) have **zero effect** on justified paragraph rendering — only `\\` forces a line break
 - When editing job-targeted resumes, build-and-check after every text change — the layout has zero margin for overflow
+- For summary sentences: always use `\\` to control line breaks, never rely on rewording alone

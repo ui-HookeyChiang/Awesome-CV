@@ -72,6 +72,7 @@ mkdir -p resumes/general/resume
 1. **Read** milestone files + current `resumes/general/resume/*.tex` (canonical GP)
 2. **Create summary** → `resumes/general/resume/summary.tex`
    - Refresh from milestones, keep general-purpose
+   - Use `\\` after each sentence (except last) per **resume-content-rules** rule #6
    - Follow **resume-content-rules**
 3. **Create experience** → `resumes/general/resume/experience.tex`
    - Update bullets with latest achievements, order by impact
@@ -102,6 +103,8 @@ mkdir -p resumes/<company-name>/resume
 5. **Create summary** → `resumes/<company-name>/resume/summary.tex`
    - Emphasize job-matching skills, include ATS keywords
    - Include 1 breadth signal (e.g., product sense, team building, process improvement)
+   - **Use `\\` after each sentence** (except the last) so every sentence starts from the left margin
+   - `\\` only between sentences — never between clauses of the same sentence
    - Follow **resume-content-rules**
 6. **Create experience** → `resumes/<company-name>/resume/experience.tex`
    - **Start from GP text** — copy `resumes/general/resume/experience.tex` as base
@@ -134,7 +137,7 @@ mkdir -p resumes/<company-name>/resume
 
 ### Tight Margin Constraint
 
-The GP resume is at the **absolute 2-page limit**. LaTeX line-breaking is unpredictable — even same-character-count text rewrites can add an extra rendered line and push to 3 pages.
+The GP resume is at the **absolute 2-page limit**. LaTeX line-breaking is unpredictable — even same-character-count text rewrites can add an extra rendered line and push to 3 pages. Adding `\\` to summaries also adds vertical space — if it causes overflow, shorten sentences rather than removing `\\`.
 
 **Incremental rewrite workflow:**
 1. Start from GP text (proven 2-page fit)
@@ -167,6 +170,17 @@ These signal a well-rounded engineer who delivers beyond the narrow job scope.
 - Mirror exact keywords from JD where truthful
 - Spell out acronyms on first use if JD does
 - Use standard section names
+
+## Keeping Job-Targeted Resumes in Sync
+
+When the GP resume is updated (quality fixes, milestone refreshes), **all job-targeted resumes become stale** because they were derived from the old GP text. To refresh:
+
+1. **Start from latest GP** `resumes/general/resume/experience.tex` as base
+2. **Re-apply job-specific bullet reordering** (order documented in each company's `experience.tex`)
+3. **Re-apply any sub-bullet rewrites** that were job-specific
+4. **Rebuild and verify** 2 pages for each
+
+Do NOT try to patch old job-targeted text — always re-derive from current GP to pick up all quality fixes.
 
 ## Example Requests
 
