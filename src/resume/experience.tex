@@ -18,7 +18,7 @@
     {
       \begin{cvitems} % Description(s) of tasks/responsibilities
         \item {
-            Pioneered Ubiquiti's first NAS platform with 2 members, scaling the product line to 6 model variants.
+            Pioneered Ubiquiti's first NAS platform with Btrfs and ZFS backends, scaling to 6 model variants.
           }
           \begin{itemize}
           \item {
@@ -53,11 +53,11 @@
             Enhanced SSD-RAID BTRFS write IOPS by 40\% via mq-deadline scheduler and ARM64 CRC32.
           }
           \item {
-            Built automated benchmarking across 16 NAS devices with RAID,
-            SSD cache, and protocol tests.
+            Built automated benchmarking across RAID, filesystem, and
+            network protocol stacks.
           }
           \item {
-            Applied cgroup V2 to guarantee quality of system services, preventing swap-induced latencies under heavy I/O and enabling foreground/background prioritization.
+            Applied cgroup V2 to prevent swap-induced latencies and prioritize foreground/background I/O.
           }
           \end{itemize}
         \item {
@@ -65,16 +65,14 @@
           }
           \begin{itemize}
           \item {
-            Resolved system crashes and hangs by fixing memory leaks and
-            network/filesystem bugs.
+            Fixed cross-layer issues from kernel (PHY crashes, NFS panics, AHCI IRQ, 93\% socket memory)
+            to storage (RAID 50\% regression, FS write amplification, Samba socket leaks, Drive OOMs).
           }
           \item {
-            Introduced a gRPC state exporter to replace a Python poller,
-            minimizing latency to microseconds.
+            Optimized ustd CLI by 65\% CPU and 50\% memory via event-driven gRPC migration.
           }
           \item {
-            Upgraded the Debian-based build system and streamlined dev
-            workflows with AI coding tools.
+            Revamped the Debian build system for safe package upgrades with AI-aided workflows.
           }
           \item {
             Conducted 280 code reviews annually and deployed AI reviewers to boost 400 PRs quarterly.

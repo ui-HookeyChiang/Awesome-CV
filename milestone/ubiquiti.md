@@ -665,9 +665,19 @@
 - Implemented non-blocking asynchronous web handlers and conducted stress testing to ensure deadlock-free operation under high load
 - Built a migration framework to support firmware-independent upgrades and downgrades, improving long-term maintainability
 
-#### Platform and System Enhancements
-- Optimized ustd CLI performance, reducing CPU usage by 65% and memory usage by 50%, resulting in a 15–50% lower system load average on all UniFi platforms
-- Designed and initiated migration of ustd toward an event-triggered gRPC framework to eliminate polling overhead
+#### Platform and System Enhancements: ustd gRPC Migration
+
+##### Situation
+- ustd, the core NAS management CLI, used synchronous polling to query system state (RAID, disk, network), consuming excessive CPU and memory on all UniFi-OS platforms
+- The polling model did not scale as new features (snapshots, ZFS, Drive) added more state to track
+
+##### Action
+- Designed and initiated migration of ustd toward an event-triggered gRPC framework, replacing polling with event-driven state management
+- Profiled and optimized the CLI hot paths, reducing redundant system calls and memory allocations
+
+##### Result
+- Reduced ustd CPU usage by 65% and memory usage by 50%, resulting in 15–50% lower system load average on all UniFi platforms
+- Established gRPC as the standard IPC framework for NAS services, adopted by subsequent features
 
 #### UX and Feature Correctness Improvements
 - Refined and unified network discovery flow for Samba clients on macOS and Windows
