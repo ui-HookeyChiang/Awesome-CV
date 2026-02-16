@@ -22,6 +22,22 @@ Read the job description and extract:
 4. **Domain focus** — storage, networking, embedded, cloud, etc.
 5. **Keywords** — terms for ATS matching
 
+## Step 1.5: Company & Product Research
+
+Use a **subagent** (Task tool with `subagent_type=general-purpose`) to research the company in parallel with Step 1. The subagent should use WebSearch to:
+
+1. **Identify the team/product** this role belongs to — use the job title, team name, and domain clues from the JD
+2. **Research recent company activity** — search for recent blog posts, engineering talks, open-source projects, press releases, and product announcements related to the role's domain
+3. **Speculate on internal tech stack** — based on job postings, engineering blog posts, conference talks, GitHub repos, and industry knowledge, infer:
+   - Programming languages and frameworks likely used internally
+   - Infrastructure and platform choices (cloud provider, container orchestration, CI/CD)
+   - Internal tools or proprietary systems hinted at in the JD
+   - Open-source projects the team contributes to or depends on
+4. **Identify the product landscape** — what products/services does this team likely build or maintain? What are the competitive alternatives?
+5. **Find team culture signals** — engineering blog posts, team size indicators, development methodology clues
+
+The subagent should return a structured summary that gets incorporated into the tech-stack report (see Step 2).
+
 ## Step 2: Generate Tech Stack Report
 
 Write `resumes/<company-name>/tech-stack.md`:
@@ -32,14 +48,22 @@ Write `resumes/<company-name>/tech-stack.md`:
 ## Role Summary
 - One-paragraph description of what this role does
 
-## Core Tech Stack
+## Product & Team Context
+- **Product/Service**: What the team likely builds or maintains
+- **Competitive Landscape**: Key competitors and alternatives
+- **Recent Activity**: Notable launches, blog posts, talks, or open-source contributions
+- **Team Signals**: Estimated team size, development methodology, engineering culture
+
+## Core Tech Stack (JD + Research)
 | Category | Technologies | Confidence |
 |----------|-------------|------------|
 | Languages | C, Go, Python, ... | From JD |
 | OS/Platform | Linux, ARM64, ... | From JD |
-| Storage | Btrfs, ZFS, ... | From JD / inferred |
-| Networking | TCP/IP, gRPC, ... | From JD / inferred |
+| Storage | Btrfs, ZFS, ... | From JD / Inferred |
+| Networking | TCP/IP, gRPC, ... | From JD / Inferred |
 | Tools | Git, Docker, Jenkins, ... | From JD |
+| Infra | Kubernetes, Borg, ... | Research |
+| Internal | [proprietary systems hinted at] | Research |
 
 ## Day-to-Day Work (Inferred)
 What you'll likely spend time on, grouped by frequency:
@@ -58,7 +82,7 @@ Key technical domains and depth expected:
 | [requirement] | [matching milestone] | Strong / Moderate / Gap |
 ```
 
-- Mark **Confidence** as "From JD" (explicitly stated) or "Inferred" (deduced from context)
+- Mark **Confidence** as "From JD" (explicitly stated), "Inferred" (deduced from JD context), or "Research" (discovered via company research in Step 1.5)
 - Cross-reference milestones to fill the "My Overlap" table
 
 ## Step 3: Generate Interview Prep Guide

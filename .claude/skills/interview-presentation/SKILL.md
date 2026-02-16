@@ -26,7 +26,7 @@ The interview presentation (`interview-presentation.html`) is a professional, in
 ## Storage & System Engineering Experience Implementation
 
 ### Experience-Specific Slide Content
-1. **Cover Slide**: Senior System Engineer & Storage Architect (7+ years, 5K sales, 210K+ users) - *Use milestone/summary.md*
+1. **Cover Slide**: Senior System Engineer & Storage Architect (8+ years, 5K sales, 210K+ users) - *Use milestone/summary.md*
 2. **Self Introduction**: Computer Science background, storage/performance/QA expertise - *Use milestone/summary.md*
 3. **Technical Expertise**: Tools & DevOps (top-left), Storage & Filesystem (top-right), Programming & System Languages (bottom-left), Frameworks & Protocols (bottom-right) - *Use milestone/summary.md*
 4. **Ubiquiti Highlights**: UniFi-OS Storage Software Engineer achievements - *Use milestone/ubiquiti.md*
@@ -144,7 +144,7 @@ Each major project follows the enhanced visual SAR structure presented in Situat
 - **Key Metrics Integration**:
   - CI/CD pipeline achievement from QNAP (<20 support cases) properly attributed to QNAP experience
   - Platform scaling (1 to 6 product variants, 3 to 5 engineering team growth)
-  - Performance improvements (544 to 730 MB/s Samba, +40% SSD IOPS, 300% metadata boost)
+  - Performance improvements (544 to 730 MB/s Samba, +40% SSD IOPS, 300% metadata boost, 93% socket memory reduction, 65% ustd CPU reduction via gRPC)
 
 ## Technical Features
 - **Responsive Design**: Works on desktop, tablet, and mobile devices

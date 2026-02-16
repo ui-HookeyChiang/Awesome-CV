@@ -41,6 +41,9 @@ Character counts are **reference guidance** for fitting rendered content into wh
 5. **Avoid hyphenated compound words** (e.g., "low-latency", "full-stack", "cross-team") at positions where LaTeX may line-break them — the hyphen becomes a line-end break point, splitting the compound across lines and hurting readability. Rephrase instead (e.g., "Delivered measurable latency gains" instead of "Low-latency gains").
 6. **Every sentence in the summary must start from the left margin.** This is the core readability rule for `cvparagraph`. Enforce with `\\` after each sentence's period (except the last). Only break between sentences — never between clauses of the same sentence. Each sentence should fit within 1-2 rendered lines (~95-204 chars). LaTeX source line breaks alone have no effect on justified text rendering; only `\\` forces a new line.
 
+## Summary Structure Rule (CRITICAL)
+7. **Always use exactly 4 lines with `\\` in the summary.** The GP summary uses a proven 4-line structure where each line starts from the left margin via `\\`. Changing to 3 lines — even with shorter total text — causes page overflow because `cvparagraph` renders differently with fewer forced line breaks. For job-targeted summaries, match this 4-line pattern: (1) role identity, (2) dedication/focus, (3) impact metrics, (4) skills list.
+
 ## Common Pitfalls (Do NOT Repeat)
 
 | Pitfall | Why It Fails | Fix |
@@ -50,6 +53,8 @@ Character counts are **reference guidance** for fitting rendered content into wh
 | Removing all hyphenated compounds (e.g., "AI-aided") | Rule #5 only applies at LaTeX line-break positions, not everywhere | Keep compounds; only rephrase if at a break point |
 | Inserting `\\` before a clause continuation (e.g., "spanning Btrfs...") | Splits one sentence across forced breaks, ruining readability | `\\` goes only after sentence-ending periods |
 | Adding `\\` without checking page count | Each `\\` adds vertical space that can push tight-margin resumes to 3 pages | Build-and-check after adding `\\`; shorten sentences if overflow |
+| Using 3-line summary instead of 4-line | Different `cvparagraph` rendering causes page overflow even with less text | Always use exactly 4 lines with `\\` matching GP structure |
+| Reordering bullets assuming zero rendering impact | Word-break patterns differ after reorder, can add rendered lines | Always build-verify after reordering |
 
 ## LaTeX Rendering Warning
 

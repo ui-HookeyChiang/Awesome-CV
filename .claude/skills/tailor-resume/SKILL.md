@@ -44,7 +44,7 @@ resumes/
     ├── job-description.md           # Input
     ├── tech-stack.md                # From job-analysis
     ├── interview-prep.md            # From job-analysis
-    ├── resume/                      # summary.tex, experience.tex, [scholar.tex]
+    ├── resume/                      # All 5 .tex files (summary, experience, education, scholar, leadership)
     ├── resume.pdf
     ├── interview-presentation.html
     └── interview-speech.md
@@ -100,24 +100,28 @@ mkdir -p resumes/<company-name>/resume
    - ~70% direct/transferable matches to JD requirements
    - ~30% standout contributions that show breadth (e.g., team scaling, build system innovation, cross-team testing, support excellence) — these catch the interviewer's eye and differentiate from other candidates
    - Prioritize: direct match > transferable > scale/impact > unique breadth
-5. **Create summary** → `resumes/<company-name>/resume/summary.tex`
+5. **Copy shared files** — copy education.tex, scholar.tex, leadership.tex from GP:
+   ```bash
+   cp resumes/general/resume/{education,scholar,leadership}.tex resumes/<company-name>/resume/
+   ```
+6. **Create summary** → `resumes/<company-name>/resume/summary.tex`
    - Emphasize job-matching skills, include ATS keywords
    - Include 1 breadth signal (e.g., product sense, team building, process improvement)
-   - **Use `\\` after each sentence** (except the last) so every sentence starts from the left margin
+   - **Must use exactly 4 lines with `\\`** matching GP structure (3-line summaries cause overflow)
    - `\\` only between sentences — never between clauses of the same sentence
    - Follow **resume-content-rules**
-6. **Create experience** → `resumes/<company-name>/resume/experience.tex`
+7. **Create experience** → `resumes/<company-name>/resume/experience.tex`
    - **Start from GP text** — copy `resumes/general/resume/experience.tex` as base
-   - **Reorder top-level bullet groups** for job relevance (safe, no page impact)
+   - **Reorder top-level bullet groups** for job relevance — but always build-verify after (reordering can change rendered line counts)
    - **Reorder QNAP top-level bullets** if relevant (performance-first vs product-first)
    - **Rewrite sub-bullets incrementally** — the layout is at the absolute 2-page limit. Rewrite one sub-bullet at a time and build-and-check after each change. If overflow, shorten that bullet before moving to the next.
    - Keep 1-2 breadth sub-bullets per role (70/30 rule)
    - Follow **resume-content-rules**, do NOT change titles/dates
-7. **Build PDF** → `resumes/<company-name>/resume.pdf`
+8. **Build PDF** → `resumes/<company-name>/resume.pdf`
    - Follow **resume-pdf-check** (backup, build, restore, validate 2 pages)
-8. **Generate presentation** → `resumes/<company-name>/interview-presentation.html`
+9. **Generate presentation** → `resumes/<company-name>/interview-presentation.html`
    - Follow **interview-presentation** skill, customize for role
-9. **Generate speech** → `resumes/<company-name>/interview-speech.md`
+10. **Generate speech** → `resumes/<company-name>/interview-speech.md`
    - Follow **interview-speech** skill, emphasize job-relevant stories
 
 ---
@@ -129,7 +133,7 @@ mkdir -p resumes/<company-name>/resume
 | Summary | Yes | Rewrite freely — has margin room |
 | Experience bullet order | Yes | Reorder top-level bullet groups (safe, no page impact) |
 | Experience sub-bullet text | Yes | Rewrite incrementally — build-and-check after each change |
-| Scholar | Shrink only | Auto-shrink via resume-pdf-check |
+| Scholar | Copy from GP | Currently 2 entries; auto-shrink via resume-pdf-check if overflow |
 | Presentation | Yes | Reorder case studies, customize summary slide |
 | Speech | Yes | Adjust emphasis and transitions |
 | Education / Leadership | No | Never modify |
@@ -153,7 +157,7 @@ Don't over-optimize for the JD. A resume that only mirrors the job posting looks
 - **Product ownership** — scaling from 1 to 6 product variants, 5K monthly sales
 - **Team building** — growing team from 2 to 5, cross-team SQA collaboration
 - **Process innovation** — CI/CD pipelines, support SOPs, AI-assisted code review
-- **Unique technical breadth** — kernel upgrades, build system redesign, gRPC architecture
+- **Unique technical breadth** — dual filesystem backends (Btrfs+ZFS), gRPC migration, build system revamp
 
 These signal a well-rounded engineer who delivers beyond the narrow job scope.
 
@@ -175,10 +179,12 @@ These signal a well-rounded engineer who delivers beyond the narrow job scope.
 
 When the GP resume is updated (quality fixes, milestone refreshes), **all job-targeted resumes become stale** because they were derived from the old GP text. To refresh:
 
-1. **Start from latest GP** `resumes/general/resume/experience.tex` as base
-2. **Re-apply job-specific bullet reordering** (order documented in each company's `experience.tex`)
-3. **Re-apply any sub-bullet rewrites** that were job-specific
-4. **Rebuild and verify** 2 pages for each
+1. **Copy shared files from GP** — education.tex, scholar.tex, leadership.tex
+2. **Start from latest GP** `resumes/general/resume/experience.tex` as base
+3. **Re-apply job-specific bullet reordering** — but build-verify after (reordering can change rendered lines)
+4. **Re-apply any sub-bullet rewrites** that were job-specific, incrementally with build checks
+5. **Update summary** — match GP's 4-line `\\` structure, customize line 2 for JD focus
+6. **Rebuild and verify** 2 pages for each
 
 Do NOT try to patch old job-targeted text — always re-derive from current GP to pick up all quality fixes.
 

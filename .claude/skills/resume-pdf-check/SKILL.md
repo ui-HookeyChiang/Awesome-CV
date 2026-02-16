@@ -50,20 +50,16 @@ cp resume.pdf ../resumes/general/resume.pdf
 
 ## Job-Targeted Build Procedure
 
+Job-targeted resumes store all 5 `.tex` files (summary, experience, education, scholar, leadership) under `resumes/<company>/resume/`. Education, scholar, and leadership are typically copied from GP unchanged.
+
 When building from `resumes/<company>/resume/`:
 
 ```bash
-# Backup GP mirror
-cp src/resume/summary.tex src/resume/summary.tex.bak
-cp src/resume/experience.tex src/resume/experience.tex.bak
-cp src/resume/scholar.tex src/resume/scholar.tex.bak
+# Backup entire GP mirror
+cp -r src/resume src/resume.bak
 
-# Copy tailored versions
-cp resumes/<company>/resume/summary.tex src/resume/summary.tex
-cp resumes/<company>/resume/experience.tex src/resume/experience.tex
-if [ -f resumes/<company>/resume/scholar.tex ]; then
-  cp resumes/<company>/resume/scholar.tex src/resume/scholar.tex
-fi
+# Copy all tailored versions
+cp resumes/<company>/resume/*.tex src/resume/
 
 # Build
 cd src && xelatex resume.tex
@@ -72,9 +68,7 @@ cd src && xelatex resume.tex
 cp resume.pdf ../resumes/<company>/resume.pdf
 
 # Restore GP mirror
-mv resume/summary.tex.bak resume/summary.tex
-mv resume/experience.tex.bak resume/experience.tex
-mv resume/scholar.tex.bak resume/scholar.tex
+rm -rf resume && mv resume.bak resume
 ```
 
 ## Direct Build
@@ -105,9 +99,9 @@ pdfinfo src/resume.pdf | grep Pages
 
 When page 2 overflows, **automatically shrink scholar** before asking the user to trim. Apply in order until the PDF fits:
 
-1. **Remove the least relevant project** (e.g., Pharmacy POS System)
+1. **Remove the least relevant project** (currently 2 entries: Phase-based Profiling and Thread Cluster Memory)
 2. **Shorten remaining descriptions** to single-line summaries
-3. **Remove another project** if still overflowing (keep top 2)
+3. **Remove another project** if still overflowing (keep top 1)
 4. **Collapse to minimal format** — remove `\begin{cvitems}` and use empty description braces `{}`
 
 After each reduction, rebuild and re-check page count.
@@ -120,7 +114,8 @@ The current resume is at the **absolute 2-page limit**. Even tiny text changes c
 
 - **Summary `\\` line breaks can cause overflow** — each `\\` forces a new rendered line, potentially adding vertical space. If adding `\\` to a summary pushes to 3 pages, shorten sentences (fewer words, shorter synonyms) rather than removing the `\\`. The left-margin rule is more important than word count.
 
-- **Reordering bullets is safe** — swapping the order of top-level bullet groups (with their sub-bullets intact) does not change rendered length
+- **Reordering bullets is NOT always safe** — while it doesn't change total content, different word-break patterns after reordering can change rendered line counts and push to 3 pages. Always build-verify after reordering.
+- **Summary structure is critical** — the GP summary uses exactly 4 lines with `\\`. Changing to 3 lines (even shorter text) can overflow because `cvparagraph` renders differently. Always match the 4-line `\\` structure.
 - **Rewriting sub-bullet text is allowed but must be incremental** — even same-length text can render differently (e.g., "streamlined the dev" vs "enabling secure" break at different points, adding an extra rendered line)
 - **Always build-and-check after each edit** — rewrite one sub-bullet, build, verify `Pages: 2`. If overflow, shorten that bullet before moving to the next.
 - **Start from GP text** — for job-targeted resumes, copy the proven-fitting GP text, reorder bullets, then rewrite sub-bullets one at a time with build verification after each.

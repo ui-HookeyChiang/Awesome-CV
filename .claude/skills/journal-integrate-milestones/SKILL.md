@@ -156,7 +156,7 @@ When extracting tuning achievements from journals, classify into these categorie
 | Storage I/O | mq-deadline, CRC32 acceleration, chunk size, I/O merge, noatime, space_cache_v2 | IOPS, BW (MB/s), checksum (GiB/s) |
 | Memory Management | vm.min_free_kbytes, SK_MEM_QUANTUM, cgroup memHigh, subvol rm throttling | OOM count, memory waste %, stability |
 | Filesystem | eCryptfs NEON, Btrfs trashcan, subvol deletion, metadata ops | Throughput multiplier, latency (s) |
-| Service Optimization | ustd CLI, Samba async I/O, zero-copy, CFS bandwidth | CPU %, memory %, load average |
+| Service Optimization | ustd CLI gRPC migration, Samba async I/O, zero-copy, CFS bandwidth | CPU %, memory %, load average |
 
 ### Writing Before/After Tuning in Milestones
 
