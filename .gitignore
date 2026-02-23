@@ -23,3 +23,7 @@
 ## Mac OS X metadata files:
 *.DS_Store
 
+### Private ###
+## Resume output and job-targeted resumes:
+resumes/
+
