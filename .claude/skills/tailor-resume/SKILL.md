@@ -71,7 +71,7 @@ mkdir -p resumes/general/resume
 
 1. **Read** milestone files + current `resumes/general/resume/*.tex` (canonical GP)
 2. **Create summary** → `resumes/general/resume/summary.tex`
-   - Refresh from milestones, keep general-purpose
+   - Refresh from milestones, keep general-purpose, use "OS Engineer" framing (Linux, performance, storage)
    - Use `\\` after each sentence (except last) per **resume-content-rules** rule #6
    - Follow **resume-content-rules**
 3. **Create experience** → `resumes/general/resume/experience.tex`
@@ -165,9 +165,17 @@ These signal a well-rounded engineer who delivers beyond the narrow job scope.
 
 - **Startup**: breadth, ownership, wearing many hats
 - **Enterprise**: scale, process, cross-team collaboration
-- **Storage/infra**: filesystem, kernel, performance metrics
+- **OS/Storage/infra**: Linux internals, filesystem, kernel, performance metrics
 - **Platform/DevOps**: CI/CD, build systems, automation
 - **Senior/Staff**: leadership, mentoring, architecture
+
+### Identity Consistency
+
+When the GP resume identity changes (e.g., "OS Engineer" instead of "Firmware Engineer"), propagate to **all** artifacts:
+- `milestone/summary.md` title
+- Presentation tagline (slide 10) and metric labels
+- Speech script opening and closing
+- All job-targeted resume summaries (re-derive from GP)
 
 ### ATS Optimization
 

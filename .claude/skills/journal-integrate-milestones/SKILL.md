@@ -24,7 +24,9 @@ journal/
 | From | To | Action |
 |------|----|--------|
 | `raw/` | `refined/` | Translate (if needed), standardize formatting, fix structure |
-| `refined/` | `integrated/` | Distill into `milestone/*.md`, then move |
+| `refined/` | `milestone/<company>.md` | Distill all achievements into company milestone file (Step 3) |
+| `milestone/<company>.md` | `milestone/summary.md` | Extract highest-impact items into career summary (Step 4) |
+| `refined/` | `integrated/` | Move processed files after Steps 3-4 are complete (Step 5) |
 
 ## Step 1: Inventory and Triage
 
@@ -55,11 +57,14 @@ For each `weekly-report_*.md` in `raw/`:
 
 Move refined files from `raw/` to `refined/`.
 
-## Step 3: Integrate into Milestones
+## Step 3: Integrate into Company Milestones (Coarse-Grained)
+
+First, integrate **all** achievements into the company-specific milestone file (e.g., `milestone/ubiquiti.md`, `milestone/qnap.md`). This is the primary repository — capture everything here with full detail.
 
 ### Read Existing Milestone Structure
 
-Read `milestone/ubiquiti.md` to understand:
+Read the target company milestone file to understand:
+- `## Key Projects` section — for major project-level descriptions (architecture, tech stack, scale); not all achievements belong here, only standalone project summaries
 - Chronological structure (sections by year and quarter)
 - Last quarter covered
 - Writing style and formatting conventions
@@ -113,13 +118,25 @@ For smaller items, use bullet-point lists grouped under themed headings.
 - New quarter section (`### Q4 Achievements`) goes **after** the preceding quarter in the same year
 - Update GitHub Metrics table when adding a new year row
 
-## Step 4: Update Career Summary
+## Step 4: Extract into Career Summary (Fine-Grained)
 
-After milestone integration, update `milestone/summary.md`:
+After company milestone integration is complete, extract the **highest-impact** achievements into `milestone/summary.md`. This is the curated, resume-ready layer.
 
-- Add 3-5 new bullet points under the relevant employer section
+### Process
+1. Review the newly added content in `milestone/<company>.md`
+2. Select achievements with the strongest metrics, broadest impact, or most differentiation value
+3. Condense each into a single-line bullet under the relevant employer section in `milestone/summary.md`
+
+### Selection Criteria
+Promote achievements that have: quantified metrics (throughput, latency, percentages), broad platform impact (serves multiple products or teams), or strong differentiation value (unique technique or outsized result). Skip items that are incremental improvements, context-dependent, or too narrow to explain quickly in an interview.
+
+### Guidelines
+- Add 3-5 new bullet points under the relevant `### Key Achievements` employer section
 - Format: `- **Bold Title**: One-line description with key metric`
 - Place new bullets after existing ones, before the next employer section
+- **Not everything goes here** — only items worth highlighting on a resume or in an interview
+- If an achievement updates an existing summary bullet (e.g., support count 120 → 180), update in place rather than adding a duplicate
+- If an achievement introduces a new capability area not yet reflected in `### Core Expertise`, update or extend that prose section as well
 
 ## Step 5: Finalize
 
@@ -191,8 +208,8 @@ For tabular tuning summaries (use in Result sections):
 | Request | Action |
 |---------|--------|
 | "integrate journals into milestones" | Full pipeline |
-| "refine weekly reports" | Stage 2 only |
-| "add Q1 2026 to milestones" | Stage 3 only |
-| "update career summary" | Stage 4 only |
+| "refine weekly reports" | Step 2 only |
+| "add Q1 2026 to milestones" | Step 3 only |
+| "update career summary" | Step 4 only |
 | "process new journal entries" | Triage new files, run full pipeline |
 | "update performance summary" | Regenerate `performance-summary.md` from CSV + milestones |

@@ -26,7 +26,7 @@ The interview presentation (`interview-presentation.html`) is a professional, in
 ## Storage & System Engineering Experience Implementation
 
 ### Experience-Specific Slide Content
-1. **Cover Slide**: Senior System Engineer & Storage Architect (8+ years, 5K sales, 210K+ users) - *Use milestone/summary.md*
+1. **Cover Slide**: OS Engineer — Linux Development, Performance & Storage Infrastructure (8+ years, 5K sales, 210K+ users) - *Use milestone/summary.md*
 2. **Self Introduction**: Computer Science background, storage/performance/QA expertise - *Use milestone/summary.md*
 3. **Technical Expertise**: Tools & DevOps (top-left), Storage & Filesystem (top-right), Programming & System Languages (bottom-left), Frameworks & Protocols (bottom-right) - *Use milestone/summary.md*
 4. **Ubiquiti Highlights**: UniFi-OS Storage Software Engineer achievements - *Use milestone/ubiquiti.md*
@@ -198,7 +198,7 @@ Horizontal display of core competencies with visual separators:
 
 ### Quantified Metrics Section
 Four key metrics displayed in metric boxes below the strengths:
-- **Experience Duration**: Years of relevant experience (e.g., "7+ Years Firmware Experience")
+- **Experience Duration**: Years of relevant experience (e.g., "8 Years Linux Development")
 - **Scale/Volume**: Production impact numbers (e.g., "210K+ Users Served", "6 Product Variants")
 - **Quality/Efficiency**: Process improvement metrics (e.g., "<20 Support Cases")
 - **Technical Achievement**: Specific technical accomplishments (e.g., "120 Test Cases")
@@ -209,6 +209,7 @@ Four key metrics displayed in metric boxes below the strengths:
 - **Memorable Format**: Simple tagline + three keywords easy for interviewers to recall
 - **Professional Appeal**: Clean, centered design with consistent color scheme
 - **Job Alignment**: All content should directly address role requirements and demonstrate fit
+- **Identity Consistency**: The tagline, metric labels, and framing must match the resume summary identity (e.g., "OS Engineer" not "Firmware Engineer"; "Years Linux Development" not "Years Firmware Experience"). When the resume identity changes, update all presentation references.
 
 ## Job Description Customization
 

@@ -27,6 +27,7 @@ Character counts are **reference guidance** for fitting rendered content into wh
 - **Natural breaks**: Content should fill whole rendered lines, not leave large gaps
 - **Content density**: Pack meaningful information efficiently
 - **Technical accuracy**: Maintain precision while respecting length
+- **Impact over vanity metrics**: Prefer performance gains (latency, throughput, CPU%), user scale, and business outcomes over code volume (LOC, file counts, commit counts). LOC belongs in milestones, not on resumes.
 
 ## Content Structure
 - **cvparagraph**: Overall summarizing.
@@ -55,6 +56,8 @@ Character counts are **reference guidance** for fitting rendered content into wh
 | Adding `\\` without checking page count | Each `\\` adds vertical space that can push tight-margin resumes to 3 pages | Build-and-check after adding `\\`; shorten sentences if overflow |
 | Using 3-line summary instead of 4-line | Different `cvparagraph` rendering causes page overflow even with less text | Always use exactly 4 lines with `\\` matching GP structure |
 | Reordering bullets assuming zero rendering impact | Word-break patterns differ after reorder, can add rendered lines | Always build-verify after reordering |
+| Using LOC/line counts as achievements | Code volume is not impressive; interviewers care about impact | Use impact metrics: latency, CPU%, throughput, user scale |
+| Redundant technical descriptors (e.g., "gRPC state daemon") | "gRPC daemon" already implies state service; extra words waste space | Drop redundant qualifiers; keep only what adds meaning |
 
 ## LaTeX Rendering Warning
 
