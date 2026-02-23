@@ -4,10 +4,9 @@
 This project uses the Awesome-CV LaTeX template to generate professional resumes and CVs, enhanced with an interactive HTML interview presentation system. The main working files are in `src/` with milestone documentation in `milestone/` and a comprehensive interview presentation (`interview-presentation.html`).
 
 ## File Structure
-- `resumes/general/resume/` - **Canonical GP resume** (all 5 .tex files — source of truth)
-- `src/resume/` - Build mirror (synced from GP canonical, used by xelatex)
+- `src/resume/*.tex` - **Canonical GP resume** (all 5 .tex files — source of truth, edit here)
 - `src/resume.tex` - Main resume document (imports from `resume/` relative path)
-- `resumes/<company>/` - Job-targeted resumes with analysis reports
+- `resumes/<company>/` - Job-targeted resumes with analysis reports (gitignored)
 - `milestone/` - Career milestone documentation (summary.md, qnap.md, ubiquiti.md)
 - `interview-presentation.html` - Interactive HTML slideshow for technical interviews
 - `examples/` - Template examples and generated outputs
@@ -25,9 +24,8 @@ make clean
 ```
 
 ## Key Files
-- `resumes/general/resume/*.tex` - Canonical GP resume files (edit here)
+- `src/resume/*.tex` - **Canonical GP resume files** (edit here)
 - `src/resume.tex` - Main resume file with personal information and section imports
-- `src/resume/*.tex` - Build mirror (synced from `resumes/general/resume/`)
 
 ## Build Requirements
 - XeLaTeX engine

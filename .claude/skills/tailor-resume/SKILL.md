@@ -54,31 +54,25 @@ resumes/
 
 | File | Purpose |
 |------|---------|
-| `resumes/general/resume/*.tex` | **Canonical GP resume** (all 5 .tex files) |
-| `src/resume/*.tex` | Build mirror — kept in sync with GP canonical |
+| `src/resume/*.tex` | **Canonical GP resume** (all 5 .tex files) — edit here |
 | `src/present/interview-presentation.html` | Default presentation template |
 | `milestone/*.md` | Achievement data |
 
-**Important:** `resumes/general/resume/` is the canonical location for all GP .tex files. After editing GP files, sync them to `src/resume/` so the build works. For job-targeted builds, the backup/copy/restore procedure in **resume-pdf-check** handles this automatically.
+**Important:** `src/resume/` is the canonical location for all GP .tex files and also the build directory (`cd src && xelatex resume.tex`). No sync step needed. For job-targeted builds, the backup/copy/restore procedure in **resume-pdf-check** handles this automatically.
 
 ---
 
 ## General-Purpose Pipeline
 
-```
-mkdir -p resumes/general/resume
-```
-
-1. **Read** milestone files + current `resumes/general/resume/*.tex` (canonical GP)
-2. **Create summary** → `resumes/general/resume/summary.tex`
+1. **Read** milestone files + current `src/resume/*.tex` (canonical GP)
+2. **Create summary** → `src/resume/summary.tex`
    - Refresh from milestones, keep general-purpose, use "OS Engineer" framing (Linux, performance, storage)
    - Use `\\` after each sentence (except last) per **resume-content-rules** rule #6
    - Follow **resume-content-rules**
-3. **Create experience** → `resumes/general/resume/experience.tex`
+3. **Create experience** → `src/resume/experience.tex`
    - Update bullets with latest achievements, order by impact
    - Follow **resume-content-rules**, do NOT change titles/dates
-4. **Sync to build mirror** — copy updated files to `src/resume/`
-5. **Build PDF** → `resumes/general/resume.pdf`
+4. **Build PDF** → `src/resume.pdf`
    - Follow **resume-pdf-check** (build, validate 2 pages)
 6. **Generate presentation** → `resumes/general/interview-presentation.html`
    - Follow **interview-presentation** skill, use latest milestones
@@ -102,7 +96,7 @@ mkdir -p resumes/<company-name>/resume
    - Prioritize: direct match > transferable > scale/impact > unique breadth
 5. **Copy shared files** — copy education.tex, scholar.tex, leadership.tex from GP:
    ```bash
-   cp resumes/general/resume/{education,scholar,leadership}.tex resumes/<company-name>/resume/
+   cp src/resume/{education,scholar,leadership}.tex resumes/<company-name>/resume/
    ```
 6. **Create summary** → `resumes/<company-name>/resume/summary.tex`
    - Emphasize job-matching skills, include ATS keywords
@@ -111,7 +105,7 @@ mkdir -p resumes/<company-name>/resume
    - `\\` only between sentences — never between clauses of the same sentence
    - Follow **resume-content-rules**
 7. **Create experience** → `resumes/<company-name>/resume/experience.tex`
-   - **Start from GP text** — copy `resumes/general/resume/experience.tex` as base
+   - **Start from GP text** — copy `src/resume/experience.tex` as base
    - **Reorder top-level bullet groups** for job relevance — but always build-verify after (reordering can change rendered line counts)
    - **Reorder QNAP top-level bullets** if relevant (performance-first vs product-first)
    - **Rewrite sub-bullets incrementally** — the layout is at the absolute 2-page limit. Rewrite one sub-bullet at a time and build-and-check after each change. If overflow, shorten that bullet before moving to the next.
@@ -187,8 +181,8 @@ When the GP resume identity changes (e.g., "OS Engineer" instead of "Firmware En
 
 When the GP resume is updated (quality fixes, milestone refreshes), **all job-targeted resumes become stale** because they were derived from the old GP text. To refresh:
 
-1. **Copy shared files from GP** — education.tex, scholar.tex, leadership.tex
-2. **Start from latest GP** `resumes/general/resume/experience.tex` as base
+1. **Copy shared files from GP** — education.tex, scholar.tex, leadership.tex from `src/resume/`
+2. **Start from latest GP** `src/resume/experience.tex` as base
 3. **Re-apply job-specific bullet reordering** — but build-verify after (reordering can change rendered lines)
 4. **Re-apply any sub-bullet rewrites** that were job-specific, incrementally with build checks
 5. **Update summary** — match GP's 4-line `\\` structure, customize line 2 for JD focus
