@@ -1,22 +1,21 @@
 # Career Summary
 
-## Senior System Engineer & Storage Architect
+## OS Engineer — Linux Development, Performance & Storage Infrastructure
 
 ### Core Expertise
 
-**System Architecture & Platform Development**: Led end-to-end system bring-up and architecture design for enterprise storage platforms, from U-Boot bootloader and Linux kernel integration to user-space applications. Pioneered NAS platform scaling from 3 to 5 engineers with 6 product variants. Architected gRPC-based service frameworks replacing polling systems with microsecond-latency state management.
+**System Architecture & Platform Development**: Led end-to-end system bring-up and architecture design for enterprise storage platforms, from U-Boot bootloader and Linux kernel integration to user-space applications. Pioneered NAS platform scaling from 3 to 5 engineers with 6 product variants. Designed and built ustated (ustate-exporter), the central gRPC state management daemon (16,600 LOC, 20 releases) serving as the sole state export layer between hardware daemons and the application stack across all console and NAS products.
 
-**Storage Architecture & Filesystem Engineering**: Architected comprehensive storage systems from filesystem layout to service integration across both cloud and NAS platforms. At Ubiquiti, designed and implemented Btrfs-based multi-volume architectures supporting snapshots, encryption, WORM compliance, and enterprise backup workflows with atomic metadata transactions. Led UniFi Drive development including system/storage pool-level migration logic, lock-less client notifications, and encryptFS optimization achieving 4x performance improvement. Implemented advanced Btrfs features including subvolume operations, balance/scrub validation, and ARM64 hardware-accelerated CRC32 delivering +40% SSD-RAID write IOPS. At QNAP, implemented FUSE-based cloud filesystem with selective mounting, client-side encryption, and transparent NFS/SMB access. Expert in modern filesystems (Btrfs, ext4, eCryptFS), RAID systems, and storage optimization with focus on reliability, performance, and data integrity at enterprise scale supporting 190K+ users.
+**Storage Architecture & Filesystem Engineering**: Architected comprehensive storage systems from filesystem layout to service integration across both cloud and NAS platforms. At Ubiquiti, built unifi-drive-config (UDC), a Go daemon managing the full NAS lifecycle — dual Btrfs/ZFS backends with a common Manager abstraction, encryption, user management, Samba/NFS exports, snapshots, and version-aware migrations. Implemented Btrfs-based multi-volume architectures supporting snapshots, encryption, WORM compliance, and enterprise backup workflows with atomic metadata transactions. Delivered full ZFS backend (245 commits, 8 PRs) with UTF-8 path encoding, native encryption, atomic rollback, and complete feature parity with Btrfs. Led UniFi Drive development including system/storage pool-level migration logic, lock-less client notifications, and encryptFS optimization achieving 4x performance improvement. Implemented advanced Btrfs features including subvolume operations, balance/scrub validation, and ARM64 hardware-accelerated CRC32 delivering +40% SSD-RAID write IOPS. At QNAP, implemented FUSE-based cloud filesystem with selective mounting, client-side encryption, and transparent NFS/SMB access. Expert in modern filesystems (Btrfs, ZFS, ext4, eCryptFS), RAID systems, and storage optimization with focus on reliability, performance, and data integrity at enterprise scale supporting 190K+ users.
 
 **Performance Engineering & Optimization**: Specialized in full-stack performance optimization delivering measurable improvements across storage, network, and system layers. Achieved Samba throughput gains from 544/592 MB/s to 830/930 MB/s through IRQ isolation, TCP tuning, and zero-copy I/O. Improved metadata operations by 300%, reduced directory deletion from 22s to 1s, and enhanced SSD-RAID write IOPS by 40% using ARM64 hardware acceleration.
 
-**Quality Assurance & Testing**: Established comprehensive testing frameworks using industry-standard tools (xfstests, stress-ng, packetdrill, filebench). Co-led cross-team stress testing implementing multi-day I/O validation, RAID expansion tests, and filesystem stability validation. Built automated CI/CD pipelines with GitLab, Jenkins, and Docker. Only less than 20 client support need RD's
-  involvement.
+**Quality Assurance & Testing**: Established comprehensive testing frameworks using industry-standard tools (xfstests, stress-ng, packetdrill, filebench). Co-led cross-team stress testing implementing multi-day I/O validation, RAID expansion tests, and filesystem stability validation. Built automated CI/CD pipelines with GitLab, Jenkins, and Docker. Fewer than 20 client support cases required R&D involvement.
 
 #### Tech Stacks
 **Programming & System Languages**: C/C++, Go, Python, Shell scripting, SQL
 **Frameworks & Protocols**: gRPC, libev, FUSE, Samba/NFS protocols
-**Storage & Filesystem**: Btrfs, ext4, RAID systems, SQLite, LVM
+**Storage & Filesystem**: Btrfs, ZFS, ext4, RAID systems, SQLite, LVM
 **Linux & Kernel**: Linux kernel development, filesystem drivers, block layer, cgroups, drivers
 **Testing & Validation**: xfstests, blktests, stress-ng, packetdrill, pjdfstest, filebench
 **DevOps & Build Systems**: Git, Docker, Jenkins, GitLab CI/CD, Debian packaging, autotools, Meson
@@ -43,6 +42,8 @@
 - **Kernel Development**: Implemented eCryptfs nanosecond timestamps and fallocate support, enabled BTF/eBPF for filesystem event auditing, added CFS bandwidth control
 - **NAS Performance Testing Platform**: Built end-to-end automated benchmarking infrastructure (3,787 lines of scripts, 11 AI skills) completing 4 test sessions across 16 managed devices with 854 log files
 - **Support at Scale**: Analyzed 180 support bundles across 60+ unique issues (63 GB diagnostic data) spanning storage, Samba, NFS, performance, and network categories
+- **unifi-drive-config (UDC)**: Built core NAS management daemon in Go — dual Btrfs/ZFS filesystem abstraction, Samba/NFS exports, encryption, snapshots, user management, and version-aware migrations deployed on all UNAS hardware
+- **ustate-exporter (ustated)**: Designed core architecture and V1 API (6 endpoints) for the central gRPC state daemon (16,600 LOC, 151 files, 20 releases) — sole state export layer across all Ubiquiti console and NAS products
 
 #### **QNAP (Cloud File System) - Lead Performance Engineer**
 - **Product Success**: Delivered cloud filesystem deployed on 190K+ QNAP NAS devices, establishing it as a core platform service

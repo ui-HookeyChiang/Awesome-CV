@@ -10,6 +10,102 @@
 | 2023 | 619                 | 31%          | 41%     | 28%           |
 | 2022 | 308                 | 20%          | 52%     | 28%           |
 
+## Key Projects
+
+### unifi-drive-config (UDC)
+
+Core storage management daemon and CLI tool for Ubiquiti's UniFi NAS hardware (UNAS/UNAS Pro devices). Manages the full lifecycle of a NAS appliance from filesystem through encryption to network sharing.
+
+#### What It Does
+- **Drive Management**: Creates and manages user storage as Btrfs subvolumes or ZFS datasets with quotas, snapshots, and encryption
+- **Dual Filesystem Support**: Full feature parity across Btrfs and ZFS, with auto-detection at runtime via statfs
+- **File Sharing**: Configures Samba (SMB/CIFS) and NFS exports, including Time Machine support for macOS backups
+- **User Management**: Manages Linux and Samba users/groups with synchronized permissions
+- **Data Protection**: Point-in-time snapshots (Btrfs native / ZFS .zfs/snapshot/), backup/restore, and safe trash/deferred deletion
+- **Encryption**: ecryptfs for Btrfs; native AES encryption (128/192/256, CCM/GCM) for ZFS
+- **System Operations**: Version-aware migrations, service discovery (Avahi/mDNS), feature flags, and performance monitoring (fio benchmarking)
+
+#### Architecture
+- Go daemon with high-performance, event-driven server (gnet) communicating over Unix sockets using Protocol Buffers
+- Client-server model — daemon runs as root handling privileged operations; CLI clients connect with minimal permissions
+- Filesystem abstraction layer — common Manager interface with BtrfsManager and ZfsManager implementations, selected automatically based on underlying filesystem
+- Deep Linux integration — CGO-enabled for PAM, Btrfs ioctls, ZFS commands, and direct system calls
+- Debian packaged — built via debfactory for Ubiquiti OS (ARM64/Bullseye)
+
+#### ZFS-Specific Engineering
+- UTF-8 path encoding — Base64 URL-safe encoding of dataset name components to work around ZFS's ASCII-only naming restriction
+- Native ZFS encryption with key load/unload lifecycle management
+- Space reclamation — Uses `zpool wait -t free` after dataset destruction to ensure space is actually freed
+- Atomic rollback — LIFO rollback mechanism for multi-step operations (rename, create) with automatic reversion on failure
+
+#### Btrfs vs ZFS Feature Comparison
+
+| Feature | Btrfs | ZFS |
+|---------|-------|-----|
+| Quotas | Qgroup hierarchy | refquota/quota properties |
+| Snapshots | Native subvolume snapshots | .zfs/snapshot/ with shadow symlinks |
+| Encryption | ecryptfs (transparent layer) | Native AES encryption |
+| Path handling | Direct paths | Base64-encoded components |
+
+#### Scale & Complexity
+- ~2,400+ lines of ZFS-specific code (internal/drive/zfs.go + pkg/zfs/), plus equivalent for Btrfs
+- Manages full storage stack: filesystem (Btrfs/ZFS) → encryption → Linux users → network sharing (Samba/NFS) → service advertisement
+- Handles cross-version migrations for firmware updates
+- 170+ ZFS-related commits across 15+ development branches
+- Production deployment on all Ubiquiti NAS hardware
+
+#### Tech Stack
+Go, Protocol Buffers, gnet, Cobra CLI, Btrfs, ZFS, Samba, NFS, ecryptfs, Avahi, Debian packaging
+
+---
+
+### ustate-exporter (ustated / ustate)
+
+Central hardware and storage state management daemon for Ubiquiti console and NAS devices. I designed the core architecture and implemented the V1 API, establishing the foundation the system runs on today.
+
+#### Key Numbers
+
+| Metric | Value |
+|--------|-------|
+| Language | Go 1.21 |
+| Codebase | 16,600 LOC across 151 Go files |
+| Release | v1.20.1 (20 releases, monthly cadence) |
+| My contribution | Core architecture + V1 API (6 service endpoints) |
+
+#### What I Built
+
+**Core Architecture:**
+- gRPC server (port 11052) with keepalive, reflection, and bidirectional streaming
+- Event-driven state system — hierarchical event tree with pattern-matching handlers, fed by Unix socket IPC to the ustd state database
+- Thread-safe metrics collection — RWMutex-protected disk stat snapshots via gopsutil (1s granularity)
+- Systemd-integrated daemon — auto-restart, graceful shutdown (SIGTERM/SIGHUP), elevated scheduling priority
+- Cobra CLI — full command tree for querying and managing exported states
+- Debian packaging with cross-compilation support
+
+**V1 API — Storage, Hardware & Services:**
+- Storage states — disks, RAID arrays, flash, SD cards, logical spaces, storage settings
+- Hardware states — PSU voltage/current/temperature, fan speed, temperature sensors
+- File service — Samba session monitoring via log tailing
+- Accessory/peripheral — external device state reporting
+- Diagnostics — dump states / dump events for support file generation
+
+#### Architecture Highlights
+- SDB client layer — JSON-based protocol over Unix sockets with auto-reconnection (exponential backoff) to the ustd state database
+- Non-blocking event distribution — decoupled state producers from consumers so slow clients don't block the pipeline
+- Versioned API design — the architecture cleanly supported later V2 API additions with full backward compatibility
+- Dual-mode operation — runs as both a background daemon (ustated) and an interactive CLI tool (ustate)
+
+#### Impact & Scope
+- Deployed across Ubiquiti's console and UNAS product lines (consumer and enterprise NAS hardware)
+- Sole state export layer between hardware management daemons (ustd, uhwd, usd) and the user-facing application stack
+- Architecture proved extensible enough to support V2 API additions, expansion device support, and cache slot management
+- Actively maintained with monthly releases over 20 versions
+
+#### Tech Stack
+Go, gRPC, Protocol Buffers, Cobra, Logrus, gopsutil, systemd, Debian packaging, GitHub Actions
+
+---
+
 ## 2026
 
 ### Q1 Achievements
@@ -707,7 +803,7 @@
 - Integrated months of foundational work into a unified firmware framework including debbox, debfactory, basefiles, uboot, and ubntnas
 
 #### Core System Service Development
-- Developed core system service: ugrpcd
+- Developed core system service: ustated
 - Redesigned the event notification architecture to simplify development and enhance system integration
 - Implemented graceful shutdown handling to ensure clean resource release
 - Integrated streaming settings with lcm and ucore for improved user experience
@@ -735,8 +831,8 @@
 ### System Configuration & Package Management Enhancements
 - Added missing package dependencies for unifi-drive, including links to unifi-drive-config and relevant samba-xxx components
 - Upstreamed and bumped core build dependencies such as linux-headers and libc-dev from the debbox master
-- Improved ugrpcd behavior with graceful shutdown and added Go build tags for better integration with Debfactory
-- Enhanced ugrpcd functionality to listen for RAID changes via udev events instead of polling, reducing CPU load
+- Improved ustated behavior with graceful shutdown and added Go build tags for better integration with Debfactory
+- Enhanced ustated functionality to listen for RAID changes via udev events instead of polling, reducing CPU load
 
 ### System Services and Device Communication Improvements
 - Implemented backup and restore of Linux Samba users, supporting user persistence across firmware upgrades or recovery scenarios
