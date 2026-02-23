@@ -5,11 +5,10 @@ description: Build resume PDF and validate. Handles backup/copy/xelatex/restore 
 
 # Resume Build & Check
 
-Use this skill to build a resume PDF and validate it. Covers three scenarios:
+Use this skill to build a resume PDF and validate it. Covers two scenarios:
 
-- **GP build** — build from canonical `resumes/general/resume/` (sync to `src/resume/` first)
+- **GP build** — build directly from canonical `src/resume/` (no sync needed)
 - **Job-targeted build** — build from customized `.tex` files under `resumes/<company>/`
-- **Direct build** — build from `src/resume/` as-is (e.g., quick iteration)
 
 ## Layout Rule
 
@@ -22,31 +21,23 @@ Use this skill to build a resume PDF and validate it. Covers three scenarios:
 
 | File | Role |
 |------|------|
-| `resumes/general/resume/*.tex` | **Canonical GP** (all 5 .tex files) |
-| `src/resume/*.tex` | Build mirror — synced from GP canonical |
+| `src/resume/*.tex` | **Canonical GP** (all 5 .tex files — edit here) |
 | `src/resume.tex` | Main document (page layout, imports) |
 | `awesome-cv.cls` | Class file (do not modify) |
 
-**Rule:** `resumes/general/resume/` is the source of truth. `src/resume/` is a build mirror kept in sync. For job-targeted builds, backup `src/resume/` before overwriting, then restore after build.
+**Rule:** `src/resume/` is the source of truth and build directory. For job-targeted builds, backup `src/resume/` before overwriting, then restore after build.
 
 ---
 
 ## GP Build Procedure
 
-GP files live in `resumes/general/resume/` (canonical) and `src/resume/` (build mirror). After editing GP files, sync and build:
+Edit GP files directly in `src/resume/` (canonical), then build:
 
 ```bash
-# Sync canonical → build mirror
-cp resumes/general/resume/summary.tex src/resume/summary.tex
-cp resumes/general/resume/experience.tex src/resume/experience.tex
-cp resumes/general/resume/scholar.tex src/resume/scholar.tex
-
-# Build
 cd src && xelatex resume.tex
-
-# Copy output
-cp resume.pdf ../resumes/general/resume.pdf
 ```
+
+`resumes/general/resume.pdf` is a symlink to `../../src/resume.pdf` — no copy needed.
 
 ## Job-Targeted Build Procedure
 
@@ -71,16 +62,6 @@ cp resume.pdf ../resumes/<company>/resume.pdf
 rm -rf resume && mv resume.bak resume
 ```
 
-## Direct Build
-
-When iterating on `src/resume/*.tex` directly (e.g., quick edits during GP update):
-
-```bash
-cd src && xelatex resume.tex
-```
-
-After iteration is complete, sync back to canonical: `cp src/resume/*.tex resumes/general/resume/`
-
 ---
 
 ## Validation
@@ -99,7 +80,7 @@ pdfinfo src/resume.pdf | grep Pages
 
 When page 2 overflows, **automatically shrink scholar** before asking the user to trim. Apply in order until the PDF fits:
 
-1. **Remove the least relevant project** (currently 2 entries: Phase-based Profiling and Thread Cluster Memory)
+1. **Remove the least relevant project** (currently only 2 entries remain: Phase-based Profiling and Thread Cluster Memory)
 2. **Shorten remaining descriptions** to single-line summaries
 3. **Remove another project** if still overflowing (keep top 1)
 4. **Collapse to minimal format** — remove `\begin{cvitems}` and use empty description braces `{}`

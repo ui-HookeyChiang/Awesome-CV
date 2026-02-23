@@ -26,7 +26,7 @@ The interview presentation (`interview-presentation.html`) is a professional, in
 ## Storage & System Engineering Experience Implementation
 
 ### Experience-Specific Slide Content
-1. **Cover Slide**: OS Engineer — Linux Development, Performance & Storage Infrastructure (8+ years, 5K sales, 210K+ users) - *Use milestone/summary.md*
+1. **Cover Slide**: OS Engineer — Linux Development, Performance & Storage Infrastructure (8+ years, 5K sales, 190K+ deployments) - *Use milestone/summary.md*
 2. **Self Introduction**: Computer Science background, storage/performance/QA expertise - *Use milestone/summary.md*
 3. **Technical Expertise**: Tools & DevOps (top-left), Storage & Filesystem (top-right), Programming & System Languages (bottom-left), Frameworks & Protocols (bottom-right) - *Use milestone/summary.md*
 4. **Ubiquiti Highlights**: UniFi-OS Storage Software Engineer achievements - *Use milestone/ubiquiti.md*

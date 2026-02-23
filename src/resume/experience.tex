@@ -39,6 +39,10 @@
             Upgraded Linux 4.19 to 5.10 along with drivers, unlocking
             OS capability and eBPF observability.
           }
+          \item {
+            Fixed cross-layer issues from kernel (PHY crashes, NFS panics, AHCI IRQ, 93\% socket memory)
+            to storage (RAID 50\% regression, FS write amplification, Samba socket leaks, Drive OOMs).
+          }
           \end{itemize}
         \item {
           Delivered full-stack system tunings and resource control across 6 NAS
@@ -65,11 +69,7 @@
           }
           \begin{itemize}
           \item {
-            Fixed cross-layer issues from kernel (PHY crashes, NFS panics, AHCI IRQ, 93\% socket memory)
-            to storage (RAID 50\% regression, FS write amplification, Samba socket leaks, Drive OOMs).
-          }
-          \item {
-            Architected ustated gRPC daemon with microsecond latency; cut ustd CPU by 65\%.
+            Architected ustated gRPC daemon with microsecond latency, reducing system load by 50\%.
           }
           \item {
             Revamped the Debian build system for safe package upgrades with AI-aided workflows.

@@ -72,11 +72,13 @@ resumes/
 3. **Create experience** → `src/resume/experience.tex`
    - Update bullets with latest achievements, order by impact
    - Follow **resume-content-rules**, do NOT change titles/dates
-4. **Build PDF** → `src/resume.pdf`
-   - Follow **resume-pdf-check** (build, validate 2 pages)
-6. **Generate presentation** → `resumes/general/interview-presentation.html`
+4. **Build PDF** → `cd src && xelatex resume.tex` → `src/resume.pdf`
+   - Follow **resume-pdf-check** (validate 2 pages, no overfull/underfull warnings)
+   - Always generate the PDF after any .tex change — the PDF is the deliverable
+   - `resumes/general/resume.pdf` is a symlink to `src/resume.pdf` — no copy needed
+5. **Generate presentation** → `resumes/general/interview-presentation.html`
    - Follow **interview-presentation** skill, use latest milestones
-7. **Generate speech** → `resumes/general/interview-speech.md`
+6. **Generate speech** → `resumes/general/interview-speech.md`
    - Follow **interview-speech** skill, derive from presentation
 
 ---
