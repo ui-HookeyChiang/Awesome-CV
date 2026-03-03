@@ -32,14 +32,14 @@ After generating a raw report, use the `journal-integrate-milestones` skill to p
 SKILL_DIR=~/Awesome-CV/.claude/skills/host-work-journal
 
 # Default: last 7 days
-python3 $SKILL_DIR/collect-weekly-report.py -v
+python3 $SKILL_DIR/scripts/collect-weekly-report.py -v
 
 # Custom date range
-python3 $SKILL_DIR/collect-weekly-report.py \
+python3 $SKILL_DIR/scripts/collect-weekly-report.py \
   --start-date 2026-02-01 --end-date 2026-02-28 -v
 
 # With detailed Claude session analysis
-python3 $SKILL_DIR/collect-weekly-report.py \
+python3 $SKILL_DIR/scripts/collect-weekly-report.py \
   --start-date 2026-02-01 --end-date 2026-02-28 --detailed -v
 ```
 
