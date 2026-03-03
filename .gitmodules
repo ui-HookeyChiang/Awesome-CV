@@ -1,0 +1,3 @@
+[submodule "journal"]
+	path = journal
+	url = git@github.com:ui-HookeyChiang/journal.git
