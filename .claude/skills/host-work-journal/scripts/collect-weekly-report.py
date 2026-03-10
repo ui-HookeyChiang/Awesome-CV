@@ -726,18 +726,20 @@ def collect_claude_sessions(start_date, end_date, detailed=False):
             idx = safe_json_load(idx_file)
             if not idx:
                 continue
+            skipped = 0
             for entry in idx.get("entries", []):
-                # Sessions index entries may have timestamps
-                ts = entry.get("timestamp", "")
-                if ts:
-                    entry_date = iso_to_date(ts) if "T" in str(ts) else str(ts)[:10]
-                    if not in_range(entry_date, start_date, end_date):
-                        continue
+                sid = entry.get("sessionId", "")
+                if sid not in session_ids:
+                    skipped += 1
+                    continue
                 result["session_summaries"].append({
                     "project": idx.get("originalPath", ""),
-                    "session_id": entry.get("sessionId", ""),
+                    "session_id": sid,
                     "summary": entry.get("summary", ""),
                 })
+            if skipped:
+                log.debug("Skipped %d sessions not in date range for %s",
+                          skipped, proj_dir.name)
 
     # ── 4. Detailed mode: parse per-session .jsonl files ─────────────────
     if detailed and PROJECTS_DIR.exists():
