@@ -115,12 +115,6 @@ def test_only_date_filtered_sessions_included(
             return original_open(str(history_file), *args, **kwargs)
         return original_open(path, *args, **kwargs)
 
-    # We also need safe_json_load to find our sessions-index.json
-    original_safe_json_load = collector.safe_json_load
-
-    def patched_safe_json_load(path):
-        return original_safe_json_load(path)
-
     with patch("builtins.open", side_effect=patched_open):
         result = collect_claude_sessions(START, END)
 
