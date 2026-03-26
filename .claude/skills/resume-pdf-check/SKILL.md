@@ -1,6 +1,6 @@
 ---
 name: resume-pdf-check
-description: Build resume PDF and validate. Handles backup/copy/xelatex/restore for resumes/ builds, enforces 2-page limit, auto-shrinks scholar on overflow. Use when building or checking a resume.
+description: Build resume PDF and validate. Handles backup/copy/xelatex/restore for resumes/ builds, enforces 2-page limit, auto-shrinks scholar on overflow. Use whenever building a resume PDF with xelatex, checking page count, validating LaTeX output, or troubleshooting overflow issues. Must be used after ANY .tex file change to verify the build still produces exactly 2 pages. If you see "Pages: 3" or LaTeX warnings, this skill has the fix procedures.
 ---
 
 # Resume Build & Check

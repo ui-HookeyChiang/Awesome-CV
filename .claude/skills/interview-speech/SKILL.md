@@ -1,6 +1,6 @@
 ---
 name: interview-speech
-description: Structure, timing, and content guidelines for interview speech scripts (interview-speech.md). Use when creating or editing interview speaking notes.
+description: Structure, timing, and content guidelines for interview speech scripts (interview-speech.md). Use when creating or editing interview speaking notes. Also use when the user asks to prepare for an interview, practice a presentation, write talking points, or generate a script for self-introduction. If the tailor-resume skill is generating a speech, this skill provides the rules.
 ---
 
 # Interview Speech Script Rules

@@ -1,6 +1,6 @@
 ---
 name: journal-integrate-milestones
-description: Process journals, integrate weekly reports into milestones, refine work logs, or update career documentation from raw reports. Use when the user asks to process journals or update milestone docs.
+description: Process journals, integrate weekly reports into milestones, refine work logs, or update career documentation from raw reports. Use when the user asks to process journals, update milestone docs, integrate work reports, refresh career summaries, add new achievements to milestone files, or move entries through the raw→refined→integrated pipeline. Also use when milestone/*.md files need updating from journal data.
 ---
 
 # Integrating Journal into Milestones

@@ -1,0 +1,22 @@
+[
+  {"query": "I want to tailor my resume for this Google TPU storage engineer role. Here's the JD: https://careers.google.com/jobs/results/123", "should_trigger": true},
+  {"query": "Update my resume and presentation with the latest milestone data from ubiquiti.md", "should_trigger": true},
+  {"query": "Refresh my general-purpose resume, interview presentation, and speech script", "should_trigger": true},
+  {"query": "I have a Vici Holdings NIC driver position I'm applying for. Can you customize my CV and generate the full application package?", "should_trigger": true},
+  {"query": "Rebuild all the tailored resumes under resumes/ to pick up the GP fixes I just made", "should_trigger": true},
+  {"query": "I updated milestone/qnap.md with new performance numbers. Can you regenerate everything in resumes/general/?", "should_trigger": true},
+  {"query": "Create a job-targeted resume package for this embedded Linux role at NVIDIA. The JD emphasizes kernel development, device drivers, and Yocto BSP.", "should_trigger": true},
+  {"query": "My resumes/google-tpu-ai-storage/ is stale since I updated the GP experience bullets last week. Re-derive it from the latest GP text.", "should_trigger": true},
+  {"query": "Update my presentation and speech script to match the latest resume content", "should_trigger": true},
+  {"query": "Tailor for this job posting and make sure the speech script emphasizes my Btrfs and ZFS experience", "should_trigger": true},
+  {"query": "The summary in src/resume/summary.tex needs a rewrite to emphasize OS engineering instead of firmware. Can you edit just that file?", "should_trigger": false},
+  {"query": "Run xelatex on my resume and check if it's still 2 pages after the changes I made", "should_trigger": false},
+  {"query": "Analyze this job description and tell me what skills they're looking for. Don't generate a resume yet.", "should_trigger": false},
+  {"query": "I'm getting an overfull hbox warning on line 47 of experience.tex. How do I fix it?", "should_trigger": false},
+  {"query": "Can you generate just the interview-presentation.html for my existing Google resume?", "should_trigger": false},
+  {"query": "Add a new bullet point to my Ubiquiti experience section about the gRPC migration project", "should_trigger": false},
+  {"query": "How do I integrate my February work journal entries into milestone/ubiquiti.md?", "should_trigger": false},
+  {"query": "Build the resume PDF and verify page count. I just reordered some bullets.", "should_trigger": false},
+  {"query": "What's the difference between cvparagraph and cvitems in awesome-cv.cls?", "should_trigger": false},
+  {"query": "Write a speech script for my upcoming interview at Meta, based on my existing presentation", "should_trigger": false}
+]

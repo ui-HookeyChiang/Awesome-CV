@@ -1,0 +1,22 @@
+[
+  {"query": "Build the resume PDF and check if it's still 2 pages", "should_trigger": true},
+  {"query": "I just edited experience.tex to reorder the Ubiquiti bullets. Can you rebuild and verify?", "should_trigger": true},
+  {"query": "My resume is showing Pages: 3 after adding the new summary text. Help me fix the overflow.", "should_trigger": true},
+  {"query": "Run xelatex on the Google TPU resume under resumes/google-tpu-ai-storage/ and validate the output", "should_trigger": true},
+  {"query": "I'm seeing 'Overfull hbox (1.46pt too wide)' in the build log. What should I do?", "should_trigger": true},
+  {"query": "After changing summary.tex to use 3 lines instead of 4 with \\\\, the resume overflowed to 3 pages. Can you diagnose?", "should_trigger": true},
+  {"query": "Build my GP resume from src/ and check for any LaTeX warnings", "should_trigger": true},
+  {"query": "I rewrote one sub-bullet in the QNAP section. Need to build-and-check before moving to the next rewrite.", "should_trigger": true},
+  {"query": "The scholar section is too long and pushing page 2 over. Can you auto-shrink it?", "should_trigger": true},
+  {"query": "Verify that resumes/vici-holdings-nic-driver/resume.pdf is exactly 2 pages with no warnings", "should_trigger": true},
+  {"query": "Tailor my resume for this Netflix storage infrastructure role and generate the full package", "should_trigger": false},
+  {"query": "Rewrite my summary to emphasize distributed systems experience instead of embedded Linux", "should_trigger": false},
+  {"query": "Generate an interview presentation HTML file based on my Ubiquiti milestones", "should_trigger": false},
+  {"query": "What bullet points should I use for the QNAP experience section to match this JD?", "should_trigger": false},
+  {"query": "Update milestone/ubiquiti.md with the latest journal entries from February", "should_trigger": false},
+  {"query": "Analyze this Amazon job description and create tech-stack.md and interview-prep.md", "should_trigger": false},
+  {"query": "Write a speech script for my upcoming panel interview", "should_trigger": false},
+  {"query": "How should I reorder my experience bullets to better target kernel development roles?", "should_trigger": false},
+  {"query": "Can you refresh my entire resume package including presentation and speech for general use?", "should_trigger": false},
+  {"query": "What ATS keywords should I include in my summary for a cloud infrastructure position?", "should_trigger": false}
+]

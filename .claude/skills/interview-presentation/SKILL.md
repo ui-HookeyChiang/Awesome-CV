@@ -1,6 +1,6 @@
 ---
 name: interview-presentation
-description: Structure, styling, and content guidelines for the interactive HTML interview presentation (interview-presentation.html). Use when creating or editing the interview presentation.
+description: Structure, styling, and content guidelines for the interactive HTML interview presentation (interview-presentation.html). Use when creating, editing, or customizing the interview slideshow. Also use when generating presentations for job applications, updating case studies, modifying slide content, or when the tailor-resume skill needs presentation rules. Covers SAR framework, visual design, and slide structure.
 ---
 
 # Interview Presentation Rules
@@ -23,22 +23,10 @@ The interview presentation (`interview-presentation.html`) is a professional, in
 10. **Summary (1min)**: Professional tagline, three key strengths, and quantified metrics
 11. **Q&A (open)**: Interactive discussion with contact information and growth potential metrics
 
-## Storage & System Engineering Experience Implementation
-
-### Experience-Specific Slide Content
-1. **Cover Slide**: OS Engineer — Linux Development, Performance & Storage Infrastructure (8+ years, 5K sales, 190K+ deployments) - *Use milestone/summary.md*
-2. **Self Introduction**: Computer Science background, storage/performance/QA expertise - *Use milestone/summary.md*
-3. **Technical Expertise**: Tools & DevOps (top-left), Storage & Filesystem (top-right), Programming & System Languages (bottom-left), Frameworks & Protocols (bottom-right) - *Use milestone/summary.md*
-4. **Ubiquiti Highlights**: UniFi-OS Storage Software Engineer achievements - *Use milestone/ubiquiti.md*
-5. **QNAP Highlights**: Cloud filesystem and performance engineering - *Use milestone/qnap.md*
-6. **Case Study 1: NAS Stability Testing**: Cross-team collaboration and platform stability - *Use milestone/ubiquiti.md, no charts (qualitative)*
-7. **Case Study 2: Linux Kernel Upgrade**: System infrastructure modernization (4.19 → 5.10) - *Use milestone/ubiquiti.md, no charts (qualitative)*
-8. **Case Study 3: Samba Performance**: Full-stack performance engineering - *Use milestone/ubiquiti.md, with performance comparison charts*
-9. **Additional Achievements**: Product Innovation & Leadership, Performance Engineering Excellence, Business Impact & Scalability, Technical Architecture & Innovation
-10. **Summary**: Customizable based on job requirements - *Align with role-specific needs*
+> For Storage & System Engineering experience-specific content (slide mapping, case study domains, metrics), read `references/storage-engineering.md`.
 
 ## SAR Framework for Case Studies
-Each major project follows the enhanced visual SAR structure presented in Situation → Action → Result order:
+Each major project follows the enhanced visual SAR structure presented in Situation -> Action -> Result order:
 
 ### Situation (Problem Identification)
 - **Format**: 1-2 concise sentences with key terms highlighted in blue
@@ -57,7 +45,7 @@ Each major project follows the enhanced visual SAR structure presented in Situat
 - **Format**: Interactive enlarged flowchart boxes (160x80px) replacing bullet points + enhanced two-tier layout
 - **Content**: Self-contained technical solutions with clickable cheat sheet access
 - **Structure**:
-  - **Preparation Box**: Purple gradient (180x80px) showing initial analysis/baseline (e.g., "FIO Benchmark", "Btrfs Analysis", "Stability Gap Analysis")
+  - **Preparation Box**: Purple gradient (180x80px) showing initial analysis/baseline
   - **Top Tier**: Core system-level optimizations (3 boxes horizontal)
   - **Bottom Tier**: Application/validation-level optimizations (3 boxes horizontal)
 - **Visual**: Blue border with light blue gradient background + color-coded gradients per optimization stage
@@ -97,15 +85,6 @@ Each major project follows the enhanced visual SAR structure presented in Situat
 - **Summary Cheat Sheets**: Clean bullet-point lists without command-line examples
 - **Content Focus**: Simple lists of items/capabilities/issues without technical details
 - **Format**: Large font (1.2rem), good line spacing (line-height: 2), disc bullet points
-- **Examples**:
-  - **Multi-issue Discovered (Case Study 1)**: Simple list of critical issues found during testing
-  - **Product Scalability (Case Study 2)**: Clean list of Linux 5.10 capabilities enabled
-
-### Result Metric Visualizations
-- **Before/after performance comparisons** + percentage improvement metric boxes
-- **Case Study 1**: 3-box layout (Multi-issue discovered with clickable list cheat sheet, Multi-day validation, Cross-platform stability)
-- **Case Study 2**: 4-box layout (checksum GB/s improvement, +40% SSD IOPS, Zero regressions, Linux 5.10 Capabilities with clickable list cheat sheet)
-- **Case Study 3**: 3-box layout (Samba read/write MB/s improvements, CPU utilization reduction)
 
 ## Generic Presentation Guidelines
 
@@ -132,20 +111,6 @@ Each major project follows the enhanced visual SAR structure presented in Situat
   - Technical expertise with brief descriptive words (e.g., "C/C++ system programming")
 - **Design Principle**: Self-contained boxes eliminate redundant bullet points while providing deeper technical access
 
-## Experience-Specific Guidelines
-
-### Storage & System Engineering Focus
-- **Case Study Domains**: Three technical areas (testing infrastructure, system modernization, performance optimization)
-- **Specific Case Studies**:
-  - **NAS Stability Testing**: Cross-team collaboration and platform stability validation
-  - **Linux Kernel Upgrade**: System infrastructure modernization (4.19 to 5.10)
-  - **Samba Performance**: Full-stack performance engineering optimization
-- **Technical Expertise Areas**: Storage architecture, filesystem engineering, performance optimization, quality assurance
-- **Key Metrics Integration**:
-  - CI/CD pipeline achievement from QNAP (<20 support cases) properly attributed to QNAP experience
-  - Platform scaling (1 to 6 product variants, 3 to 5 engineering team growth)
-  - Performance improvements (544 to 730 MB/s Samba, +40% SSD IOPS, 300% metadata boost, 93% socket memory reduction, 65% ustd CPU reduction via gRPC)
-
 ## Technical Features
 - **Responsive Design**: Works on desktop, tablet, and mobile devices
 - **Keyboard Navigation**: left/right arrow keys, Space, Page Up/Down, Home, End
@@ -155,22 +120,7 @@ Each major project follows the enhanced visual SAR structure presented in Situat
 
 ## Content Sources
 - **Resume sections**: All `.tex` files in `src/resume/` directory for professional summary and technical skills
-- **Milestone documentation**:
-  - `milestone/ubiquiti.md` and `milestone/qnap.md` and `milestone/summary.md` except core expertise sections for achievements and SAR case studies
-  - `milestone/summary.md` for: Cover slide, Self Introduction, Core Technical Expertise, and Summary slide
-  - **Content Guidelines**:
-    - Use `milestone/summary.md` for high-level expertise and capability descriptions
-    - Use specific milestone files (`ubiquiti.md`, `qnap.md`) for detailed achievements, case studies, and quantified results
 - **Personal details**: Contact information and professional positioning from `src/resume.tex`
-- **Technical depth**: Specific case studies from Ubiquiti milestone documentation (Stability Testing, Kernel Upgrade, Performance Optimization)
-- **Quantified metrics**: Business impact numbers (190K+ devices, 5K monthly sales, performance improvements, CI/CD automation results)
-
-### Additional Achievements Content Guidelines
-- **Focus**: Unique achievements not covered in the three main case studies (NAS Stability Testing, Linux Kernel Upgrade, Samba Performance)
-- **Sources**: Highest-impact contributions from both resume and milestone documentation
-- **Exclusions**: Academic achievements and content overlapping with case studies
-- **Metrics**: Include concrete numbers and business impact where available
-- **Organization**: Four balanced categories showcasing different aspects of technical leadership
 
 ## Summary Slide (Slide 10) Structure
 

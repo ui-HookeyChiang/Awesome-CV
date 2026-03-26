@@ -1,6 +1,6 @@
 ---
 name: host-work-journal
-description: Collect host activity (git, shell, Claude, test artifacts) into journal/raw/ for the Awesome-CV milestone pipeline. Use when the user asks for a work report, activity summary, journal entry, or wants to review what was done over a date range.
+description: Collect host activity (git, shell, Claude, test artifacts) into journal/raw/ for the Awesome-CV milestone pipeline. Use when the user asks for a work report, activity summary, journal entry, weekly report, or wants to review what was done over a date range. Also use when the user says "what did I work on", "generate work log", "collect activity", or needs to document recent engineering work for career tracking.
 ---
 
 # Host Work Journal

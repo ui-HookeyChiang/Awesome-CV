@@ -1,6 +1,6 @@
 ---
 name: tailor-resume
-description: Orchestrator for generating tailor-made resumes, presentations, and speech scripts. Supports job-targeted (with JD) and general-purpose (without JD) modes. All output under resumes/. Use when asked to tailor, update, or rebuild a resume.
+description: Orchestrator for generating tailor-made resumes, presentations, and speech scripts. Supports job-targeted (with JD) and general-purpose (without JD) modes. All output under resumes/. Use when asked to tailor, update, rebuild, or refresh a resume, presentation, or speech script. Also use when the user says "update resume", "refresh resume", "tailor for this job", "customize CV", or provides a job description and expects a complete application package. This is the top-level skill that coordinates sub-skills (job-analysis, resume-content-rules, resume-pdf-check, interview-presentation, interview-speech).
 ---
 
 # Tailor-Made Resume & Presentation Generator

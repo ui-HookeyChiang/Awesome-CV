@@ -1,6 +1,6 @@
 ---
 name: job-analysis
-description: Analyze a job description and generate tech-stack report and interview prep guide. Use when a JD is provided or when asked to analyze a job posting.
+description: Analyze a job description and generate tech-stack report and interview prep guide. Use whenever a JD or job posting is provided, when asked to analyze a role, research a company's tech stack, prepare for an interview, identify skill gaps, or compare qualifications against job requirements. Even if the user just pastes a job link or description without explicit instructions, use this skill to analyze it.
 ---
 
 # Job Analysis
