@@ -105,7 +105,13 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0,0,0,0.15) !important;
         }
-        
+
+        .flow-box:focus-visible {
+            outline: 3px solid #4f46e5;
+            outline-offset: 2px;
+            transform: translateY(-2px);
+        }
+
         /* Cheat sheet modal */
         .cheat-sheet-modal {
             position: fixed;
@@ -125,6 +131,7 @@
             background: white;
             border-radius: 16px;
             padding: 30px;
+            width: calc(100% - 40px);
             max-width: 600px;
             max-height: 80vh;
             overflow-y: auto;
@@ -480,6 +487,11 @@
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
+
+            .cheat-sheet-content {
+                width: calc(100% - 24px);
+                padding: 20px;
+            }
         }
 
         @media print {
@@ -735,7 +747,7 @@
                         <!-- Preparation Step -->
                         <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
                             <div style="text-align: center;">
-                                <div class="flow-box" data-cheat="btrfs-analysis" style="width: 180px; height: 80px; background: linear-gradient(135deg, #6366f1, #4f46e5); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3); padding: 8px;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="btrfs-analysis" style="width: 180px; min-height: 80px; background: linear-gradient(135deg, #6366f1, #4f46e5); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3); padding: 8px;">
                                     <div style="font-size: 0.9rem; margin-bottom: 4px;">Btrfs Feature</div>
                                     <div style="font-size: 0.9rem; margin-bottom: 2px;">Backporting</div>
                                 </div>
@@ -750,7 +762,7 @@
                         <!-- Top Row: Core Upgrade Stages -->
                         <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
                             <div style="text-align: center;">
-                                <div class="flow-box" data-cheat="kernel-upgrade" style="width: 160px; height: 80px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3); padding: 8px;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="kernel-upgrade" style="width: 160px; min-height: 80px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3); padding: 8px;">
                                     <div style="font-size: 0.9rem; margin-bottom: 4px;">Kernel Upgrade</div>
                                     <div style="font-size: 0.9rem; margin-bottom: 2px;">4.19 → 5.10</div>
                                     <div style="font-size: 0.7rem; opacity: 0.9;">Alpine SDK compat</div>
@@ -758,7 +770,7 @@
                             </div>
                             <div style="font-size: 1.6rem; color: #6b7280; margin: 0 5px;">→</div>
                             <div style="text-align: center;">
-                                <div class="flow-box" data-cheat="driver-modernization" style="width: 160px; height: 80px; background: linear-gradient(135deg, #7c3aed, #5b21b6); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(124, 58, 237, 0.3); padding: 8px;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="driver-modernization" style="width: 160px; min-height: 80px; background: linear-gradient(135deg, #7c3aed, #5b21b6); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(124, 58, 237, 0.3); padding: 8px;">
                                     <div style="font-size: 0.9rem; margin-bottom: 4px;">API</div>
                                     <div style="font-size: 0.9rem; margin-bottom: 2px;">Compatibility</div>
                                     <div style="font-size: 0.7rem; opacity: 0.9;">PCI + AHCI + PHY</div>
@@ -766,7 +778,7 @@
                             </div>
                             <div style="font-size: 1.6rem; color: #6b7280; margin: 0 5px;">→</div>
                             <div style="text-align: center;">
-                                <div class="flow-box" data-cheat="hardware-compat" style="width: 160px; height: 80px; background: linear-gradient(135deg, #059669, #047857); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(5, 150, 105, 0.3); padding: 8px;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="hardware-compat" style="width: 160px; min-height: 80px; background: linear-gradient(135deg, #059669, #047857); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(5, 150, 105, 0.3); padding: 8px;">
                                     <div style="font-size: 0.9rem; margin-bottom: 4px;">Driver</div>
                                     <div style="font-size: 0.9rem; margin-bottom: 2px;">Modernization</div>
                                     <div style="font-size: 0.7rem; opacity: 0.9;">PCA9575 + RTL8211F</div>
@@ -782,7 +794,7 @@
                         <!-- Bottom Row: Bug Resolution & Validation -->
                         <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
                             <div style="text-align: center;">
-                                <div class="flow-box" data-cheat="bug-fixes" style="width: 160px; height: 80px; background: linear-gradient(135deg, #dc2626, #991b1b); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(220, 38, 38, 0.3); padding: 8px;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="bug-fixes" style="width: 160px; min-height: 80px; background: linear-gradient(135deg, #dc2626, #991b1b); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(220, 38, 38, 0.3); padding: 8px;">
                                     <div style="font-size: 0.9rem; margin-bottom: 4px;">Critical Bug</div>
                                     <div style="font-size: 0.9rem; margin-bottom: 2px;">Resolution</div>
                                     <div style="font-size: 0.7rem; opacity: 0.9;">RAID5 + PHY fixes</div>
@@ -790,7 +802,7 @@
                             </div>
                             <div style="font-size: 1.6rem; color: #6b7280; margin: 0 5px;">→</div>
                             <div style="text-align: center;">
-                                <div class="flow-box" data-cheat="comprehensive-validation" style="width: 160px; height: 80px; background: linear-gradient(135deg, #ea580c, #c2410c); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(234, 88, 12, 0.3); padding: 8px;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="comprehensive-validation" style="width: 160px; min-height: 80px; background: linear-gradient(135deg, #ea580c, #c2410c); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(234, 88, 12, 0.3); padding: 8px;">
                                     <div style="font-size: 0.9rem; margin-bottom: 4px;">Comprehensive</div>
                                     <div style="font-size: 0.9rem; margin-bottom: 2px;">Validation</div>
                                     <div style="font-size: 0.7rem; opacity: 0.9;">stress-ng + xfstests</div>
@@ -798,7 +810,7 @@
                             </div>
                             <div style="font-size: 1.6rem; color: #6b7280; margin: 0 5px;">→</div>
                             <div style="text-align: center;">
-                                <div class="flow-box" data-cheat="stable-deployment" style="width: 160px; height: 80px; background: linear-gradient(135deg, #0891b2, #0e7490); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(8, 145, 178, 0.3); padding: 8px;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="stable-deployment" style="width: 160px; min-height: 80px; background: linear-gradient(135deg, #0891b2, #0e7490); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(8, 145, 178, 0.3); padding: 8px;">
                                     <div style="font-size: 0.9rem; margin-bottom: 4px;">Stable</div>
                                     <div style="font-size: 0.9rem; margin-bottom: 2px;">Deployment</div>
                                     <div style="font-size: 0.7rem; opacity: 0.9;">Zero regression</div>
@@ -862,7 +874,7 @@
                         <!-- Preparation Step -->
                         <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
                             <div style="text-align: center;">
-                                <div class="flow-box" data-cheat="stability-analysis" style="width: 180px; height: 80px; background: linear-gradient(135deg, #6366f1, #4f46e5); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3); padding: 8px;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="stability-analysis" style="width: 180px; min-height: 80px; background: linear-gradient(135deg, #6366f1, #4f46e5); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3); padding: 8px;">
                                     <div style="font-size: 0.9rem; margin-bottom: 4px;">Stability Gap</div>
                                     <div style="font-size: 0.9rem; margin-bottom: 2px;">Analysis</div>
                                 </div>
@@ -877,7 +889,7 @@
                         <!-- Top Row: Planning & Framework -->
                         <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
                             <div style="text-align: center;">
-                                <div class="flow-box" data-cheat="qa-planning" style="width: 160px; height: 80px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3); padding: 8px;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="qa-planning" style="width: 160px; min-height: 80px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3); padding: 8px;">
                                     <div style="font-size: 0.9rem; margin-bottom: 4px;">Test</div>
                                     <div style="font-size: 0.9rem; margin-bottom: 2px;">Draft</div>
                                     <div style="font-size: 0.7rem; opacity: 0.9;">Hardware + software</div>
@@ -885,7 +897,7 @@
                             </div>
                             <div style="font-size: 1.6rem; color: #6b7280; margin: 0 5px;">→</div>
                             <div style="text-align: center;">
-                                <div class="flow-box" data-cheat="cross-team-collaboration" style="width: 160px; height: 80px; background: linear-gradient(135deg, #7c3aed, #5b21b6); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(124, 58, 237, 0.3); padding: 8px;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="cross-team-collaboration" style="width: 160px; min-height: 80px; background: linear-gradient(135deg, #7c3aed, #5b21b6); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(124, 58, 237, 0.3); padding: 8px;">
                                     <div style="font-size: 0.9rem; margin-bottom: 4px;">Human Resource</div>
                                     <div style="font-size: 0.9rem; margin-bottom: 2px;">Allocation</div>
                                     <div style="font-size: 0.7rem; opacity: 0.9;">SQA partnership</div>
@@ -893,7 +905,7 @@
                             </div>
                             <div style="font-size: 1.6rem; color: #6b7280; margin: 0 5px;">→</div>
                             <div style="text-align: center;">
-                                <div class="flow-box" data-cheat="test-automation" style="width: 160px; height: 80px; background: linear-gradient(135deg, #059669, #047857); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(5, 150, 105, 0.3); padding: 8px;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="test-automation" style="width: 160px; min-height: 80px; background: linear-gradient(135deg, #059669, #047857); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(5, 150, 105, 0.3); padding: 8px;">
                                     <div style="font-size: 0.9rem; margin-bottom: 4px;">Test</div>
                                     <div style="font-size: 0.9rem; margin-bottom: 2px;">Finalization</div>
                                     <div style="font-size: 0.7rem; opacity: 0.9;">Multi-day cycles</div>
@@ -909,7 +921,7 @@
                         <!-- Bottom Row: Testing & Validation -->
                         <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
                             <div style="text-align: center;">
-                                <div class="flow-box" data-cheat="storage-testing" style="width: 160px; height: 80px; background: linear-gradient(135deg, #dc2626, #991b1b); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(220, 38, 38, 0.3); padding: 8px;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="storage-testing" style="width: 160px; min-height: 80px; background: linear-gradient(135deg, #dc2626, #991b1b); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(220, 38, 38, 0.3); padding: 8px;">
                                     <div style="font-size: 0.9rem; margin-bottom: 4px;">Storage</div>
                                     <div style="font-size: 0.9rem; margin-bottom: 2px;">Testing</div>
                                     <div style="font-size: 0.7rem; opacity: 0.9;">RAID + Btrfs stress</div>
@@ -917,7 +929,7 @@
                             </div>
                             <div style="font-size: 1.6rem; color: #6b7280; margin: 0 5px;">→</div>
                             <div style="text-align: center;">
-                                <div class="flow-box" data-cheat="cross-platform-testing" style="width: 160px; height: 80px; background: linear-gradient(135deg, #ea580c, #c2410c); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(234, 88, 12, 0.3); padding: 8px;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="cross-platform-testing" style="width: 160px; min-height: 80px; background: linear-gradient(135deg, #ea580c, #c2410c); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(234, 88, 12, 0.3); padding: 8px;">
                                     <div style="font-size: 0.9rem; margin-bottom: 4px;">Cross-Platform</div>
                                     <div style="font-size: 0.9rem; margin-bottom: 2px;">Testing</div>
                                     <div style="font-size: 0.7rem; opacity: 0.9;">Linux/Mac/Windows</div>
@@ -925,7 +937,7 @@
                             </div>
                             <div style="font-size: 1.6rem; color: #6b7280; margin: 0 5px;">→</div>
                             <div style="text-align: center;">
-                                <div class="flow-box" data-cheat="stability-validation" style="width: 160px; height: 80px; background: linear-gradient(135deg, #0891b2, #0e7490); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(8, 145, 178, 0.3); padding: 8px;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="stability-validation" style="width: 160px; min-height: 80px; background: linear-gradient(135deg, #0891b2, #0e7490); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(8, 145, 178, 0.3); padding: 8px;">
                                     <div style="font-size: 0.9rem; margin-bottom: 4px;">Stability</div>
                                     <div style="font-size: 0.9rem; margin-bottom: 2px;">Validation</div>
                                     <div style="font-size: 0.7rem; opacity: 0.9;">Issue discovery</div>
@@ -1013,7 +1025,7 @@
                         <!-- Preparation Step -->
                         <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
                             <div style="text-align: center;">
-                                <div class="flow-box" data-cheat="fio-benchmark" style="width: 180px; height: 80px; background: linear-gradient(135deg, #6366f1, #4f46e5); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3); padding: 8px;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="fio-benchmark" style="width: 180px; min-height: 80px; background: linear-gradient(135deg, #6366f1, #4f46e5); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3); padding: 8px;">
                                     <div style="font-size: 0.9rem; margin-bottom: 4px;">Benchmark</div>
                                     <div style="font-size: 0.9rem; margin-bottom: 2px;">Baseline Analysis</div>
                                 </div>
@@ -1028,7 +1040,7 @@
                         <!-- Top Row: Core Performance Stages -->
                         <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
                             <div style="text-align: center;">
-                                <div class="flow-box" data-cheat="cpu-irq" style="width: 160px; height: 80px; background: linear-gradient(135deg, #dc2626, #b91c1c); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(220, 38, 38, 0.3); padding: 8px;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="cpu-irq" style="width: 160px; min-height: 80px; background: linear-gradient(135deg, #dc2626, #b91c1c); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(220, 38, 38, 0.3); padding: 8px;">
                                     <div style="font-size: 0.9rem;
                                       margin-bottom: 4px;">IRQ</div>
                                     <div style="font-size: 0.9rem;
@@ -1038,7 +1050,7 @@
                             </div>
                             <div style="font-size: 1.6rem; color: #6b7280; margin: 0 5px;">→</div>
                             <div style="text-align: center;">
-                                <div class="flow-box" data-cheat="hardware-optimize" style="width: 160px; height: 80px; background: linear-gradient(135deg, #059669, #047857); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(5, 150, 105, 0.3); padding: 8px;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="hardware-optimize" style="width: 160px; min-height: 80px; background: linear-gradient(135deg, #059669, #047857); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(5, 150, 105, 0.3); padding: 8px;">
                                     <div style="font-size: 0.9rem; margin-bottom: 4px;">IRQ</div>
                                     <div style="font-size: 0.9rem; margin-bottom: 2px;">Optimization</div>
                                     <div style="font-size: 0.7rem; opacity: 0.9;">RX coalescing + adaptive</div>
@@ -1046,7 +1058,7 @@
                             </div>
                             <div style="font-size: 1.6rem; color: #6b7280; margin: 0 5px;">→</div>
                             <div style="text-align: center;">
-                                <div class="flow-box" data-cheat="network-tuning" style="width: 160px; height: 80px; background: linear-gradient(135deg, #ea580c, #dc2626); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(234, 88, 12, 0.3); padding: 8px;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="network-tuning" style="width: 160px; min-height: 80px; background: linear-gradient(135deg, #ea580c, #dc2626); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(234, 88, 12, 0.3); padding: 8px;">
                                     <div style="font-size: 0.9rem; margin-bottom: 4px;">Network</div>
                                     <div style="font-size: 0.9rem; margin-bottom: 2px;">Tuning</div>
                                     <div style="font-size: 0.7rem; opacity: 0.9;">CUBIC + fq queuing</div>
@@ -1062,7 +1074,7 @@
                         <!-- Bottom Row: Protocol & Application Layer -->
                         <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
                           <div style="text-align: center;">
-                              <div class="flow-box" data-cheat="tcp-optimize" style="width: 160px; height: 80px; background: linear-gradient(135deg, #7c3aed, #5b21b6); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(124, 58, 237, 0.3); padding: 8px;">
+                              <div class="flow-box" tabindex="0" role="button" data-cheat="tcp-optimize" style="width: 160px; min-height: 80px; background: linear-gradient(135deg, #7c3aed, #5b21b6); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(124, 58, 237, 0.3); padding: 8px;">
                                   <div style="font-size: 0.9rem; margin-bottom: 4px;">TCP</div>
                                   <div style="font-size: 0.9rem; margin-bottom: 2px;">Socket</div>
                                   <div style="font-size: 0.7rem; opacity: 0.9;">quickack + nodelay</div>
@@ -1070,7 +1082,7 @@
                           </div>
                           <div style="font-size: 1.6rem; color: #6b7280; margin: 0 5px;">→</div>
                           <div style="text-align: center;">
-                              <div class="flow-box" data-cheat="buffer-scaling" style="width: 160px; height: 80px; background: linear-gradient(135deg, #0891b2, #0e7490); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(8, 145, 178, 0.3); padding: 8px;">
+                              <div class="flow-box" tabindex="0" role="button" data-cheat="buffer-scaling" style="width: 160px; min-height: 80px; background: linear-gradient(135deg, #0891b2, #0e7490); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(8, 145, 178, 0.3); padding: 8px;">
                                   <div style="font-size: 0.9rem; margin-bottom: 4px;">TCP Buffer</div>
                                   <div style="font-size: 0.9rem; margin-bottom: 2px;">Scaling</div>
                                   <div style="font-size: 0.7rem; opacity: 0.9;">rw mem</div>
@@ -1078,7 +1090,7 @@
                           </div>
                           <div style="font-size: 1.6rem; color: #6b7280; margin: 0 5px;">→</div>
                             <div style="text-align: center;">
-                                <div class="flow-box" data-cheat="zero-copy" style="width: 160px; height: 80px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3); padding: 8px;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="zero-copy" style="width: 160px; min-height: 80px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3); padding: 8px;">
                                     <div style="font-size: 0.9rem; margin-bottom: 4px;">Samba</div>
                                     <div style="font-size: 0.9rem; margin-bottom: 2px;">Tuning</div>
                                     <div style="font-size: 0.7rem; opacity: 0.9;">Zero-copy + async I/O</div>
@@ -1908,16 +1920,6 @@
                     }
                     break;
             }
-        });
-
-        // Visual feedback for interactive elements
-        document.querySelectorAll('.point-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-8px) scale(1.02)';
-            });
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
         });
 
         // Add click handlers for flow boxes
