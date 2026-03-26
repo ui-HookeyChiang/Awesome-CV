@@ -4,7 +4,7 @@
 
 | Year | Total Contributions | Code Reviews | Commits | Pull Requests |
 |------|---------------------|--------------|---------|---------------|
-| 2026 | 538+ (Nov–Feb)      | —            | 538     | 51            |
+| 2026 | 730+ (Nov–Mar)      | —            | 730     | 220           |
 | 2025 | 812                 | 47%          | 30%     | 22%           |
 | 2024 | 722                 | 36%          | 36%     | 28%           |
 | 2023 | 619                 | 31%          | 41%     | 28%           |
@@ -241,6 +241,50 @@ Go, gRPC, Protocol Buffers, Cobra, Logrus, gopsutil, systemd, Debian packaging, 
 - Updated performance checklists with ethernet naming conventions and client-side info requirements
 - Handled 10+ support cases across Samba, NFS, network with systematic diagnostic SOPs
 - Cumulative support scale (2024–2026): analyzed 180 support bundles across 60+ unique issues (63 GB diagnostic data), categorized as: 18 storage/filesystem, 17 Samba/SMB, 10 device performance, 6 NFS, 5 network/connectivity, 8 system issues
+
+#### NFS SSD Cache Performance Testing
+
+##### Situation
+- NFS performance with SSD cache had not been systematically measured in the SQA lab environment
+- No comparative data existed between NFS-with-cache and NFS-without-cache configurations
+
+##### Action
+- Conducted 12 fio test runs across 2 sessions (Mar 11–12) in the SQA lab, comparing NFS performance with and without SSD cache
+- Generated performance charts and analyzed results using the ubiquiti-nas-perf-test skill
+- Tested across multiple fio profiles covering sequential and random I/O patterns
+
+##### Result
+- Established NFS cache vs. no-cache performance baseline in a controlled SQA lab environment
+- Extended the existing benchmarking platform with NFS-specific test coverage, complementing earlier Samba-focused campaigns
+
+#### Btrfs Slab Pressure Investigation
+
+##### Situation
+- Memory allocation behavior under sustained Btrfs storage workloads was not well understood
+- Potential kmalloc slab pressure from Btrfs operations needed systematic investigation
+
+##### Action
+- Designed a kmalloc slab pressure test (Mar 18–19) targeting memory allocation patterns under Btrfs storage workloads
+- Created design specification, implementation plan, and test scripts in the linux kernel repo (4 commits, +1,267/-28 lines)
+- Ran initial slab test session to validate the test framework
+
+##### Result
+- Established a reusable kernel-level memory pressure testing methodology for Btrfs workloads
+- Provided instrumentation to detect and diagnose slab allocation bottlenecks affecting NAS storage stability
+
+#### Kernel Config: KASAN & TCP_CONG_ADVANCED
+- Enabled CONFIG_KASAN (Kernel Address Sanitizer) for UNAS Pro, providing runtime memory error detection for kernel and driver development
+- Disabled CONFIG_TCP_CONG_ADVANCED to reduce kernel image size, removing unused congestion control algorithms
+
+#### AI-Assisted Development Tooling (March)
+- Merged 192 PRs to the prompt-hub skills repository — major skill framework overhaul including XDG config migration (~/.config/ubiquiti/), Lua power-cycle rewrite, device auto-labeling from controller VLAN, recover-device skill, tie-fw-knot kernel header pipeline, dev-build orchestrator, semver-release, multi-controller support, and CI polling infrastructure
+- Expanded to 20+ Claude skills covering the full development workflow: build, deploy, configure, test, analyze, and multi-repo CI coordination
+- Built auto-detection of devices via proxy/tunnel HTTPS and ENAS ZFS support in device infrastructure
+- Total AI-assisted development: 87 Claude sessions, 1,339 prompts, 11,420 tool calls across 18 active days
+
+#### unifi-drive-config 2.19.1 Release
+- Released unifi-drive-config 2.19.1 (Mar 24) with changelog updates
+- Upgraded the PR agent model to claude-opus-4-6 and improved the AI-assisted PR review workflow
 
 ## 2025
 

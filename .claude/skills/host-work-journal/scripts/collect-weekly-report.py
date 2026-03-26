@@ -142,9 +142,18 @@ def run_cmd(cmd, timeout=5, cwd=None):
         return None
 
 
-def get_git_author():
-    """Get the git author name from global config."""
-    return run_cmd(["git", "config", "user.name"]) or "unknown"
+def get_git_authors():
+    """Get all git author names (local config + GitHub)."""
+    authors = set()
+    # Local git config
+    name = run_cmd(["git", "config", "user.name"])
+    if name:
+        authors.add(name)
+    # GitHub display name (may differ from git config)
+    gh_name = run_cmd(["gh", "api", "user", "--jq", ".name"])
+    if gh_name and gh_name != name:
+        authors.add(gh_name)
+    return sorted(authors) if authors else ["unknown"]
 
 
 def classify_topic(text):
@@ -388,9 +397,9 @@ def collect_shell_history(start_date, end_date):
     return result
 
 
-def collect_git(start_date, end_date, author):
+def collect_git(start_date, end_date, authors, no_fetch=False):
     """Collect git commit data from all repos under $HOME."""
-    log.info("Collecting git data (author=%s)...", author)
+    log.info("Collecting git data (authors=%s, no_fetch=%s)...", authors, no_fetch)
     result = {
         "total_commits": 0,
         "total_prs": 0,
@@ -410,56 +419,84 @@ def collect_git(start_date, end_date, author):
     for repo_path in repos:
         repo_name = str(Path(repo_path).relative_to(Path.home()))
 
-        # Get commits in range
-        log_output = run_cmd(
-            ["git", "-C", repo_path, "log", "--all",
-             "--author=" + author,
-             "--after=" + start_date,
-             "--before=" + end_date + "T23:59:59",
-             "--format=%H|%ad|%s", "--date=short"],
-            timeout=5,
-        )
-        if not log_output:
+        # Fetch latest refs from origin (unless --no-fetch)
+        if not no_fetch:
+            run_cmd(["git", "-C", repo_path, "fetch", "--quiet", "origin"], timeout=15)
+
+        # Get commits in range for all authors (dedup by SHA)
+        all_commits_by_sha = {}
+        for author in authors:
+            log_output = run_cmd(
+                ["git", "-C", repo_path, "log", "--all",
+                 "--author=" + author,
+                 "--after=" + start_date,
+                 "--before=" + end_date + "T23:59:59",
+                 "--format=%H|%ad|%s", "--date=short"],
+                timeout=10,
+            )
+            if log_output:
+                for line in log_output.splitlines():
+                    line = line.strip()
+                    if not line:
+                        continue
+                    parts = line.split("|", 2)
+                    if len(parts) < 3:
+                        continue
+                    sha, date, subject = parts
+                    all_commits_by_sha[sha] = {"sha": sha[:8], "date": date, "subject": subject}
+
+        if not all_commits_by_sha:
             continue
 
-        commits = []
-        prs = 0
-        for line in log_output.splitlines():
-            line = line.strip()
-            if not line:
-                continue
-            parts = line.split("|", 2)
-            if len(parts) < 3:
-                continue
-            sha, date, subject = parts
-            commits.append({
-                "sha": sha[:8],
-                "date": date,
-                "subject": subject,
-            })
-            if pr_re.search(subject):
-                prs += 1
+        commits = sorted(all_commits_by_sha.values(), key=lambda c: c["date"], reverse=True)
+        prs = sum(1 for c in commits if pr_re.search(c["subject"]))
 
-        if not commits:
-            continue
-
-        # Get line stats
-        stat_output = run_cmd(
-            ["git", "-C", repo_path, "log", "--all",
-             "--author=" + author,
-             "--after=" + start_date,
-             "--before=" + end_date + "T23:59:59",
-             "--shortstat", "--format="],
-            timeout=5,
-        )
+        # Get line stats for all authors (dedup by combining)
         insertions = 0
         deletions = 0
-        if stat_output:
-            for line in stat_output.splitlines():
-                m = stat_re.search(line)
-                if m:
-                    insertions += int(m.group(2) or 0)
-                    deletions += int(m.group(3) or 0)
+        stat_shas = set()
+        for author in authors:
+            stat_output = run_cmd(
+                ["git", "-C", repo_path, "log", "--all",
+                 "--author=" + author,
+                 "--after=" + start_date,
+                 "--before=" + end_date + "T23:59:59",
+                 "--format=%H", "--shortstat"],
+                timeout=10,
+            )
+            if stat_output:
+                current_sha = None
+                for line in stat_output.splitlines():
+                    line = line.strip()
+                    if not line:
+                        continue
+                    # Lines alternate: SHA then stat line
+                    if len(line) == 40 and all(c in "0123456789abcdef" for c in line):
+                        current_sha = line
+                        continue
+                    m = stat_re.search(line)
+                    if m and current_sha and current_sha not in stat_shas:
+                        stat_shas.add(current_sha)
+                        insertions += int(m.group(2) or 0)
+                        deletions += int(m.group(3) or 0)
+                    current_sha = None
+
+        # Get accurate PR count from GitHub API for github.com repos
+        remote_url = run_cmd(["git", "-C", repo_path, "remote", "get-url", "origin"], timeout=5)
+        if remote_url and "github.com" in remote_url:
+            gh_match = re.search(r"github\.com[:/](.+?)(?:\.git)?$", remote_url)
+            if gh_match:
+                gh_repo = gh_match.group(1)
+                gh_prs = run_cmd(
+                    ["gh", "pr", "list", "--repo", gh_repo,
+                     "--state", "merged", "--author", "@me", "--limit", "500",
+                     "--json", "number,mergedAt",
+                     "--jq", f'[.[] | select(.mergedAt >= "{start_date}" and .mergedAt < "{end_date}T23:59:59")] | length'],
+                    timeout=30,
+                )
+                if gh_prs and gh_prs.isdigit():
+                    prs = int(gh_prs)
+                    log.info("GitHub API: %s has %d merged PRs", gh_repo, prs)
 
         repo_data = {
             "repo": repo_name,
@@ -901,8 +938,12 @@ def main():
         help="Output JSON path (default: ~/work-report-data_<host>_<start>-to-<end>.json)",
     )
     parser.add_argument(
-        "--author", type=str, default=None,
-        help="Git author name (default: from git config)",
+        "--author", type=str, action="append", default=None,
+        help="Git author name(s) — can be repeated (default: auto-detect from git config + GitHub)",
+    )
+    parser.add_argument(
+        "--no-fetch", action="store_true",
+        help="Skip 'git fetch origin' before scanning repos (for offline use)",
     )
     parser.add_argument(
         "--detailed", action="store_true",
@@ -926,12 +967,12 @@ def main():
     )
 
     hostname = socket.gethostname()
-    author = args.author or get_git_author()
+    authors = args.author if args.author else get_git_authors()
     start_date = args.start_date
     end_date = args.end_date
 
-    log.info("Host: %s, Author: %s, Range: %s to %s",
-             hostname, author, start_date, end_date)
+    log.info("Host: %s, Authors: %s, Range: %s to %s",
+             hostname, authors, start_date, end_date)
 
     # Run all collectors (each handles its own errors)
     data = {
@@ -940,14 +981,14 @@ def main():
             "start_date": start_date,
             "end_date": end_date,
             "generated": datetime.now(timezone.utc).isoformat(),
-            "git_author": author,
+            "git_authors": authors,
             "detailed": args.detailed,
         },
     }
 
     data["infrastructure"] = collect_infrastructure()
     data["shell"] = collect_shell_history(start_date, end_date)
-    data["git"] = collect_git(start_date, end_date, author)
+    data["git"] = collect_git(start_date, end_date, authors, no_fetch=args.no_fetch)
     data["test_artifacts"] = collect_test_artifacts(start_date, end_date)
     data["claude_sessions"] = collect_claude_sessions(
         start_date, end_date, detailed=args.detailed

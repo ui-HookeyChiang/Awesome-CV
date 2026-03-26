@@ -39,8 +39,8 @@
 - **NAS Performance Engineering**: Designed CPU affinity framework (smbd/nfsd/IRQ pinning), network tuning (qdisc fq, TCP buffers, rx-usecs), improving iperf throughput from 1.9 to 2.3 Gb/s
 - **SSD Cache Benchmark Framework**: Created 4-scenario test methodology (basic/empty/full/warm) with I/O migration tuning, enabling systematic cache performance validation
 - **ZFS Filesystem Support**: Implemented full ZFS backend (245 commits, 8 PRs) with dataset management, snapshot system, quota enforcement via Samba dfree, and 2-step deletion workflow achieving complete feature parity with Btrfs
-- **Kernel Development**: Implemented eCryptfs nanosecond timestamps and fallocate support, enabled BTF/eBPF for filesystem event auditing, added CFS bandwidth control
-- **NAS Performance Testing Platform**: Built end-to-end automated benchmarking infrastructure (3,787 lines of scripts, 11 AI skills) completing 4 test sessions across 16 managed devices with 854 log files
+- **Kernel Development**: Implemented eCryptfs nanosecond timestamps and fallocate support, enabled BTF/eBPF for filesystem event auditing, added CFS bandwidth control, and designed Btrfs kmalloc slab pressure testing methodology
+- **NAS Performance Testing Platform**: Built end-to-end automated benchmarking infrastructure (3,787 lines of scripts, 11 AI skills) completing 8 test sessions across 23 managed devices with NFS cache/no-cache comparison and cross-protocol coverage
 - **Support at Scale**: Analyzed 180 support bundles across 60+ unique issues (63 GB diagnostic data) spanning storage, Samba, NFS, performance, and network categories
 - **unifi-drive-config (UDC)**: Built core NAS management daemon in Go — dual Btrfs/ZFS filesystem abstraction, Samba/NFS exports, encryption, snapshots, user management, and version-aware migrations deployed on all UNAS hardware
 - **ustate-exporter (ustated)**: Designed core architecture and V1 API (6 endpoints) for the central gRPC state daemon (16,600 LOC, 151 files, 20 releases) — sole state export layer across all Ubiquiti console and NAS products
