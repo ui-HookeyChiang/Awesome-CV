@@ -135,10 +135,17 @@ Go, gRPC, Protocol Buffers, Cobra, Logrus, gopsutil, systemd, Debian packaging, 
 - Aligned `vm.min_free_kbytes` across platforms to delay OOM-killer (Pro8: 128 MB, others: 64 MB)
 - Resolved 500–750 MB/s → 20 MB/s throughput drops via page cache adjustment
 
+**Platform-Level Tuning (debbox-base-files):**
+- `unas-rtd1619`: pinned app.slice CPU affinity to isolate Docker/app containers from storage I/O paths
+- `unas-rtd1619`: reduced ethernet interrupt coalescing delay for better throughput at small I/O sizes
+- `unas-rtd1619 and unaspro-al324`: set vm.min_free_kbytes to prevent OOM-triggered writeback stalls on both platforms
+- `unas-rtd1619`: TCP buffer sizes, congestion window, and socket backlog tuned for 2.5GbE throughput
+
 ##### Result
 - iperf throughput improved from 1.9 to 2.3 Gb/s on UNAS4 (+21%)
 - Eliminated smbd/nfsd hang conditions under sustained stress workloads
 - Established CPU affinity and network tuning framework applicable across all UNAS platforms
+- Platform tuning shipped via debbox firmware build for RTD1619 and AL324 platforms
 
 #### SSD Cache Benchmarking Framework
 
@@ -158,6 +165,47 @@ Go, gRPC, Protocol Buffers, Cobra, Logrus, gopsutil, systemd, Debian packaging, 
 - Identified and resolved I/O migration latency issue that degraded p99 performance
 - Created comprehensive test framework enabling continuous regression testing for cache features
 
+#### RAID Level Comparison (3-Way)
+
+##### Situation
+- Only RAID5 baseline data existed; no systematic comparison of RAID performance tradeoffs across device tiers
+- Engineering and PM needed data-driven guidance on RAID level recommendations per device capacity
+
+##### Action
+**Test Campaigns (Feb 24-26):**
+- Ran 3-way RAID comparison (raid10 vs raid5 vs raid6) across 4 device tiers in 3 phases:
+  - Phase 1 (Feb 24): UNASPro8 (raid10x8, raid6x8) and UNASPro7 (raid10x6, raid6x7) — 10GbE
+  - Phase 2 (Feb 25): UNAS4 (raid6x4) — 2.5GbE; additional UNASPro8 (raid10x8) validation
+  - Phase 3 (Feb 25-26): UNASPro4-SQALab (raid10x4, raid5x4, raid6x4) — 10GbE; UNAS4-SQALab SSD cache across all 3 RAID levels
+- Total: 17 test runs across the RAID comparison campaign
+- Built `generate-charts.py` for Plotly comparison charts and `dedup-results.py` for RAID mismatch filtering
+
+**UNASPro4 Detailed Results (4-disk, 10G, no SSD cache):**
+
+| RAID | Seq Read | Seq Write | Rand Read | Rand Write (ow) |
+|------|----------|-----------|-----------|-----------------|
+| raid10x4 | 751 MB/s | 221 MB/s | 1,906 IOPS | 239 IOPS |
+| raid5x4 | 644 MB/s | 344 MB/s | 1,867 IOPS | 368 IOPS |
+| raid6x4 | 428 MB/s | 237 MB/s | 1,872 IOPS | 388 IOPS |
+
+**Tail Latency Analysis:**
+- RAID10 random write overwrite P99: 17,113 ms (2.7× worse than RAID5's 6,409 ms) — mirror penalty
+- RAID6 seq read P99: 1,502 ms (nearly 2× RAID10's 851 ms) — double parity reconstruction
+- CPU IOWait (seq read): RAID6 44% > RAID5 30% > RAID10 15% — more parity = more CPU wait per stripe
+
+##### Result
+- Produced comprehensive 3-way RAID comparison charts for all device tiers, enabling data-driven RAID recommendations
+- Key insight: RAID10 optimal for read-heavy workloads (best seq read); RAID5 optimal for write-heavy or balanced workloads (best overall throughput); RAID6 impractical on 4-disk configs (only 2 data disks, worst seq read)
+- Random reads are seek-bound (~1,870–1,906 IOPS) and effectively identical across RAID levels
+- RAID10 overwrite performance worst (239 IOPS) due to mirror write amplification — important for NAS workloads with existing-file updates
+
+#### dm-cache burst_reserve_ratio Investigation
+
+- Diagnosed `burst_reserve_ratio=100` eviction stall on UNASPro4-SQALab during SSD cache testing
+- Root cause: dm-cache default reserves 100% of cache capacity for burst writes, leaving 0% for data retention — `fill_ssd_cache()` enters infinite write→evict→write loop
+- Implemented `set_burst_reserve_ratio_for_test()` in fio.sh to auto-adjust ratio before cache tests
+- UNASPro4 SSD cache re-testing blocked pending ENAS-39-SQALab SSH access restoration (DHCP IP change, SSH key not provisioned on 10G interface, SSO account locked)
+
 #### NAS Storage Performance Testing Platform
 
 ##### Situation
@@ -166,25 +214,32 @@ Go, gRPC, Protocol Buffers, Cobra, Logrus, gopsutil, systemd, Debian packaging, 
 - SSD cache behavior across different states (cold/warm/full) was untested at scale
 
 ##### Action
-**Test Automation Scripts:**
-- Developed `fio.sh` (2,284 lines): automated fio test runner with SSD cache state management (cold/warm/full), CSV/JSON output, and CPU monitoring
+**Test Automation Scripts (3,787 lines total):**
+- Developed `fio.sh` (2,284 lines): automated fio test runner with SSD cache lifecycle management (add/remove/flush/warm/fill), CSV/JSON output, CPU monitoring, volume detection filtering (HEALTHY/AT_RISK only), NVMe orphan md array cleanup, nohup+poll pattern for remote cache fill, and burst_reserve_ratio auto-adjustment
 - Developed `preflight.sh` (727 lines): pre-test validation covering RAID health, resync detection, NIC speed, free space, and SMART checks
 - Developed `discover-client.sh` (575 lines): auto-detect fastest server-client NIC pair on shared subnet
 - Developed `gather-results.sh` (201 lines): collect results from remote clients into organized directory structure
+- Developed `dedup-results.py`: result deduplication with RAID mismatch filter and cross-config validation
+- Developed `generate-charts.py`: Plotly comparison charts for RAID-level and cross-device analysis
 
 **AI-Assisted Workflow:**
-- Built 11 Claude Skills covering the full workflow: build → deploy → configure → test → analyze
-- Enabled AI-driven test orchestration reducing manual intervention across the entire pipeline
+- Built 11 Claude Skills covering the full workflow: build → deploy → configure → test → analyze → document
+- Skills encode operational procedures (RAID deploy/nuke/cache management), test workflows (discover→preflight→fio→gather→dedup→chart), and documentation pipelines
+- Exported skill collection to prompt-hub for sharing (+9,702 lines)
 
 **Multi-Device Test Campaigns:**
 - `20260208_multi_device_test`: 4 devices (Pro8, Pro7, UNAS4, UNAS2), 8 test runs across RAID5/RAID1 and 10G/2.5G configurations
 - `20260209_raid_perf_test`: RAID configuration comparison across 2 devices
 - `20260210_fullsize_assume_clean`: Full-size array performance with `--assume-clean`
 - `UNASPro8-86-Office-fullsize`: SSD cache with/without comparison
+- `20260224_raid10_test`: RAID10 vs RAID5 on UNASPro7 and UNASPro8 (10G)
+- `20260224_raid6_test`: RAID6 on UNASPro7 and UNASPro8 (10G)
+- `20260225_raid_comparison_pro4`: 3-way RAID comparison on UNASPro4-SQALab (10G)
+- `20260226_unas4_sqalab_cache`: SSD cache across raid5/6/10 on UNAS4-SQALab (2.5G)
 
 ##### Result
-- Established repeatable, automated benchmarking platform across 16 managed NAS devices
-- Completed 4 test sessions with 18 test runs producing 854 log files (26 MB of structured results)
+- Established repeatable, automated benchmarking platform across 19 managed NAS devices (12 UNAS Pro, 3 UNAS, 3 ENAS, 1 UNVR Pro)
+- Completed 11 test sessions with 47 test runs producing 69 MB of structured results
 - Reduced test setup and execution from days of manual work to automated single-command campaigns
 - Created reusable infrastructure enabling continuous performance regression testing for all UNAS platforms
 
@@ -210,6 +265,12 @@ Go, gRPC, Protocol Buffers, Cobra, Logrus, gopsutil, systemd, Debian packaging, 
 
 #### Kernel Development
 
+##### SunRPC CPU Affinity Sysfs Interface
+- Authored Linux kernel patch: `sunrpc: add sysfs interface for RPC worker thread CPU affinity` (+154/-10 lines across sunrpc subsystem)
+- Added sysfs control at `/sys/kernel/sunrpc/*/cpu_affinity` for runtime NFS RPC worker thread pinning
+- Prevents NFS server threads from competing with user-space applications (Samba, Docker) on the same cores
+- Integrated into debbox firmware build for RTD1619 platform
+
 ##### eBPF & BTF Support
 - Added BPF Type Format (BTF) support for compile-once-run-anywhere eBPF tools on NAS kernel
 - Enabled eBPF-based filesystem event auditing for UNAS Pro (working for BE dev)
@@ -220,10 +281,17 @@ Go, gRPC, Protocol Buffers, Cobra, Logrus, gopsutil, systemd, Debian packaging, 
 - Enabled soft lockup and hung task detection to diagnose long-latency smbd/nfsd events
 - Configured qdisc kernel modules (`=m` vs `=y`) to avoid kernel image bloat preventing boot
 
-#### ustd RAID Helpers
-- Added `--assume-clean` flag to skip RAID resync during `ustackctl deploy` for immediate testing
-- Added `--size` flag to limit RAID member size for rapid functional test array creation
-- Enabled 4-session multi-device test campaigns across Pro8, Pro7, UNAS4, UNAS2
+#### ustd Features & Bug Fixes
+
+##### RAID Deploy Helpers
+- Added `--assume-clean` flag to skip RAID resync during `ustackctl deploy` — array instantly available for I/O, first write pass fills parity for touched blocks (+26 lines across `raid_creator.py`, `raid_sm.py`, `stackctl_sm.py`, `ustackctl.py`); became the standard approach for all performance testing
+- Added `--size` flag to limit RAID member size via mdadm `-z` — enables quick functional tests with small arrays (e.g., `--size 1048576` for 1 GB/member)
+- Released as ustd v5.1.4 via debfactory
+
+##### Volume Probe Bug Fix
+- Fixed volume state machine probing RAID member partitions (e.g., `/dev/sda1` in an md array) as standalone volumes — probe would fail or return confusing state
+- Added 6-line check in `volume_sm.py` to skip partitions belonging to RAID members
+- Released as ustd v5.1.7 via debfactory hash bump
 
 #### AI-Driven QA Automation Concept
 - Proposed "No More Human Labors" project: QA-agent discovers better configs and bugs, RD-agent modifies code, builds firmware, deploys, and re-iterates
