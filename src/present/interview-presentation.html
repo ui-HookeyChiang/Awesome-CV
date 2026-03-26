@@ -837,8 +837,7 @@
                             <span class="metric-label"><strong>Regression</strong></span>
                         </div>
                         <div class="metric-box" style="min-width: 110px; flex: 1; cursor: pointer;" data-cheat="product-scalability">
-                          <span class="metric-number" style="color:
-                            var(--primary-color);">Feature</span>
+                          <span class="metric-number" style="color: var(--primary-color);">Feature</span>
                             <span class="metric-label"><strong>Scalability</strong></span>
                         </div>
                         <div class="metric-box" style="min-width: 110px; flex: 1;">
@@ -1042,10 +1041,8 @@
                         <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
                             <div style="text-align: center;">
                                 <div class="flow-box" tabindex="0" role="button" data-cheat="cpu-irq" style="width: 160px; min-height: 80px; background: linear-gradient(135deg, #dc2626, #b91c1c); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: 0 6px 16px rgba(220, 38, 38, 0.3); padding: 8px;">
-                                    <div style="font-size: 0.9rem;
-                                      margin-bottom: 4px;">IRQ</div>
-                                    <div style="font-size: 0.9rem;
-                                      margin-bottom: 2px;">Isolation</div>
+                                    <div style="font-size: 0.9rem; margin-bottom: 4px;">IRQ</div>
+                                    <div style="font-size: 0.9rem; margin-bottom: 2px;">Isolation</div>
                                     <div style="font-size: 0.7rem; opacity: 0.9;">Exclusive core dedication</div>
                                 </div>
                             </div>
@@ -1923,12 +1920,19 @@
             }
         });
 
-        // Add click handlers for flow boxes
+        // Add click and keyboard handlers for flow boxes
         document.querySelectorAll('.flow-box').forEach(box => {
             box.addEventListener('click', function() {
                 const cheatKey = this.getAttribute('data-cheat');
                 if (cheatKey) {
                     showCheatSheet(cheatKey);
+                }
+            });
+            box.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    const cheatKey = this.getAttribute('data-cheat');
+                    if (cheatKey) showCheatSheet(cheatKey);
                 }
             });
         });
