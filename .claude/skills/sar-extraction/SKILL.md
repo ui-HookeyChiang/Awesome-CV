@@ -95,35 +95,22 @@ One per flow box. Two formats:
 
 Write the HTML fragment to `src/present/fragments/case-studies/<id>.html`.
 
-**Template approach**: read one existing fragment (e.g., `samba-perf.html`) and use it as the structural template. Replace content while preserving all CSS classes, inline styles, and HTML structure. This ensures visual consistency.
+**Use the template**: copy `src/present/fragments/case-studies/_template.html` and replace all `{{PLACEHOLDER}}` values with extracted content. The template has:
 
-Fragment structure:
-```
-<!-- frontmatter comment -->
-<div class="slide">
-    <div class="slide-number">{{N}} / {{TOTAL}}</div>
-    <h1>Case Study N: <Title></h1>
-    <div class="sar-format">
-        <div class="sar-item sar-situation">...</div>
-        <div class="sar-item sar-action">...</div>
-        <div class="sar-item sar-result">...</div>
-    </div>
-</div>
-<script>Object.assign(window.cheatSheets = window.cheatSheets || {}, { ... });</script>
-```
+- **Frontmatter** — fill in `{{ID}}`, `{{TAGS}}`, `{{DOMAIN}}`, `{{METRICS_LIST}}`
+- **Situation** — fill `{{SITUATION_TEXT}}` with highlighted spans. Delete the `<!-- OPTIONAL CHART -->` block if no chart needed.
+- **Action** — fill 7 flow boxes: `{{BOX_N_LINE1}}`, `{{BOX_N_LINE2}}`, `{{BOX_N_DETAIL}}` and their `{{CHEAT_N}}` IDs
+- **Result** — fill 2-4 metric boxes: `{{RESULT_N_NUMBER}}`, `{{RESULT_N_LABEL}}`. Delete unused boxes.
+- **Cheat sheets** — fill 7 entries: `{{CHEAT_N_TITLE}}`, item headings, descriptions, commands. Add/remove `<div class="cheat-sheet-item">` blocks as needed (2-4 items per cheat sheet).
 
-**Frontmatter**:
+**`data-cheat` ID convention**: the template uses `{{ID}}-{{CHEAT_N}}` format, producing IDs like `zfs-analysis`, `zfs-pool-create`. This ensures global uniqueness.
+
+**Situation text highlighting**: wrap key technical terms with:
 ```html
-<!-- fragment: <id>
-     tags: [relevant, keywords, for, auto-selection]
-     domain: <broad-category>
-     metrics: [headline metric 1, headline metric 2, ...]
-     time: 2-3min
-     type: slide
--->
+<span style="color: var(--accent); font-weight: 700;">term</span>
 ```
 
-**`data-cheat` ID convention**: prefix all IDs with the fragment ID to ensure global uniqueness. E.g., `zfs-analysis`, `zfs-pool-create`, not just `analysis`.
+**After filling the template**: verify the fragment renders correctly by assembling with a test profile or opening the fragment in a browser with the base CSS.
 
 ## Step 5: Suppress
 
