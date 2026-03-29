@@ -16,7 +16,7 @@ All output goes under `resumes/`.
 
 | Skill | When Used | Purpose |
 |-------|-----------|---------|
-| **job-analysis** | Job-targeted only | JD analysis → `tech-stack.md` + `interview-prep.md` |
+| **job-analysis** | Job-targeted only | JD analysis → `tech-stack.md` + `interview-prep.md` + `presentation-profile.yaml` |
 | **resume-content-rules** | Both modes | Character limits, formatting |
 | **resume-pdf-check** | Both modes | Build PDF, validate 2-page limit, scholar auto-shrink |
 | **interview-presentation** | Both modes | HTML slideshow structure |
@@ -44,6 +44,7 @@ resumes/
     ├── job-description.md           # Input
     ├── tech-stack.md                # From job-analysis
     ├── interview-prep.md            # From job-analysis
+    ├── presentation-profile.yaml    # From job-analysis (auto-generated, editable)
     ├── resume/                      # All 5 .tex files (summary, experience, education, scholar, leadership)
     ├── resume.pdf
     ├── interview-presentation.html
@@ -55,7 +56,9 @@ resumes/
 | File | Purpose |
 |------|---------|
 | `src/resume/*.tex` | **Canonical GP resume** (all 5 .tex files) — edit here |
-| `src/present/interview-presentation.html` | Default presentation template |
+| `src/present/fragments/` | Presentation HTML fragments (assembled by `assemble.js`) |
+| `src/present/profiles/general.yaml` | Default presentation profile |
+| `src/present/assemble.js` | Fragment assembler: `node assemble.js <profile> [--output <path>]` |
 | `milestone/*.md` | Achievement data |
 
 **Important:** `src/resume/` is the canonical location for all GP .tex files and also the build directory (`cd src && xelatex resume.tex`). No sync step needed. For job-targeted builds, the backup/copy/restore procedure in **resume-pdf-check** handles this automatically.
@@ -77,7 +80,8 @@ resumes/
    - Always generate the PDF after any .tex change — the PDF is the deliverable
    - `resumes/general/resume.pdf` is a symlink to `src/resume.pdf` — no copy needed
 5. **Generate presentation** → `resumes/general/interview-presentation.html`
-   - Follow **interview-presentation** skill, use latest milestones
+   - Use the fragment assembler: `cd src/present && node assemble.js general --output ../../resumes/general/interview-presentation.html`
+   - Follow **interview-presentation** skill for content guidelines
 6. **Generate speech** → `resumes/general/interview-speech.md`
    - Follow **interview-speech** skill, derive from presentation
 
@@ -91,7 +95,7 @@ mkdir -p resumes/<company-name>/resume
 
 1. **Save JD** → `resumes/<company-name>/job-description.md`
 2. **Analyze JD** — extract skills, responsibilities, domain, keywords
-3. **Run job-analysis** → `tech-stack.md` + `interview-prep.md`
+3. **Run job-analysis** → `tech-stack.md` + `interview-prep.md` + `presentation-profile.yaml`
 4. **Select milestones** — balance depth and breadth
    - ~70% direct/transferable matches to JD requirements
    - ~30% standout contributions that show breadth (e.g., team scaling, build system innovation, cross-team testing, support excellence) — these catch the interviewer's eye and differentiate from other candidates
@@ -116,7 +120,11 @@ mkdir -p resumes/<company-name>/resume
 8. **Build PDF** → `resumes/<company-name>/resume.pdf`
    - Follow **resume-pdf-check** (backup, build, restore, validate 2 pages)
 9. **Generate presentation** → `resumes/<company-name>/interview-presentation.html`
-   - Follow **interview-presentation** skill, customize for role
+   - Use the profile from job-analysis Step 4: `resumes/<company-name>/presentation-profile.yaml`
+   - Copy profile to assembler: `cp resumes/<company-name>/presentation-profile.yaml src/present/profiles/<company-name>.yaml`
+   - Assemble: `cd src/present && node assemble.js <company-name> --output ../../resumes/<company-name>/interview-presentation.html`
+   - Review the generated profile before assembling — adjust selections if needed
+   - Follow **interview-presentation** skill for content guidelines
 10. **Generate speech** → `resumes/<company-name>/interview-speech.md`
    - Follow **interview-speech** skill, emphasize job-relevant stories
 
