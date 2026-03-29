@@ -667,12 +667,14 @@
         const slides = document.querySelectorAll('.slide');
         const totalSlides = slides.length;
 
-        // Cheat sheet data: fragments register entries via Object.assign(window.cheatSheets, {...})
-        window.cheatSheets = window.cheatSheets || {};
+        // Cheat Sheet Data
+        const cheatSheets = {
+<!-- CHEAT_SHEETS -->
+        };
 
         // Cheat Sheet Functions
         function showCheatSheet(cheatKey) {
-            const cheatSheet = window.cheatSheets[cheatKey];
+            const cheatSheet = cheatSheets[cheatKey];
             if (cheatSheet) {
                 document.getElementById('cheatSheetTitle').innerHTML = cheatSheet.title;
                 document.getElementById('cheatSheetBody').innerHTML = cheatSheet.content;

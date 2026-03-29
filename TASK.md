@@ -26,4 +26,10 @@
   - Created: profiles/general.yaml, assemble.js
   - Added js-yaml dependency to package.json
   - Assembles 11 slides, all template variables replaced
-- [ ] Task 6: Validation — diff assembled vs original
+- [x] Task 6: Validation — diff assembled vs original
+  - Created: test-assemble.js
+  - Fixed: assemble.js (rewrote to match original structure exactly)
+  - Fixed: base.html (const cheatSheets with placeholder)
+  - Fixed: profiles/general.yaml (HTML entity for em dash)
+  - Created: fragments/cheat-sheet-data.js (consolidated cheat sheet data)
+  - Result: PASS — byte-identical output
