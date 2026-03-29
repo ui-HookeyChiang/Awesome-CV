@@ -1,0 +1,137 @@
+%-------------------------------------------------------------------------------
+%	SECTION TITLE
+%-------------------------------------------------------------------------------
+\cvsection{Work Experience}
+
+
+%-------------------------------------------------------------------------------
+%	CONTENT
+%-------------------------------------------------------------------------------
+\begin{cventries}
+
+%---------------------------------------------------------
+  \cventry
+    {UniFi-OS Storage Software Engineer} % Job title
+    {Ubiquiti Inc.} % Organization
+    {Taiwan/Remote} % Location
+    {Mar. 2022 - Present} % Date(s)
+    {
+      \begin{cvitems} % Description(s) of tasks/responsibilities
+        \item {
+            Built Ubiquiti's first NAS end-to-end --- core UX-aware Btrfs/ZFS middlewares, scaling to 6 models.
+          }
+          \begin{itemize}
+          \item {
+            Developed across the UniFi-APPs, Debian OS, Linux kernel and BSP
+            layers, collaborating for robust manufacturing and field
+            deployment, guiding hardware strategy with benchmarking data.
+          }
+          \item {
+            Co-led testing frameworks with SQA team, implementing I/O stress
+            loops, RAID expansion tests, and validation of BTRFS, ZFS and
+            eCryptFS filesystems using xfstest and fio.
+          }
+          \item {
+            Established support checklists on performance and troubleshooting, handling 180+
+            escalations.
+          }
+          \item {
+            Upgraded Linux 4.19 to 5.10 along with drivers, unlocking
+            OS capability and eBPF observability.
+          }
+          \item {
+            Fixed cross-layer issues from kernel (PHY crashes, NFS panics, AHCI IRQ, 93\% socket memory)
+            to storage (RAID 50\% regression, FS write amplification, Samba socket leaks, Drive OOMs).
+          }
+          \end{itemize}
+        \item {
+          Led full-stack system tunings and resource control across 6 NAS
+          models.
+          }
+          \begin{itemize}
+          \item {
+            Maximized data pipeline throughput (by 50\%) via tuning CPU, IRQ,
+            TCP and application layers.
+          }
+          \item {
+            Enhanced SSD-RAID BTRFS write IOPS by 40\% via mq-deadline scheduler and ARM64 CRC32.
+          }
+          \item {
+            Built scalable AI-skilled benchmarking across RAID, filesystem, and
+            network protocol stacks.
+          }
+          \item {
+            Applied cgroup V2 to prevent swap-induced latencies and prioritize foreground/background I/O.
+          }
+          \end{itemize}
+        \item {
+          Drove system reliability, scalability and efficiency across all 2M+ UniFi-OS machines.
+          }
+          \begin{itemize}
+          \item {
+            Architected ustated gRPC daemon with microsecond latency, reducing system load by 50\%.
+          }
+          \item {
+            Revamped the Debian build system for safe package upgrades with AI-aided workflows.
+          }
+          \item {
+            Conducted 280 code reviews annually and deployed AI reviewers to boost 400 PRs quarterly.
+          }
+          \end{itemize}
+      \end{cvitems}
+    }
+
+%---------------------------------------------------------
+  \cventry
+    {Software Engineer} % Job title
+    {QNAP Systems Inc.} % Organization
+    {Taiwan} % Location
+    {Jan. 2018 - Feb. 2022} % Date(s)
+    {
+      \begin{cvitems} % Description(s) of tasks/responsibilities
+        \item {
+          Led Hybridmount, a filesystem allowing local access to cloud
+          files, reducing user-operating costs.
+          }
+        \begin{itemize}
+          \item {
+            Built FUSE-based architecture with SQLite DB, libev event handling,
+            and IPC.
+            }
+          \item {
+            Shipped multi-cloud mounting, client-side encryption, smart
+            sync with predownload/autoupdate, cache pinning, and partial downloads across 190K+ devices.
+            }
+          \item {
+            Implemented CI pipelines using GitLab, Jenkins, and Docker with
+            filesystem validation suites.
+            }
+        \end{itemize}
+        \item {
+          Achieved 300\% metadata and 50\% I/O performance improvements via multi-threading,
+          multi-layer caching, algorithm optimization, and database performance tuning.
+          }
+        \begin{itemize}
+          \item {
+            Enabled VFS cache by handling unicode normalization,
+            case-sensitivity and cache invalidation.
+            }
+          \item {
+            Resolved cyclic deadlocks between FUSE xattr and IPC daemons via API flow redesign.
+            }
+          \item {
+            Mitigated the inode limit and indexing bottleneck, scaling 50M+ files at 200 files/s.
+            }
+          \item {
+            Optimized download latency by 36\% using centralized state machine with condition variables.
+            }
+          \item {
+            Reduced recursive deletion from 22s to 1s by batching syscalls and minimizing context
+            switches.
+            }
+        \end{itemize}
+      \end{cvitems}
+    }
+
+%---------------------------------------------------------
+\end{cventries}

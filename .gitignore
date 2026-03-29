@@ -7,6 +7,8 @@
 *.fls
 *.out
 *.toc
+*.xdv
+*.gz
 
 ## Intermediate documents:
 *.dvi
@@ -20,4 +22,8 @@
 ### Mac OS X ###
 ## Mac OS X metadata files:
 *.DS_Store
+
+### Private ###
+## Resume output and job-targeted resumes:
+resumes/
 
