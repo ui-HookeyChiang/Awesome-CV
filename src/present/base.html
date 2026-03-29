@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hookey Chiang - Interview Presentation</title>
+    <!-- Fonts: Avenir Next (system), Calibri (fallback), Consolas (code) -->
+    <style>
+        :root {
+            --page-bg: #12121f;
+            --slide-bg: #1A1A2E;
+            --card-bg: #25253A;
+            --text-primary: #FFFFFF;
+            --text-secondary: #F0F0F5;
+            --text-muted: #888899;
+            --primary: #006FFF;
+            --success: #00C853;
+            --accent: #00D4FF;
+            --orange: #FF9F00;
+            --alert: #FF4545;
+            --border: #3A3A55;
+            --code-bg: #0D0D1A;
+            --code-text: #00C853;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Avenir Next', Calibri, sans-serif;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            background: var(--page-bg);
+            overflow-x: hidden;
+        }
+
+        .presentation {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .slide {
+            background: var(--slide-bg);
+            border-radius: 14px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+            box-shadow: 0 6px 30px rgba(0,0,0,0.5);
+            min-height: 80vh;
+            width: 100%;
+            max-width: 100%;
+            display: flex;
+            flex-direction: column;
+            page-break-after: always;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slide h1 {
+            font-family: 'Avenir Next', Calibri, sans-serif;
+            color: var(--text-primary);
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .slide h1::after {
+            content: '';
+            display: block;
+            width: 35%;
+            height: 3px;
+            background: var(--primary);
+            margin-top: 10px;
+            border-radius: 2px;
+        }
+
+        .slide h2 {
+            font-family: 'Avenir Next', Calibri, sans-serif;
+            color: var(--text-primary);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            margin-top: 30px;
+            font-weight: 600;
+        }
+
+        .slide h3 {
+            font-family: 'Avenir Next', Calibri, sans-serif;
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        /* Ensure consistent content width */
+        .slide > * {
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Interactive flowchart boxes */
+        .flow-box {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .flow-box:hover {
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 15px rgba(0,111,255,0.15) !important;
+        }
+
+        .flow-box:focus-visible {
+            outline: 3px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        /* Cheat sheet modal */
+        .cheat-sheet-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .cheat-sheet-content {
+            position: relative;
+            background: var(--slide-bg);
+            border: 1px solid var(--border);
+            border-top: 3px solid var(--primary);
+            border-radius: 14px;
+            padding: 30px;
+            width: calc(100% - 40px);
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cheat-sheet-header {
+            font-family: 'Avenir Next', Calibri, sans-serif;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        .cheat-sheet-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: color 0.2s;
+        }
+
+        .cheat-sheet-close:hover {
+            color: var(--alert);
+        }
+
+        .cheat-sheet-item {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            color: var(--text-secondary);
+        }
+
+        .cheat-sheet-item strong {
+            color: var(--text-primary);
+        }
+
+        .cheat-sheet-item p {
+            color: var(--text-secondary);
+        }
+
+        .cheat-sheet-command {
+            font-family: Consolas, 'Courier New', monospace;
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin: 8px 0;
+            display: block;
+        }
+
+        .section-break {
+            margin: 20px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .intro-header {
+            text-align: left;
+            margin-bottom: 50px;
+        }
+
+        .name {
+            font-family: 'Avenir Next', Calibri, sans-serif;
+            font-size: 3.5rem;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            font-weight: 700;
+            background: none;
+            -webkit-background-clip: unset;
+            -webkit-text-fill-color: unset;
+            background-clip: unset;
+        }
+
+        .title {
+            font-family: 'Avenir Next', Calibri, sans-serif;
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.05rem;
+            padding: 10px 20px;
+            background: transparent;
+            border-radius: 25px;
+            border: none;
+            color: var(--text-muted);
+        }
+
+        .summary-box {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--primary);
+            margin: 30px 0;
+            font-size: 1.05rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+        }
+
+        .summary-box h3 {
+            color: var(--text-primary);
+        }
+
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .point-card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .point-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 6px 30px rgba(0,0,0,0.3);
+        }
+
+        .point-card h4 {
+            font-family: 'Avenir Next', Calibri, sans-serif;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .metrics-row {
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .metric-box {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            text-align: center;
+            min-width: 140px;
+            box-shadow: none;
+        }
+
+        .metric-number {
+            font-family: 'Avenir Next', 'Avenir Next', Calibri, sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent) !important;
+            display: block;
+            line-height: 1;
+        }
+
+        .metric-label {
+            font-family: 'Avenir Next', Calibri, sans-serif;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            margin-top: 8px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .metric-label strong {
+            color: var(--text-muted);
+        }
+
+        .story-section {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border: 1px solid var(--border);
+        }
+
+        .story-header {
+            font-family: 'Avenir Next', Calibri, sans-serif;
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .sar-format {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+            margin: 25px 0;
+        }
+
+        .sar-item {
+            background: var(--slide-bg);
+            padding: 20px;
+            border-radius: 10px;
+            border: none;
+        }
+
+        .sar-item strong {
+            color: var(--text-primary);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .sar-situation {
+            grid-column: 1 / -1;
+            border: none;
+            border-left: 4px solid var(--alert);
+            background: rgba(255,69,69,0.06);
+        }
+
+        .sar-action {
+            grid-column: 1 / -1;
+            border: none;
+            border-left: 4px solid var(--primary);
+            background: rgba(0,111,255,0.06);
+            margin-top: 0;
+        }
+
+        .sar-result {
+            grid-column: 1 / -1;
+            border: none;
+            border-left: 4px solid var(--success);
+            background: rgba(0,200,83,0.06);
+            margin-top: 0;
+        }
+
+        .tech-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 25px 0;
+        }
+
+        .tech-skill {
+            background: rgba(0,111,255,0.15);
+            color: var(--accent);
+            padding: 8px 18px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid rgba(0,111,255,0.25);
+            box-shadow: none;
+        }
+
+        .closing-section {
+            text-align: center;
+            padding: 60px 0;
+        }
+
+        .closing-title {
+            font-family: 'Avenir Next', Calibri, sans-serif;
+            font-size: 3.5rem;
+            color: var(--text-primary);
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .closing-subtitle {
+            font-family: 'Avenir Next', Calibri, sans-serif;
+            font-size: 1.8rem;
+            color: var(--text-muted);
+            margin-bottom: 50px;
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-family: 'Avenir Next', Calibri, sans-serif;
+            background: transparent;
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 400;
+        }
+
+        .navigation-hint {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(26,26,46,0.95);
+            color: var(--text-muted);
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: 1px solid var(--border);
+            font-size: 0.85rem;
+            font-family: 'Avenir Next', Calibri, sans-serif;
+            z-index: 100;
+        }
+
+        ul {
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        li strong {
+            color: var(--text-primary);
+        }
+
+        /* Prevent single words on lines */
+        .text-flow {
+            text-align: justify;
+            hyphens: none;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        /* SAR header styling */
+        .sar-header-situation {
+            font-family: 'Avenir Next', Calibri, sans-serif;
+            color: var(--alert) !important;
+            font-size: 1.1rem !important;
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sar-header-situation::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--alert);
+        }
+
+        .sar-header-action {
+            font-family: 'Avenir Next', Calibri, sans-serif;
+            color: var(--primary) !important;
+            font-size: 1.1rem !important;
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sar-header-action::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--primary);
+        }
+
+        .sar-header-result {
+            font-family: 'Avenir Next', Calibri, sans-serif;
+            color: var(--success) !important;
+            font-size: 1.1rem !important;
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sar-header-result::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+
+        @media (max-width: 768px) {
+            .presentation {
+                padding: 15px;
+                max-width: 100%;
+            }
+
+            .slide {
+                padding: 20px 15px;
+                margin-bottom: 20px;
+                min-height: 70vh;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .name {
+                font-size: 2.8rem;
+            }
+
+            .contact-info {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-row {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .slide h1 {
+                font-size: 2rem;
+            }
+
+            .sar-format {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .cheat-sheet-content {
+                width: calc(100% - 24px);
+                padding: 20px;
+            }
+        }
+
+        @media print {
+            body { background: white; color: #1f2937; }
+            .presentation {
+                max-width: none;
+                padding: 0;
+            }
+            .slide {
+                box-shadow: none;
+                border: 1px solid #e5e7eb;
+                min-height: auto;
+                width: 100%;
+                margin-bottom: 20px;
+                page-break-after: always;
+                background: white;
+                color: #1f2937;
+            }
+            .navigation-hint { display: none; }
+        }
+
+        @media (min-width: 1400px) {
+            .presentation {
+                max-width: 1300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation-hint">
+        Use &#8592; &#8594; arrow keys to navigate slides
+    </div>
+
+    <div class="presentation">
+        <!-- SLIDES -->
+    </div>
+
+    <!-- Cheat Sheet Modal -->
+    <div id="cheatSheetModal" class="cheat-sheet-modal">
+        <div class="cheat-sheet-content">
+            <div class="cheat-sheet-close" onclick="closeCheatSheet()">&times;</div>
+            <div class="cheat-sheet-header" id="cheatSheetTitle"></div>
+            <div id="cheatSheetBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced navigation and presentation features
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        // Cheat sheet data: fragments register entries via Object.assign(window.cheatSheets, {...})
+        window.cheatSheets = window.cheatSheets || {};
+
+        // Cheat Sheet Functions
+        function showCheatSheet(cheatKey) {
+            const cheatSheet = window.cheatSheets[cheatKey];
+            if (cheatSheet) {
+                document.getElementById('cheatSheetTitle').innerHTML = cheatSheet.title;
+                document.getElementById('cheatSheetBody').innerHTML = cheatSheet.content;
+                document.getElementById('cheatSheetModal').style.display = 'flex';
+
+                // Prevent background scrolling
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeCheatSheet() {
+            document.getElementById('cheatSheetModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside content
+        document.getElementById('cheatSheetModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeCheatSheet();
+            }
+        });
+
+        // Navigation functions
+        function showSlide(n) {
+            if (n >= 0 && n < totalSlides) {
+                currentSlide = n;
+                slides[currentSlide].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                showSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        // Enhanced Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            // Check if modal is open first
+            if (document.getElementById('cheatSheetModal').style.display === 'flex') {
+                if (e.key === 'Escape') {
+                    e.preventDefault();
+                    closeCheatSheet();
+                }
+                return; // Don't process other keys when modal is open
+            }
+
+            switch(e.key) {
+                case 'ArrowRight':
+                case ' ':
+                case 'PageDown':
+                    e.preventDefault();
+                    nextSlide();
+                    break;
+                case 'ArrowLeft':
+                case 'PageUp':
+                    e.preventDefault();
+                    prevSlide();
+                    break;
+                case 'Home':
+                    e.preventDefault();
+                    showSlide(0);
+                    break;
+                case 'End':
+                    e.preventDefault();
+                    showSlide(totalSlides - 1);
+                    break;
+                case 'Escape':
+                    // Toggle fullscreen
+                    if (!document.fullscreenElement) {
+                        document.documentElement.requestFullscreen();
+                    } else {
+                        document.exitFullscreen();
+                    }
+                    break;
+            }
+        });
+
+        // Add click and keyboard handlers for flow boxes
+        document.querySelectorAll('.flow-box').forEach(box => {
+            box.addEventListener('click', function() {
+                const cheatKey = this.getAttribute('data-cheat');
+                if (cheatKey) {
+                    showCheatSheet(cheatKey);
+                }
+            });
+            box.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    const cheatKey = this.getAttribute('data-cheat');
+                    if (cheatKey) showCheatSheet(cheatKey);
+                }
+            });
+        });
+
+        // Add click handlers for clickable metric boxes
+        document.querySelectorAll('.metric-box[data-cheat]').forEach(box => {
+            box.addEventListener('click', function() {
+                const cheatKey = this.getAttribute('data-cheat');
+                if (cheatKey) {
+                    showCheatSheet(cheatKey);
+                }
+            });
+        });
+
+        // Presentation mode indicator
+        function updateNavigationHint() {
+            const hint = document.querySelector('.navigation-hint');
+            hint.innerHTML = `
+                Slide ${currentSlide + 1} of ${totalSlides} |
+                Use \u2190 \u2192 arrow keys to navigate |
+                Press ESC for fullscreen
+            `;
+        }
+
+        // Initialize
+        updateNavigationHint();
+
+        // Update navigation hint when slide changes
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const slideIndex = Array.from(slides).indexOf(entry.target);
+                    if (slideIndex !== -1) {
+                        currentSlide = slideIndex;
+                        updateNavigationHint();
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+
+        slides.forEach(slide => observer.observe(slide));
+
+        console.log('Interview presentation loaded successfully!');
+        console.log('Navigation: Use arrow keys only');
+        console.log('Total slides:', totalSlides);
+    </script>
+</body>
+</html>
