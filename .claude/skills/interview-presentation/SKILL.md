@@ -7,94 +7,6 @@ description: Structure, styling, and content guidelines for the interactive HTML
 
 Use this skill when creating or editing `interview-presentation.html`. This defines the structure, styling, and content guidelines for the interactive HTML interview presentation.
 
-## Fragment Architecture
-
-The presentation is built from modular HTML fragments assembled via profile YAML. This enables JD-driven content selection — swap case studies, achievements, skills, and metrics per interview without editing HTML.
-
-### How It Works
-
-```
-src/present/
-  base.html              # HTML shell (CSS, JS, modal, navigation)
-  fragments/             # 15+ fragment files (slides + cards)
-    cover.html           # Fixed slide with {{tagline}} template var
-    intro.html           # Fixed slide
-    skills/*.html        # Card fragments (os, tools, languages, frameworks)
-    highlights/*.html    # Slide fragments (ubiquiti, qnap)
-    case-studies/*.html  # SAR slides + cheat sheet JS (kernel-upgrade, nas-stability, samba-perf)
-    achievements/*.html  # Card fragments with data-id for suppression (innovation, performance)
-    summary.html         # Fixed slide with {{summary-tagline}}, {{strength-1/2/3}}
-    qna.html             # Fixed slide
-    cheat-sheet-data.js  # Consolidated cheat sheet data
-  profiles/
-    general.yaml         # Default profile
-  assemble.js            # Assembler: profile → HTML
-  test-assemble.js       # Validation: diff assembled vs original
-```
-
-### Building a Presentation
-
-```bash
-cd src/present
-node assemble.js general                              # default → interview-presentation.html
-node assemble.js general --output ~/Downloads/pres.html  # custom output
-node assemble.js google-storage                       # JD-targeted profile
-```
-
-### Profile YAML
-
-Profiles select which fragments to include and customize template variables:
-
-```yaml
-name: General Purpose
-description: Default presentation for broad engineering roles
-
-cover:
-  tagline: "Delivering Solutions of Quality and Innovation"
-
-summary:
-  tagline: "OS Engineer — Linux Development, Performance & Storage Infrastructure"
-  strengths: [Performance, Reliability, Scalability]
-
-skills: [os, tools, languages, frameworks]        # order = display order
-highlights: [ubiquiti, qnap]                      # order = slide order
-case-studies: [kernel-upgrade, nas-stability, samba-perf]  # pick 3 from pool
-achievements: [innovation, performance]           # order = display order
-
-suppress: []  # achievement bullet data-ids to remove (case study overlap)
-```
-
-### Adding Content to the Pool
-
-**New case study**: Create `fragments/case-studies/<id>.html` with SAR slide HTML + inline `<script>` for cheat sheet data. Add frontmatter comment with tags for future auto-selection.
-
-**New skill card**: Create `fragments/skills/<id>.html` as a `<div class="point-card">` (no slide wrapper).
-
-**New achievement card**: Create `fragments/achievements/<id>.html` with `data-id` on each `<li>` for suppression support.
-
-### Overlap Strategy
-
-| Overlap | Strategy |
-|---|---|
-| Case study ↔ achievement | **Suppress** — add achievement `data-id` to profile `suppress` list |
-| Case study ↔ highlight metric | **Reinforce** — metric teases, case study explains. No action. |
-| Highlight metric ↔ achievement | **Acceptable** — different granularity. No action. |
-
-Career highlight metrics are **fixed** per role — always shown, never suppressed.
-
-### Fragment Types
-
-- **Slide fragments**: Full `<div class="slide">` with `{{N}} / {{TOTAL}}` slide number
-- **Card fragments**: Inner `<div class="point-card">` only — assembler wraps in slide container
-
-### Editing Workflow
-
-1. Edit the relevant fragment file (not `interview-presentation.html` directly)
-2. Run `node assemble.js general` to rebuild
-3. Run `node test-assemble.js` to validate (if editing existing content that should match original)
-
-> **Design spec**: `spec/2026-03-29/presentation-fragments.md`
-
 ## HTML Presentation Generation
 The interview presentation (`interview-presentation.html`) is a professional, interactive HTML slideshow created from resume content and milestone documentation.
 
@@ -252,11 +164,7 @@ Four key metrics displayed in metric boxes below the strengths:
 
 ## Job Description Customization
 
-When a specific job description is provided, create a new profile YAML in `src/present/profiles/<company>.yaml` and customize content selection. The profile controls which case studies, skills, and achievements appear, plus template variables for taglines and strengths.
-
-**Workflow**: `job-analysis` produces `tech-stack.md` + `interview-prep.md` → manually create profile YAML (future: auto-generated) → `node assemble.js <company>` → tailored presentation.
-
-Customize the presentation to align with the role requirements:
+When a specific job description is provided, customize the presentation to align with the role requirements:
 
 ### Summary Slide (Slide 10) Customization
 When job description is explicitly provided, tailor the summary slide elements:
