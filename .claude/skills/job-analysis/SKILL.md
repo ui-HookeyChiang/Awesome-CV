@@ -1,16 +1,17 @@
 ---
 name: job-analysis
-description: Analyze a job description and generate tech-stack report and interview prep guide. Use whenever a JD or job posting is provided, when asked to analyze a role, research a company's tech stack, prepare for an interview, identify skill gaps, or compare qualifications against job requirements. Even if the user just pastes a job link or description without explicit instructions, use this skill to analyze it.
+description: Analyze a job description and generate tech-stack report, interview prep guide, and presentation profile. Use whenever a JD or job posting is provided, when asked to analyze a role, research a company's tech stack, prepare for an interview, identify skill gaps, or compare qualifications against job requirements. Even if the user just pastes a job link or description without explicit instructions, use this skill to analyze it.
 ---
 
 # Job Analysis
 
-Use this skill to analyze a job description and produce two reports under `resumes/<company-name>/`. Called by **tailor-resume** as Steps 2-4, or independently.
+Use this skill to analyze a job description and produce three outputs under `resumes/<company-name>/`: tech-stack report, interview prep guide, and presentation profile YAML. Called by **tailor-resume** as Steps 2-4, or independently.
 
 ## Inputs
 
 - `resumes/<company-name>/job-description.md` — the job posting
 - `milestone/summary.md`, `milestone/ubiquiti.md`, `milestone/qnap.md` — for overlap analysis
+- `src/present/fragments/` — fragment frontmatter for presentation profile generation (Step 4)
 
 ## Step 1: Extract from JD
 
@@ -145,3 +146,57 @@ Suggested review order if time is limited:
 
 - Prioritize gaps — areas the JD demands but milestones don't fully cover
 - Pick 3-5 best SAR stories for "My Talking Points"
+
+## Step 4: Generate Presentation Profile
+
+Write `resumes/<company-name>/presentation-profile.yaml` — a profile for the fragment-based presentation assembler.
+
+### How to select content
+
+1. **Read all fragment frontmatter** — run `grep -r "^<!-- fragment:" src/present/fragments/` to discover available fragment IDs, tags, domains, and metrics
+2. **Use your judgment** from Steps 1-3 to select content that best demonstrates JD-required skills:
+   - **Case studies** (pick 3): which SAR stories most directly address the JD's core requirements? Order by relevance (strongest match first)
+   - **Skills** (pick 4): reorder skill cards so the most JD-relevant appears first
+   - **Achievements** (pick 2): reorder achievement cards by JD relevance
+   - **Suppress**: identify achievement bullets whose `data-id` overlaps with a selected case study (e.g., if `samba-perf` is selected, suppress `samba-throughput`)
+   - **Cover tagline**: craft from JD keywords — what value does this role need?
+   - **Summary tagline**: align with JD's domain emphasis
+   - **Strengths** (pick 3): choose from JD emphasis areas (e.g., Performance, Scalability, Reliability, Infrastructure, Automation, Security, Leadership)
+
+### Output format
+
+```yaml
+name: <Company> <Role>
+description: Auto-generated from JD analysis on <date>
+derived_from: general
+
+cover:
+  tagline: "<JD-aligned value proposition>"
+
+summary:
+  tagline: "<JD-aligned professional identity>"
+  strengths: [<strength-1>, <strength-2>, <strength-3>]
+
+skills: [<4 skill fragment IDs, reordered by JD relevance>]
+highlights: [ubiquiti, qnap]
+case-studies: [<3 case study fragment IDs, ranked by JD relevance>]
+achievements: [<2 achievement fragment IDs, reordered>]
+
+suppress: [<data-ids of achievement bullets that overlap with selected case studies>]
+```
+
+### Suppression reference
+
+When a case study is selected, suppress these overlapping achievement bullets:
+
+| Case Study | Suppress |
+|---|---|
+| `kernel-upgrade` | (no direct overlap in current achievements) |
+| `nas-stability` | (no direct overlap in current achievements) |
+| `samba-perf` | `samba-throughput` |
+
+Update this table as new case studies and achievements are added to the fragment pool.
+
+### After writing the profile
+
+The profile is consumed by `node src/present/assemble.js <profile-name>` to generate the tailored presentation HTML. This is called by the **tailor-resume** orchestrator (Step 9), not by job-analysis directly.
