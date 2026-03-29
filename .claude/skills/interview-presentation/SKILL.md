@@ -24,6 +24,7 @@ The interview presentation (`interview-presentation.html`) is a professional, in
 11. **Q&A (open)**: Interactive discussion with contact information and growth potential metrics
 
 > For Storage & System Engineering experience-specific content (slide mapping, case study domains, metrics), read `references/storage-engineering.md`.
+> For visual design (unified color palette, typography, layout, SAR treatment — applies to both HTML and PPTX), read `references/visual-design.md`.
 
 ## SAR Framework for Case Studies
 Each major project follows the enhanced visual SAR structure presented in Situation -> Action -> Result order:
