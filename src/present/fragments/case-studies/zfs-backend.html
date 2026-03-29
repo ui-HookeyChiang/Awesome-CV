@@ -1,0 +1,290 @@
+<!-- fragment: zfs-backend
+     tags: [zfs, btrfs, filesystem, storage, go, encryption, snapshots]
+     domain: filesystem-engineering
+     metrics: [245 commits, 8 PRs, Feature Parity, 2400+ lines]
+     time: 2-3min
+     type: slide
+-->
+        <div class="slide">
+            <div class="slide-number">{{N}} / {{TOTAL}}</div>
+            <h1>Case Study {{CASE_NUM}}: ZFS Filesystem Backend</h1>
+
+            <div class="sar-format">
+                <!-- ===== SITUATION ===== -->
+                <div class="sar-item sar-situation">
+                    <h3 class="sar-header-situation">Situation</h3>
+                    <p style="margin: 10px 0; font-size: 1rem; line-height: 1.5; color: var(--text-secondary);">
+                        Ubiquiti NAS platform supported only <span style="color: var(--accent); font-weight: 700;">Btrfs</span> as the filesystem backend. Enterprise customers required <span style="color: var(--accent); font-weight: 700;">ZFS</span> for advanced data protection and storage management, demanding <span style="color: var(--accent); font-weight: 700;">complete feature parity</span> with the existing Btrfs backend without disrupting user-facing workflows.
+                    </p>
+                </div>
+
+                <!-- ===== ACTION ===== -->
+                <div class="sar-item sar-action">
+                    <h3 class="sar-header-action">Action</h3>
+
+                    <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-top: 20px;">
+
+                        <!-- Preparation Step -->
+                        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="zfs-backend-design" style="width: 180px; min-height: 80px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Architecture</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Design</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Down Arrow -->
+                        <div style="display: flex; justify-content: center; margin-bottom: 25px;">
+                            <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
+                        </div>
+
+                        <!-- Top Row: 3 boxes -->
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="zfs-backend-dataset-mgmt" style="width: 160px; min-height: 80px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Dataset</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Management</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">create, destroy, rename + rollback</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="zfs-backend-property-system" style="width: 160px; min-height: 80px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Property</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">System</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">batch ops, field mask, quotas</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="zfs-backend-snapshot-system" style="width: 160px; min-height: 80px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Snapshot</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">System</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">create, rollback, symlink migration</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Down Arrow -->
+                        <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+                            <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
+                        </div>
+
+                        <!-- Bottom Row: 3 boxes -->
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="zfs-backend-space-mgmt" style="width: 160px; min-height: 80px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Space</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Management</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">dfree integration, reclamation</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="zfs-backend-encryption" style="width: 160px; min-height: 80px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Encryption</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Support</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">native AES, key lifecycle</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="zfs-backend-path-encoding" style="width: 160px; min-height: 80px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Path</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Encoding</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">UTF-8 Base64 for ASCII-only ZFS</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Flow Description -->
+                        <div style="text-align: center; margin-top: 20px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
+                            Dual Filesystem Engineering: Design &#8594; Implementation &#8594; Integration
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== RESULT ===== -->
+                <div class="sar-item sar-result">
+                    <h3 class="sar-header-result">Result</h3>
+                    <div class="metrics-row" style="margin-top: 20px; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                            <span class="metric-number">245</span>
+                            <span class="metric-label">Commits Merged</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                            <span class="metric-number">8 PRs</span>
+                            <span class="metric-label">Code Reviews</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                            <span class="metric-number">Feature Parity</span>
+                            <span class="metric-label">Btrfs &#8596; ZFS</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                            <span class="metric-number">2400+</span>
+                            <span class="metric-label">Lines ZFS Code</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<script>
+Object.assign(window.cheatSheets = window.cheatSheets || {}, {
+    'zfs-backend-design': {
+        title: 'Architecture Design',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Common Manager interface:</strong>
+                        <p>BtrfsManager and ZfsManager implement shared API contract</p>
+                        <code class="cheat-sheet-command">type Manager interface {</code>
+                        <code class="cheat-sheet-command">    CreateDataset(ctx, req) (*Dataset, error)</code>
+                        <code class="cheat-sheet-command">    DestroyDataset(ctx, req) error</code>
+                        <code class="cheat-sheet-command">}</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Filesystem auto-detection via statfs:</strong>
+                        <p>Runtime detection selects BtrfsManager or ZfsManager at startup</p>
+                        <code class="cheat-sheet-command">syscall.Statfs(mountpoint, &stat)</code>
+                        <code class="cheat-sheet-command">// ZFS_SUPER_MAGIC = 0x2FC12FC1</code>
+                        <code class="cheat-sheet-command">// BTRFS_SUPER_MAGIC = 0x9123683E</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Go daemon with gnet event-driven server:</strong>
+                        <p>Unix socket IPC with Protocol Buffers serialization</p>
+                        <code class="cheat-sheet-command">gnet.Serve(handler, "unix:///var/run/ustgcore.sock",</code>
+                        <code class="cheat-sheet-command">    gnet.WithMulticore(true),</code>
+                        <code class="cheat-sheet-command">    gnet.WithCodec(protobuf.New()))</code>
+                    </div>`
+    },
+    'zfs-backend-dataset-mgmt': {
+        title: 'Dataset Management',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Dataset create with quota:</strong>
+                        <p>Provision new ZFS dataset with storage limits</p>
+                        <code class="cheat-sheet-command">zfs create -o quota=100G pool/dataset</code>
+                        <code class="cheat-sheet-command">zfs create -o mountpoint=/data/share pool/myshare</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Dataset destroy and rename:</strong>
+                        <p>Recursive destroy and atomic rename operations</p>
+                        <code class="cheat-sheet-command">zfs destroy -r pool/dataset</code>
+                        <code class="cheat-sheet-command">zfs rename pool/old pool/new</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Atomic rollback for multi-step operations:</strong>
+                        <p>LIFO mechanism: rename + create reverts automatically on failure</p>
+                        <code class="cheat-sheet-command">// Rollback stack: push(rename), push(create)</code>
+                        <code class="cheat-sheet-command">// On failure: pop(create).Undo(), pop(rename).Undo()</code>
+                    </div>`
+    },
+    'zfs-backend-property-system': {
+        title: 'Property System',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Batch property retrieval:</strong>
+                        <p>Efficient multi-property fetch with parseable output</p>
+                        <code class="cheat-sheet-command">zfs get -Hp -o value quota,refquota,logicalused pool/dataset</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Property modification with field mask:</strong>
+                        <p>Batch set operations filtered by requested fields</p>
+                        <code class="cheat-sheet-command">zfs set quota=200G refquota=150G pool/dataset</code>
+                        <code class="cheat-sheet-command">// FieldMask: ["quota", "refquota"] — only update specified</code>
+                    </div>`
+    },
+    'zfs-backend-snapshot-system': {
+        title: 'Snapshot System',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Snapshot create and rollback:</strong>
+                        <p>Point-in-time capture and dataset restoration</p>
+                        <code class="cheat-sheet-command">zfs snapshot pool/dataset@snap-20240101</code>
+                        <code class="cheat-sheet-command">zfs rollback pool/dataset@snap-20240101</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Symlink migration during renames:</strong>
+                        <p>Update .zfs/snapshot/ paths when parent dataset is renamed</p>
+                        <code class="cheat-sheet-command">// Before: /data/old/.zfs/snapshot/snap1</code>
+                        <code class="cheat-sheet-command">// After:  /data/new/.zfs/snapshot/snap1</code>
+                        <code class="cheat-sheet-command">// Symlinks in /snapshots/ updated atomically</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Snapshot lifecycle coverage:</strong>
+                        <p>Full lifecycle: create, list, rollback, destroy with dependency checks</p>
+                        <code class="cheat-sheet-command">zfs list -t snapshot -r pool/dataset</code>
+                        <code class="cheat-sheet-command">zfs destroy pool/dataset@snap-20240101</code>
+                    </div>`
+    },
+    'zfs-backend-space-mgmt': {
+        title: 'Space Management',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Samba dfree integration:</strong>
+                        <p>Quota enforcement via custom dfree command for accurate reporting</p>
+                        <code class="cheat-sheet-command">// smb.conf: dfree command = /usr/lib/ustgcore/dfree</code>
+                        <code class="cheat-sheet-command">zfs get -Hp -o value available,used pool/dataset</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Space reclamation after destroy:</strong>
+                        <p>Wait for asynchronous free to complete before reporting available space</p>
+                        <code class="cheat-sheet-command">zpool wait -t free pool</code>
+                        <code class="cheat-sheet-command">// logicalused tracking for accurate accounting</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>2-step deletion with deferred cleanup:</strong>
+                        <p>BeginDeletion marks dataset, CommitDeletion reclaims space</p>
+                        <code class="cheat-sheet-command">// Step 1: BeginDeletion → rename to .trash-{uuid}</code>
+                        <code class="cheat-sheet-command">// Step 2: CommitDeletion → zfs destroy -r</code>
+                    </div>`
+    },
+    'zfs-backend-encryption': {
+        title: 'Encryption Support',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Native ZFS encryption:</strong>
+                        <p>AES-128/192/256 with CCM or GCM modes, no separate layer</p>
+                        <code class="cheat-sheet-command">zfs create -o encryption=aes-256-gcm \\</code>
+                        <code class="cheat-sheet-command">    -o keylocation=prompt -o keyformat=passphrase \\</code>
+                        <code class="cheat-sheet-command">    pool/encrypted</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Key load/unload lifecycle:</strong>
+                        <p>Mount requires key load; unmount triggers key unload</p>
+                        <code class="cheat-sheet-command">zfs load-key pool/encrypted</code>
+                        <code class="cheat-sheet-command">zfs mount pool/encrypted</code>
+                        <code class="cheat-sheet-command">zfs unload-key pool/encrypted</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Contrast with Btrfs approach:</strong>
+                        <p>Btrfs uses ecryptfs transparent layer; ZFS encrypts at dataset level</p>
+                        <code class="cheat-sheet-command">// Btrfs: ecryptfs on top of subvolume (userspace)</code>
+                        <code class="cheat-sheet-command">// ZFS: native encryption in dataset (kernel)</code>
+                    </div>`
+    },
+    'zfs-backend-path-encoding': {
+        title: 'Path Encoding',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>ZFS ASCII-only naming restriction:</strong>
+                        <p>ZFS dataset names only allow ASCII; user paths may contain UTF-8</p>
+                        <code class="cheat-sheet-command">// User drive name: "我的資料" (UTF-8)</code>
+                        <code class="cheat-sheet-command">// ZFS dataset:    pool/5oiR55qE6LOH5paZ (Base64)</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Base64 URL-safe encoding:</strong>
+                        <p>Non-ASCII drive names mapped to ASCII dataset names via base64url</p>
+                        <code class="cheat-sheet-command">encoded := base64.URLEncoding.EncodeToString([]byte(name))</code>
+                        <code class="cheat-sheet-command">zfs create pool/$encoded</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Fixed snapshot failure after rename:</strong>
+                        <p>Drive rename changed encoded dataset name, breaking snapshot paths</p>
+                        <code class="cheat-sheet-command">// Rename "Data" → "資料": re-encode + zfs rename</code>
+                        <code class="cheat-sheet-command">// Snapshot symlinks updated to new encoded path</code>
+                    </div>`
+    }
+});
+</script>
