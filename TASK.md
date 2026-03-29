@@ -22,5 +22,8 @@
 - [x] Task 4: Extract highlight + case study fragments
   - Created: highlights/ubiquiti.html, highlights/qnap.html
   - Created: case-studies/kernel-upgrade.html (8 cheat sheets), nas-stability.html (8 cheat sheets), samba-perf.html (7 cheat sheets)
-- [ ] Task 5: Create assembler + general.yaml
+- [x] Task 5: Create assembler + general.yaml
+  - Created: profiles/general.yaml, assemble.js
+  - Added js-yaml dependency to package.json
+  - Assembles 11 slides, all template variables replaced
 - [ ] Task 6: Validation — diff assembled vs original

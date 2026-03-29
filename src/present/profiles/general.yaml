@@ -1,0 +1,17 @@
+name: General Purpose
+description: Default presentation for broad engineering roles
+derived_from: null
+
+cover:
+  tagline: "Delivering Solutions of Quality and Innovation"
+
+summary:
+  tagline: "OS Engineer — Linux Development, Performance & Storage Infrastructure"
+  strengths: [Performance, Reliability, Scalability]
+
+skills: [os, tools, languages, frameworks]
+highlights: [ubiquiti, qnap]
+case-studies: [kernel-upgrade, nas-stability, samba-perf]
+achievements: [innovation, performance]
+
+suppress: []
