@@ -81,7 +81,7 @@ If `journal/raw/git-sar/` directories exist, read the `index.md` to check for mi
 
 1. **Compare SAR categories against milestone sections** (see `_shared/categories.md` for category list) — if a category has 10+ commits but no corresponding milestone section, flag it as a potential new achievement
 2. **Enrich existing sections** — for milestone sections that match a SAR category, read the per-category file to add precise commit counts, date ranges, and cross-repo detail
-3. **Do NOT move SAR files** — they stay in `raw/` permanently as reference data for both this pipeline and `sar-extraction`
+3. **Do NOT move SAR files in this step** — they are also consumed by `sar-extraction`. Movement to `integrated/` happens in Step 5 after both pipelines confirm consumption
 
 ### Extract Achievements by Theme
 
