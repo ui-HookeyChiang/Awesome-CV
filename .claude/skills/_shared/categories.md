@@ -23,20 +23,22 @@ Used by `host-work-journal` (categorize git commits), `sar-extraction` (find rel
 
 | Category | Keywords (match against subject, body, file paths) |
 |---|---|
-| `kernel-upgrade` | kernel, btrfs checksum, alpine sdk, driver, phy |
+| `kernel-upgrade` | kernel, btrfs checksum, alpine sdk, driver, phy, pca9575 |
 | `nas-stability` | stability, stress, xfstest, fio stress, sqa |
-| `samba-perf` | samba, smb, irq, tcp tuning, throughput |
-| `zfs-backend` | zfs, dataset, zpool, snapshot, quota, ustgcore |
+| `samba-perf` | samba, smb, irq, tcp tuning, network tuning, throughput |
+| `zfs-backend` | zfs, dataset, zpool, snapshot, quota, refquota, ustgcore |
 | `btrfs-backend` | btrfs, subvolume, qgroup, ecryptfs |
 | `grpc-streamer` | grpc, protobuf, event stream, poller |
-| `metadata-perf` | metadata, cache, database, sqlite |
+| `metadata-perf` | metadata, cache, database, sqlite, dir listing |
 | `memory-opt` | memory, oom, socket buffer, 64kb page |
 | `cloud-gateway` | fuse, cloud, gateway, rclone, cache tier |
 | `build-system` | debfactory, debbox, deb package, backport |
 | `debian-trixie` | trixie, bullseye, porting, pyzfs |
 | `ai-skill` | skill, claude, prompt, ai, agent, mcp |
 
-Commits matching no category go into `other`.
+Commits matching no category go into `other`. When many commits land in `other`, review them for recurring themes and consider adding a new category.
+
+> **Single source of truth:** This table is authoritative. `collect-weekly-report.py` reads from here at runtime via `_load_categories()`. Do not hardcode categories in the Python script.
 
 ## SAR Target Repos
 

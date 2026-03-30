@@ -99,27 +99,71 @@ DEVICE_PREFIXES = [
     ("UDM", "UDM"),
 ]
 
-# SAR-focused git collection: target repos and category keywords
-SAR_REPOS = {
-    "unifi-drive-config", "debbox", "debfactory", "prompt-hub",
-    "debbox-kernel", "debbox-base-files", "ustd", "ustate-exporter",
-    "unifi-protobufs",
-}
+# SAR-focused git collection: loaded from _shared/categories.md (single source of truth)
+def _load_categories():
+    """Load SAR categories and target repos from _shared/categories.md.
 
-SAR_CATEGORIES = {
-    "kernel-upgrade": ["kernel", "btrfs checksum", "alpine sdk", "driver", "phy", "pca9575"],
-    "nas-stability": ["stability", "stress", "xfstest", "fio stress", "sqa"],
-    "samba-perf": ["samba", "smb", "irq", "tcp tuning", "network tuning", "throughput"],
-    "zfs-backend": ["zfs", "dataset", "zpool", "snapshot", "quota", "refquota", "ustgcore"],
-    "btrfs-backend": ["btrfs", "subvolume", "qgroup", "ecryptfs"],
-    "grpc-streamer": ["grpc", "protobuf", "event stream", "poller"],
-    "metadata-perf": ["metadata", "cache", "database", "sqlite", "dir listing"],
-    "memory-opt": ["memory", "oom", "socket buffer", "64kb page"],
-    "cloud-gateway": ["fuse", "cloud", "gateway", "rclone", "cache tier"],
-    "build-system": ["debfactory", "debbox", "deb package", "backport"],
-    "debian-trixie": ["trixie", "bullseye", "porting", "pyzfs"],
-    "ai-skill": ["skill", "claude", "prompt", "ai", "agent", "mcp"],
-}
+    Falls back to built-in defaults if the file is missing (e.g., running
+    the script outside the repo).
+    """
+    categories_file = Path(__file__).resolve().parent.parent.parent / "_shared" / "categories.md"
+    cats = {}
+    repos = set()
+
+    if categories_file.exists():
+        text = categories_file.read_text()
+        # Parse SAR Categories table: | `category` | keyword1, keyword2, ... |
+        in_sar = False
+        for line in text.splitlines():
+            if "## SAR Categories" in line:
+                in_sar = True
+                continue
+            if in_sar and line.startswith("## "):
+                in_sar = False
+                continue
+            if in_sar and line.startswith("| `"):
+                m = re.match(r"\|\s*`([^`]+)`\s*\|\s*(.+?)\s*\|", line)
+                if m:
+                    cat_name = m.group(1)
+                    keywords = [k.strip() for k in m.group(2).split(",")]
+                    cats[cat_name] = keywords
+
+        # Parse SAR Target Repos: comma-separated list in code block
+        in_repos = False
+        for line in text.splitlines():
+            if "## SAR Target Repos" in line:
+                in_repos = True
+                continue
+            if in_repos and line.startswith("## "):
+                break
+            if in_repos and line.strip() and not line.startswith("```") and not line.startswith("Used by"):
+                repos.update(r.strip() for r in line.split(",") if r.strip())
+
+    if not cats:
+        log.warning("Could not load _shared/categories.md — using built-in defaults")
+        cats = {
+            "kernel-upgrade": ["kernel", "btrfs checksum", "alpine sdk", "driver", "phy", "pca9575"],
+            "nas-stability": ["stability", "stress", "xfstest", "fio stress", "sqa"],
+            "samba-perf": ["samba", "smb", "irq", "tcp tuning", "network tuning", "throughput"],
+            "zfs-backend": ["zfs", "dataset", "zpool", "snapshot", "quota", "refquota", "ustgcore"],
+            "btrfs-backend": ["btrfs", "subvolume", "qgroup", "ecryptfs"],
+            "grpc-streamer": ["grpc", "protobuf", "event stream", "poller"],
+            "metadata-perf": ["metadata", "cache", "database", "sqlite", "dir listing"],
+            "memory-opt": ["memory", "oom", "socket buffer", "64kb page"],
+            "cloud-gateway": ["fuse", "cloud", "gateway", "rclone", "cache tier"],
+            "build-system": ["debfactory", "debbox", "deb package", "backport"],
+            "debian-trixie": ["trixie", "bullseye", "porting", "pyzfs"],
+            "ai-skill": ["skill", "claude", "prompt", "ai", "agent", "mcp"],
+        }
+    if not repos:
+        repos = {
+            "unifi-drive-config", "debbox", "debfactory", "prompt-hub",
+            "debbox-kernel", "debbox-base-files", "ustd", "ustate-exporter",
+            "unifi-protobufs",
+        }
+    return cats, repos
+
+SAR_CATEGORIES, SAR_REPOS = _load_categories()
 
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
