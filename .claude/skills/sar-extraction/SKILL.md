@@ -99,7 +99,17 @@ Write the HTML fragment to `src/present/fragments/case-studies/<id>.html`.
 
 **Use the template**: copy `src/present/fragments/case-studies/_template.html` and replace all `{{PLACEHOLDER}}` values with extracted content. The template has:
 
-- **Frontmatter** — fill in `{{ID}}`, `{{TAGS}}`, `{{DOMAIN}}`, `{{METRICS_LIST}}`
+- **Frontmatter** — fill in the full schema:
+  ```html
+  <!-- fragment:
+    id: <fragment-id>
+    type: case-study
+    tags: [tag1, tag2, ...]
+    domain: <broad domain>
+    metrics: [metric1, metric2, ...]
+    source: milestone/<company>.md#<section>
+  -->
+  ```
 - **Situation** — fill `{{SITUATION_TEXT}}` with highlighted spans. Delete the `<!-- OPTIONAL CHART -->` block if no chart needed.
 - **Action** — fill 7 flow boxes: `{{BOX_N_LINE1}}`, `{{BOX_N_LINE2}}`, `{{BOX_N_DETAIL}}` and their `{{CHEAT_N}}` IDs
 - **Result** — fill 2-4 metric boxes: `{{RESULT_N_NUMBER}}`, `{{RESULT_N_LABEL}}`. Delete unused boxes.
@@ -158,6 +168,24 @@ Check if any achievement bullets in `achievements/*.html` overlap with the new c
 3. Update the suppression table in `job-analysis/SKILL.md` Step 4
 
 ## Step 6: Report (mandatory)
+
+### Step 6.1: Milestone Feedback (optional)
+
+After extracting a new case study, optionally update the source milestone to cross-reference the generated fragment:
+
+1. **Add fragment reference** — in the milestone section that was the primary source for this case study, add a note:
+   ```
+   > **Presentation fragment**: `fragments/case-studies/<id>.html` — extracted as SAR case study
+   ```
+
+2. **Flag milestone gaps** — if during Step 1-2 you discovered achievements that were:
+   - Rich in commit data (git-sar) but sparse in milestone prose
+   - Missing quantified results that the commits clearly show
+   Then note these gaps in the report and suggest enriching the milestone section before the next integration cycle.
+
+3. **Update suppression reference** — add the new case study's overlapping achievement `data-id` values to the report's suppression list. The user (or job-analysis) will add these to profile YAML `suppress` lists as needed.
+
+This step is optional because not every extraction warrants milestone updates — skip it for small fragments or when the milestone is already comprehensive.
 
 Always produce this report after creating a fragment:
 
