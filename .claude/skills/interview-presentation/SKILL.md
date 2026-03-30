@@ -68,6 +68,32 @@ suppress: []  # achievement bullet data-ids to remove (case study overlap)
 
 **New case study**: Create `fragments/case-studies/<id>.html` with SAR slide HTML + inline `<script>` for cheat sheet data. Add frontmatter comment with tags for future auto-selection.
 
+#### Fragment Frontmatter Format
+
+Every fragment file should begin with an HTML comment block containing structured metadata. This enables programmatic discovery via `node assemble.js --list-fragments`.
+
+```html
+<!-- fragment:
+  id: kernel-upgrade
+  type: case-study
+  tags: [kernel, driver, btrfs, validation]
+  domain: System Infrastructure
+  metrics: [32x checksum, 0 regression, +40% SSD IOPS]
+  source: milestone/ubiquiti.md#2026-q1
+-->
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Unique fragment identifier (matches filename without extension) |
+| `type` | enum | One of: `case-study`, `skill`, `achievement`, `highlight` |
+| `tags` | array | Searchable keywords for JD-driven auto-selection |
+| `domain` | string | Technical domain category (e.g., "System Infrastructure", "Storage Performance") |
+| `metrics` | array | Key quantified outcomes for quick relevance matching |
+| `source` | string | Milestone path where the content originated (e.g., `milestone/ubiquiti.md#section`) |
+
+The assembler's `readFragment()` strips the frontmatter comment before assembly, so it has zero impact on the rendered presentation. Use `node assemble.js --list-fragments` to output a JSON array of all fragment metadata for tooling integration.
+
 **New skill card**: Create `fragments/skills/<id>.html` as a `<div class="point-card">` (no slide wrapper).
 
 **New achievement card**: Create `fragments/achievements/<id>.html` with `data-id` on each `<li>` for suppression support.

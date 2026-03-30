@@ -5,12 +5,79 @@ const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
 
+const BASE_DIR = __dirname;
+const FRAGMENTS_DIR = path.join(BASE_DIR, 'fragments');
+
+// ---------------------------------------------------------------------------
+// Frontmatter parsing
+// ---------------------------------------------------------------------------
+
+/**
+ * Parse the <!-- fragment: ... --> frontmatter comment from fragment content.
+ * Returns an object with { id, type, tags, domain, metrics, source } or null.
+ */
+function parseFrontmatter(content) {
+    const match = content.match(/^<!--\s*fragment:\s*\n([\s\S]*?)-->/);
+    if (!match) return null;
+
+    const block = match[1];
+    const meta = {};
+
+    for (const line of block.split('\n')) {
+        const kv = line.match(/^\s*(\w+)\s*:\s*(.+)$/);
+        if (!kv) continue;
+        const key = kv[1];
+        let val = kv[2].trim();
+
+        // Parse arrays: [item1, item2, ...]
+        if (val.startsWith('[') && val.endsWith(']')) {
+            val = val.slice(1, -1).split(',').map(s => s.trim()).filter(Boolean);
+        }
+
+        meta[key] = val;
+    }
+
+    // Require at least an id to be considered valid frontmatter
+    return meta.id ? meta : null;
+}
+
+// ---------------------------------------------------------------------------
+// --list-fragments mode
+// ---------------------------------------------------------------------------
+
+if (process.argv.includes('--list-fragments')) {
+    const results = [];
+
+    // Scan all .html files recursively
+    function scanDir(dir) {
+        const entries = fs.readdirSync(dir, { withFileTypes: true });
+        for (const entry of entries) {
+            const fullPath = path.join(dir, entry.name);
+            if (entry.isDirectory()) {
+                scanDir(fullPath);
+            } else if (entry.name.endsWith('.html') && !entry.name.startsWith('_')) {
+                const content = fs.readFileSync(fullPath, 'utf8');
+                const meta = parseFrontmatter(content);
+                if (meta) {
+                    meta.file = path.relative(FRAGMENTS_DIR, fullPath);
+                    results.push(meta);
+                }
+            }
+        }
+    }
+
+    scanDir(FRAGMENTS_DIR);
+    console.log(JSON.stringify(results, null, 2));
+    process.exit(0);
+}
+
 // ---------------------------------------------------------------------------
 // CLI
 // ---------------------------------------------------------------------------
 const args = process.argv.slice(2);
 if (args.length === 0) {
     console.error('Usage: node assemble.js <profile> [--output <path>]');
+    console.error('       node assemble.js --list-fragments');
     process.exit(1);
 }
 
@@ -20,9 +87,6 @@ const outIdx = args.indexOf('--output');
 if (outIdx !== -1 && args[outIdx + 1]) {
     outputPath = args[outIdx + 1];
 }
-
-const BASE_DIR = __dirname;
-const FRAGMENTS_DIR = path.join(BASE_DIR, 'fragments');
 
 // ---------------------------------------------------------------------------
 // Helpers
