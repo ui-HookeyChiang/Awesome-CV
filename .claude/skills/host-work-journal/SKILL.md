@@ -188,44 +188,47 @@ Commits matching no category go into `other`.
 
 ### Output Format
 
-Save to `journal/raw/git-sar-<start>-to-<end>.md`:
+Write per-category files under `journal/raw/git-sar/<start>-to-<end>/`:
 
+```
+journal/raw/git-sar/2025-11-to-2026-01/
+  index.md              # summary table across all categories
+  zfs-backend.md        # only ZFS commits
+  kernel-upgrade.md     # only kernel commits
+  samba-perf.md
+  build-system.md
+  other.md              # uncategorized commits
+```
+
+**index.md** — summary table:
 ```markdown
-# Git Activity for SAR Extraction: <start> to <end>
+# Git SAR Index: <start> to <end>
 
-## Summary
-| Category | Commits | Repos | Lines Changed |
+| Category | Commits | Repos | File |
 |---|---|---|---|
-| zfs-backend | 45 | udc, debfactory, protobufs | +2400/-800 |
-| kernel-upgrade | 12 | debbox, debbox-kernel | +850/-200 |
-| ... | | | |
-| other | 8 | various | +120/-45 |
+| zfs-backend | 45 | udc, debfactory, protobufs | zfs-backend.md |
+| kernel-upgrade | 12 | debbox, debbox-kernel | kernel-upgrade.md |
+| other | 8 | various | other.md |
+```
 
-## zfs-backend (45 commits)
+**Per-category file** (e.g., `zfs-backend.md`):
+```markdown
+# zfs-backend (45 commits, 2025-11 to 2026-01)
 
-### unifi-drive-config (38 commits)
+## unifi-drive-config (38 commits)
 - `a1b2c3d` 2025-12-15 feat(zfs): implement dataset rename with rollback
   Body: Added LIFO rollback mechanism for multi-step rename operations.
-  Automatic reversion on failure for create+rename sequences.
   Files: internal/drive/zfs.go (+145/-23), pkg/zfs/dataset.go (+67/-12)
 
 - `d4e5f6a` 2025-12-18 feat(zfs): snapshot create and rollback
   Files: internal/drive/zfs.go (+89/-5), pkg/zfs/snapshot.go (+112/-0)
 
-### debfactory (5 commits)
+## debfactory (5 commits)
 - `b7c8d9e` 2025-12-20 fix: zfs trixie packaging
   ...
-
-### unifi-protobufs (2 commits)
-- `e0f1a2b` 2025-12-10 feat: add ZFS property types
-  ...
-
-## kernel-upgrade (12 commits)
-...
-
-## other (8 commits)
-...
 ```
+
+This keeps each file small and focused. `sar-extraction` reads only the category it needs. Files stay in `raw/` permanently as reference data.
 
 ### How sar-extraction Uses This
 
