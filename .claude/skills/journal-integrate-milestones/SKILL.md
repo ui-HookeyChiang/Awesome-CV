@@ -147,9 +147,14 @@ Promote achievements that have: quantified metrics (throughput, latency, percent
 ## Step 5: Finalize
 
 1. Move integrated weekly reports from `refined/` to `integrated/`
-2. Update `journal/README.md` if new file types were processed
-3. Verify:
-   - `raw/` contains unprocessed work-reports
+2. **git-sar/ consumption check** — if `raw/git-sar/` directories exist:
+   - Verify milestone integration consumed the data (Step 3 completed for this date range)
+   - Check if `sar-extraction` also needs these files — if so, **do NOT move yet**. Leave in `raw/` until both pipelines confirm consumption. Add a note: `<!-- awaiting sar-extraction -->`
+   - Only move `git-sar/<date>/` to `integrated/` after **both** milestone integration AND sar-extraction are complete
+3. **Review `other.md`** — if `raw/git-sar/<date>/other.md` has significant entries (>5 commits), review them for recurring themes. If a pattern emerges (e.g., many "CI" or "release" commits), suggest adding a new category to `_shared/categories.md`
+4. Update `journal/README.md` if new file types were processed
+5. Verify:
+   - `raw/` contains only unprocessed work-reports and git-sar awaiting sar-extraction
    - `refined/` is empty (all refined reports integrated)
    - `integrated/` contains processed weekly reports
    - Milestone file has new quarter sections
