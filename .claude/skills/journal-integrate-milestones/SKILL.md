@@ -34,12 +34,16 @@ Read all files in `journal/` (or `journal/raw/` if already structured). Classify
 
 | File Pattern | Type | Pipeline Stage |
 |--------------|------|---------------|
-| `weekly-report_*.md` | Weekly logs | Refine then integrate |
-| `work-report_*.md` | Auto-generated host reports | Keep in raw (reference data) |
-| `annual_summary.md` | Raw annual data | Keep in raw (reference data) |
-| `*-performance.csv` | fio benchmark data | Keep in raw, refine into `refined/performance-summary.md` |
-| `git-sar/<date>/index.md` | SAR git commit index | Keep in raw (reference data for both pipelines) |
-| `git-sar/<date>/<category>.md` | SAR categorized commits | Keep in raw — use in Step 3 for gap detection + enrichment |
+| `weekly-report_*.md` | Weekly logs | Refine → integrate → move to `integrated/` |
+| `work-report_*.md` | Auto-generated host reports | Use in Phase 2 (compose journal) → move to `integrated/` when milestones updated |
+| `annual_summary.md` | Annual summary | Integrate into milestones → move to `integrated/` |
+| `*-performance.csv` | fio benchmark data | Refine into `refined/performance-summary.md` → move to `integrated/` |
+| `git-sar/<date>/index.md` | SAR git commit index | Use in Step 3 (gap detection) + `sar-extraction` → move to `integrated/` when both done |
+| `git-sar/<date>/<category>.md` | SAR categorized commits | Use in Step 3 (enrichment) + `sar-extraction` → move to `integrated/` when both done |
+
+**Pipeline principle**: everything moves through the pipeline. `raw/` is an inbox, not an archive. Once a file has been consumed by all its downstream pipelines (milestones updated, SAR fragments extracted), move it to `integrated/`.
+
+**For `git-sar/` files**: these are consumed by two pipelines (milestone integration AND sar-extraction). Move to `integrated/` only after **both** are done. Check with the user before moving if unsure.
 
 Create the directory structure if it doesn't exist:
 
