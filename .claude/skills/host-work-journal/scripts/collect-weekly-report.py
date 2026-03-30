@@ -99,6 +99,29 @@ DEVICE_PREFIXES = [
     ("UDM", "UDM"),
 ]
 
+# SAR-focused git collection: target repos and category keywords
+SAR_REPOS = {
+    "unifi-drive-config", "debbox", "debfactory", "prompt-hub",
+    "debbox-kernel", "debbox-base-files", "ustd", "ustate-exporter",
+    "unifi-protobufs",
+}
+
+SAR_CATEGORIES = {
+    "kernel-upgrade": ["kernel", "btrfs checksum", "alpine sdk", "driver", "phy", "pca9575"],
+    "nas-stability": ["stability", "stress", "xfstest", "fio stress", "sqa"],
+    "samba-perf": ["samba", "smb", "irq", "tcp tuning", "network tuning", "throughput"],
+    "zfs-backend": ["zfs", "dataset", "zpool", "snapshot", "quota", "refquota", "ustgcore"],
+    "btrfs-backend": ["btrfs", "subvolume", "qgroup", "ecryptfs"],
+    "grpc-streamer": ["grpc", "protobuf", "event stream", "poller"],
+    "metadata-perf": ["metadata", "cache", "database", "sqlite", "dir listing"],
+    "memory-opt": ["memory", "oom", "socket buffer", "64kb page"],
+    "cloud-gateway": ["fuse", "cloud", "gateway", "rclone", "cache tier"],
+    "build-system": ["debfactory", "debbox", "deb package", "backport"],
+    "debian-trixie": ["trixie", "bullseye", "porting", "pyzfs"],
+    "ai-skill": ["skill", "claude", "prompt", "ai", "agent", "mcp"],
+}
+
+
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
 
@@ -212,15 +235,29 @@ def find_git_repos():
         if git_dir.exists():
             repos.add(str(entry))
 
-    # Depth 2: ~/parent/repo/.git (e.g. debfactory/source/ustd)
-    # Only scan known parent dirs that contain sub-repos
+    # Depth 2: ~/parent/repo/.git
+    # Scan known parent dirs that contain sub-repos
+    DEPTH2_PARENTS = {"projects", "source", "repos"}
+    DEPTH2_SUBDIRS = {"source", "packages", "plugins", "repos", "projects"}
+
     for entry in Path(home).iterdir():
         if not entry.is_dir() or entry.name.startswith("."):
             continue
         if entry.name in GIT_SCAN_EXCLUDES:
             continue
-        # Check select subdirs (source/, packages/, etc.)
-        for subdir_name in ("source", "packages", "plugins", "repos"):
+
+        # If this is a known parent dir (e.g. ~/projects/), scan direct children
+        if entry.name in DEPTH2_PARENTS:
+            try:
+                for sub_entry in entry.iterdir():
+                    if sub_entry.is_dir() and (sub_entry / ".git").exists():
+                        repos.add(str(sub_entry))
+            except OSError:
+                pass
+            continue
+
+        # Otherwise check select subdirs (e.g. ~/debfactory/source/ustd)
+        for subdir_name in DEPTH2_SUBDIRS:
             subdir = entry / subdir_name
             if not subdir.is_dir():
                 continue
@@ -517,6 +554,148 @@ def collect_git(start_date, end_date, authors, no_fetch=False):
     log.info("Found %d commits across %d repos",
              result["total_commits"], len(result["by_repo"]))
     return result
+
+
+def _categorize_commit(subject, body, files):
+    """Match a commit to SAR categories by keyword search in subject+body+files."""
+    text = (subject + " " + body + " " + files).lower()
+    categories = []
+    for cat, keywords in SAR_CATEGORIES.items():
+        for kw in keywords:
+            if kw.lower() in text:
+                categories.append(cat)
+                break
+    return categories if categories else ["other"]
+
+
+def collect_git_sar(start_date, end_date, authors):
+    """Collect detailed, categorized git commits from SAR target repos.
+
+    Returns dict with commits grouped by category, each with subject, body
+    (first 3 lines), and file stats. This supplements the regular collect_git()
+    data for SAR case study extraction.
+    """
+    log.info("Collecting SAR git data from %d target repos...", len(SAR_REPOS))
+
+    repos = find_git_repos()
+    # Filter to SAR target repos only
+    sar_repo_paths = []
+    for repo_path in repos:
+        repo_basename = Path(repo_path).name
+        if repo_basename in SAR_REPOS:
+            sar_repo_paths.append(repo_path)
+
+    log.info("Found %d SAR repos to scan: %s",
+             len(sar_repo_paths),
+             [Path(p).name for p in sar_repo_paths])
+
+    # Collect detailed commits from each SAR repo
+    all_commits = []  # list of (repo_name, commit_dict)
+
+    for repo_path in sar_repo_paths:
+        repo_name = Path(repo_path).name
+
+        for author in authors:
+            # Get subject + body + stat in one call using a delimiter
+            # Format: SHA|date|subject then body lines then --stat output
+            # We use a unique separator to split commits
+            log_output = run_cmd(
+                ["git", "-C", repo_path, "log", "--all",
+                 "--author=" + author,
+                 "--after=" + start_date,
+                 "--before=" + end_date + "T23:59:59",
+                 "--format=__COMMIT__%H|%ad|%s%n%b__END_BODY__",
+                 "--date=short", "--stat"],
+                timeout=30,
+            )
+            if not log_output:
+                continue
+
+            # Parse the output: split by __COMMIT__ delimiter
+            raw_commits = log_output.split("__COMMIT__")
+            for raw in raw_commits:
+                raw = raw.strip()
+                if not raw:
+                    continue
+
+                # Split header from body+stat
+                lines = raw.split("\n", 1)
+                if not lines:
+                    continue
+
+                header = lines[0].strip()
+                parts = header.split("|", 2)
+                if len(parts) < 3:
+                    continue
+
+                sha, date, subject = parts[0][:8], parts[1], parts[2]
+
+                # Extract body (between subject line and __END_BODY__)
+                body = ""
+                files_text = ""
+                if len(lines) > 1:
+                    rest = lines[1]
+                    if "__END_BODY__" in rest:
+                        body_part, stat_part = rest.split("__END_BODY__", 1)
+                        # Body: first 3 non-empty lines
+                        body_lines = [l.strip() for l in body_part.strip().splitlines()
+                                      if l.strip()][:3]
+                        body = "\n".join(body_lines)
+                        # File stats from --stat output
+                        stat_lines = [l.strip() for l in stat_part.strip().splitlines()
+                                      if l.strip() and "|" in l]
+                        files_text = "\n".join(stat_lines)
+
+                categories = _categorize_commit(subject, body, files_text)
+
+                commit_data = {
+                    "sha": sha,
+                    "date": date,
+                    "subject": subject,
+                    "body": body,
+                    "files": files_text,
+                    "repo": repo_name,
+                    "categories": categories,
+                }
+                all_commits.append(commit_data)
+
+    # Deduplicate by SHA (same commit may appear from multiple authors)
+    seen_shas = set()
+    unique_commits = []
+    for c in all_commits:
+        if c["sha"] not in seen_shas:
+            seen_shas.add(c["sha"])
+            unique_commits.append(c)
+
+    # Group by category
+    by_category = {}
+    for c in unique_commits:
+        for cat in c["categories"]:
+            by_category.setdefault(cat, []).append(c)
+
+    # Sort each category by date descending
+    for cat in by_category:
+        by_category[cat].sort(key=lambda c: c["date"], reverse=True)
+
+    # Build summary
+    summary = {}
+    for cat, commits in by_category.items():
+        repos_in_cat = sorted(set(c["repo"] for c in commits))
+        summary[cat] = {
+            "commits": len(commits),
+            "repos": repos_in_cat,
+        }
+
+    log.info("SAR collection: %d unique commits across %d categories",
+             len(unique_commits), len(by_category))
+
+    return {
+        "total_commits": len(unique_commits),
+        "summary": summary,
+        "by_category": {cat: commits for cat, commits in
+                        sorted(by_category.items(),
+                               key=lambda x: -len(x[1]))},
+    }
 
 
 def collect_test_artifacts(start_date, end_date):
@@ -989,6 +1168,7 @@ def main():
     data["infrastructure"] = collect_infrastructure()
     data["shell"] = collect_shell_history(start_date, end_date)
     data["git"] = collect_git(start_date, end_date, authors, no_fetch=args.no_fetch)
+    data["git_sar"] = collect_git_sar(start_date, end_date, authors)
     data["test_artifacts"] = collect_test_artifacts(start_date, end_date)
     data["claude_sessions"] = collect_claude_sessions(
         start_date, end_date, detailed=args.detailed
