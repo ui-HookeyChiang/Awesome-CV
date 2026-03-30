@@ -151,9 +151,37 @@ Suggested review order if time is limited:
 
 Write `resumes/<company-name>/presentation-profile.yaml` — a profile for the fragment-based presentation assembler.
 
+### Fragment Frontmatter Schema
+
+Each fragment in `src/present/fragments/` includes YAML frontmatter with these fields:
+
+```yaml
+id: string          # fragment filename without extension
+type: case-study | skill | achievement | highlight
+tags: string[]      # keyword matches for JD terms
+domain: string      # broad technical domain
+metrics: string[]   # quantified results for emphasis
+source: string      # milestone path for provenance
+```
+
+### How to discover fragments
+
+Run the assembler's list command to get JSON metadata for all fragments with parsed frontmatter:
+
+```bash
+node src/present/assemble.js --list-fragments
+```
+
+### How to match JD requirements to fragments
+
+1. **Extract key technical terms** from the JD (e.g., "Linux kernel", "performance tuning", "ZFS")
+2. **Compare against fragment `tags`** arrays in the listing output
+3. **Select fragments where >= 2 tags match** JD terms
+4. **Prioritize fragments with `metrics`** that align with JD emphasis areas (e.g., if the JD stresses performance, prefer fragments with throughput/latency metrics)
+
 ### How to select content
 
-1. **Read all fragment frontmatter** — run `grep -r "^<!-- fragment:" src/present/fragments/` to discover available fragment IDs, tags, domains, and metrics
+1. **Read all fragment frontmatter** — run `node src/present/assemble.js --list-fragments` to discover available fragment IDs, tags, domains, and metrics
 2. **Use your judgment** from Steps 1-3 to select content that best demonstrates JD-required skills:
    - **Case studies** (pick 3): which SAR stories most directly address the JD's core requirements? Order by relevance (strongest match first)
    - **Skills** (pick 4): reorder skill cards so the most JD-relevant appears first
