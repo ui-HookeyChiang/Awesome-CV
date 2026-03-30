@@ -1,0 +1,266 @@
+<!-- fragment:
+  id: system-perf
+  type: case-study
+  tags: [performance, memory, cgroup, oom, linux, kernel, resource-management]
+  domain: System Performance
+  metrics: [-93% memory waste, -65% CPU, 0 OOM crashes]
+  source: milestone/ubiquiti.md#system-stability-memory-optimization
+-->
+        <div class="slide">
+            <div class="slide-number">{{N}} / {{TOTAL}}</div>
+            <h1>Case Study {{CASE_NUM}}: System Performance</h1>
+
+            <div class="sar-format">
+                <!-- ===== SITUATION ===== -->
+                <div class="sar-item sar-situation">
+                    <h3 class="sar-header-situation">Situation</h3>
+                    <p style="margin: 10px 0; font-size: 1rem; line-height: 1.5; color: var(--text-secondary);">
+                        Multi-service NAS platforms experienced recurring
+                        <span style="color: var(--accent); font-weight: 700;">OOM crashes</span> and
+                        <span style="color: var(--accent); font-weight: 700;">throughput collapses</span> under production workloads &mdash; from
+                        <span style="color: var(--accent); font-weight: 700;">socket buffer waste</span> on 64KB-page systems to
+                        <span style="color: var(--accent); font-weight: 700;">unconstrained resource consumption</span> by storage services.
+                    </p>
+                </div>
+
+                <!-- ===== ACTION ===== -->
+                <div class="sar-item sar-action">
+                    <h3 class="sar-header-action">Action</h3>
+
+                    <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-top: 20px;">
+
+                        <!-- Preparation Step (1 box, 180px wide) -->
+                        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="system-perf-oom-root-cause" style="width: 180px; min-height: 80px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">OOM Root Cause</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">SK_MEM_QUANTUM Analysis</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Down Arrow -->
+                        <div style="display: flex; justify-content: center; margin-bottom: 25px;">
+                            <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
+                        </div>
+
+                        <!-- Top Row: 3 boxes (160px wide each) -->
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="system-perf-socket-fix" style="width: 160px; min-height: 80px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Socket Memory Fix</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Page Shift Correction</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">net: set SK_MEM_QUANTUM to 4096</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="system-perf-cgroup-framework" style="width: 160px; min-height: 80px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">cgroup Framework</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Resource Isolation</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">systemd slice-based CPU+memory caps</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="system-perf-drive-limits" style="width: 160px; min-height: 80px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Drive App Limits</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">75% CPU+Memory Cap</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Reserve resources for system services</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Down Arrow -->
+                        <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+                            <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
+                        </div>
+
+                        <!-- Bottom Row: 3 boxes (160px wide each) -->
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="system-perf-subvol-throttle" style="width: 160px; min-height: 80px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Subvolume Throttle</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Deletion Queue Control</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Prevent OOM during mass rm</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="system-perf-platform-tuning" style="width: 160px; min-height: 80px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Platform Tuning</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">vm.min_free_kbytes</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Per-platform OOM-killer delay (64-128 MB)</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="system-perf-validation" style="width: 160px; min-height: 80px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Validation</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">packetdrill + blktests</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Cross-platform stability verification</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Flow Description -->
+                        <div style="text-align: center; margin-top: 20px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
+                            Resource Management: Root-Cause Analysis &#8594; Kernel Fix &#8594; Application Isolation &#8594; Platform Validation
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== RESULT ===== -->
+                <div class="sar-item sar-result">
+                    <h3 class="sar-header-result">Result</h3>
+                    <div class="metrics-row" style="margin-top: 20px; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                            <span class="metric-number">-93%</span>
+                            <span class="metric-label">Socket Memory Waste</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                            <span class="metric-number">-65%</span>
+                            <span class="metric-label">CPU Usage (ustd)</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                            <span class="metric-number">0</span>
+                            <span class="metric-label">OOM Crashes</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<script>
+Object.assign(window.cheatSheets = window.cheatSheets || {}, {
+    'system-perf-oom-root-cause': {
+        title: 'OOM Root Cause: SK_MEM_QUANTUM Analysis',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>SK_MEM_QUANTUM page shift mismatch:</strong>
+                        <p>On 64KB page-sized systems (UNAS, EFG), SK_MEM_QUANTUM defaults to PAGE_SIZE, causing 16x memory consumption increase vs 4K-page systems. Each socket forward-allocation reserved 64KB instead of 4KB.</p>
+                        <code class="cheat-sheet-command"># Check page size on target platform</code>
+                        <code class="cheat-sheet-command">getconf PAGESIZE   # Returns 65536 on ARM64 UNAS</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Profiling socket buffer waste:</strong>
+                        <p>Used packetdrill to reproduce the memory bloat under controlled conditions on 64K-page kernels.</p>
+                        <code class="cheat-sheet-command"># Monitor per-socket memory allocation</code>
+                        <code class="cheat-sheet-command">cat /proc/net/sockstat   # Check sk_forward_alloc accumulation</code>
+                        <code class="cheat-sheet-command">cat /proc/buddyinfo      # Check memory fragmentation under load</code>
+                    </div>`
+    },
+    'system-perf-socket-fix': {
+        title: 'Socket Memory Fix: Page Shift Correction',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Kernel patch: net: set SK_MEM_QUANTUM to 4096:</strong>
+                        <p>Hardcoded SK_MEM_QUANTUM to 4096 regardless of PAGE_SIZE, eliminating the 16x overhead on 64KB-page ARM64 platforms. Reduced 93% of socket buffer memory waste.</p>
+                        <code class="cheat-sheet-command"># Before: SK_MEM_QUANTUM = PAGE_SIZE (65536 on ARM64)</code>
+                        <code class="cheat-sheet-command"># After:  SK_MEM_QUANTUM = 4096 (fixed)</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Minimized sk_forward_alloc:</strong>
+                        <p>Ensured idle sockets release all forward-allocated memory back to the system, keeping allocation at zero when not actively transferring data.</p>
+                        <code class="cheat-sheet-command"># Verify fix: idle sockets should show 0 forward alloc</code>
+                        <code class="cheat-sheet-command">ss -m | grep sk_forward_alloc</code>
+                        <code class="cheat-sheet-command"># Before: ~64KB per idle socket; After: 0 bytes</code>
+                    </div>`
+    },
+    'system-perf-cgroup-framework': {
+        title: 'cgroup Framework: Resource Isolation',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>systemd slice-based resource management:</strong>
+                        <p>Integrated cgroup v2 resource controls via systemd slices, enabling foreground/background I/O scheduling with CPU and memory caps per service group.</p>
+                        <code class="cheat-sheet-command"># Create resource-limited slice for storage apps</code>
+                        <code class="cheat-sheet-command">systemctl set-property app.slice CPUQuota=540% MemoryHigh=75%</code>
+                        <code class="cheat-sheet-command">systemctl set-property idle.slice CPUWeight=idle</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Foreground/background I/O scheduling:</strong>
+                        <p>Used systemd-compatible cgroup rules to prioritize interactive workloads over background tasks like Drive sync. Validated with blktests.</p>
+                        <code class="cheat-sheet-command"># Configure I/O weight for background tasks</code>
+                        <code class="cheat-sheet-command">systemctl set-property drive.service IOWeight=50</code>
+                        <code class="cheat-sheet-command">systemctl set-property smbd.service IOWeight=500</code>
+                    </div>`
+    },
+    'system-perf-drive-limits': {
+        title: 'Drive App Limits: Resource Reservation',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>75% CPU+Memory cap for Drive app:</strong>
+                        <p>Designed resource control framework capping Drive at 75% of CPU and memory, reserving 25% for mission-critical system services (Samba, NFS, SSH).</p>
+                        <code class="cheat-sheet-command"># Platform-specific CPU quota scaling</code>
+                        <code class="cheat-sheet-command"># ENAS: app.slice CPUQuota=540% (8 CPUs)</code>
+                        <code class="cheat-sheet-command"># UNAS2/UNAS4: scaled 360% → 270%</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>MemoryHigh soft limit with OOM protection:</strong>
+                        <p>Set MemoryHigh as a soft limit to throttle rather than kill, while MemoryMax provides a hard backstop preventing OOM-killer from targeting system services.</p>
+                        <code class="cheat-sheet-command"># Configure memory limits for app slice</code>
+                        <code class="cheat-sheet-command">systemctl set-property app.slice MemoryHigh=75% MemoryMax=85%</code>
+                        <code class="cheat-sheet-command"># Verify cgroup memory pressure</code>
+                        <code class="cheat-sheet-command">cat /sys/fs/cgroup/app.slice/memory.pressure</code>
+                    </div>`
+    },
+    'system-perf-subvol-throttle': {
+        title: 'Subvolume Throttle: Deletion Queue Control',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Btrfs subvolume rm throttling:</strong>
+                        <p>Implemented throttling for subvolume deletions to reduce memory queue usage. Mass snapshot deletions and Drive attribute modifications caused unconstrained memory allocation leading to OOM.</p>
+                        <code class="cheat-sheet-command"># Throttled deletion: commit after each subvolume</code>
+                        <code class="cheat-sheet-command">btrfs subvolume delete --commit-after /mnt/data/snap-*</code>
+                        <code class="cheat-sheet-command"># Rate-limit deletions to prevent memory exhaustion</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Samba OOM workaround for async I/O queue:</strong>
+                        <p>Diagnosed Samba excessive memory consumption in async I/O queue causing swap thrashing. Applied memory limits to btrfs subvolume deletion in debfactory config.</p>
+                        <code class="cheat-sheet-command"># Limit memory for btrfs operations</code>
+                        <code class="cheat-sheet-command">systemd-run --scope -p MemoryMax=512M btrfs subvolume delete /mnt/data/snap-old</code>
+                        <code class="cheat-sheet-command"># Monitor deletion queue memory usage</code>
+                        <code class="cheat-sheet-command">cat /proc/meminfo | grep -E "(MemFree|SwapUsed|Dirty)"</code>
+                    </div>`
+    },
+    'system-perf-platform-tuning': {
+        title: 'Platform Tuning: vm.min_free_kbytes',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Per-platform vm.min_free_kbytes alignment:</strong>
+                        <p>Tuned vm.min_free_kbytes to delay OOM-killer activation. Pro8: 128 MB, others: 64 MB. Resolved 500-750 MB/s to 20 MB/s throughput drops caused by page cache exhaustion.</p>
+                        <code class="cheat-sheet-command"># Pro8 (high-memory platform)</code>
+                        <code class="cheat-sheet-command">sysctl vm.min_free_kbytes=131072    # 128 MB</code>
+                        <code class="cheat-sheet-command"># Standard platforms (UNAS, EFG)</code>
+                        <code class="cheat-sheet-command">sysctl vm.min_free_kbytes=65536     # 64 MB</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Page cache and CPU affinity tuning:</strong>
+                        <p>Platform-level tuning in debbox-base-files: CPU affinity for app.slice, ethernet interrupt coalescing, and dirty page writeback thresholds.</p>
+                        <code class="cheat-sheet-command"># Dirty page writeback tuning</code>
+                        <code class="cheat-sheet-command">sysctl vm.dirty_ratio=20 vm.dirty_background_ratio=5</code>
+                        <code class="cheat-sheet-command"># Ethernet interrupt coalescing</code>
+                        <code class="cheat-sheet-command">ethtool -C eth0 rx-usecs 50 adaptive-rx on</code>
+                    </div>`
+    },
+    'system-perf-validation': {
+        title: 'Validation: Cross-Platform Stability',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>packetdrill socket memory verification:</strong>
+                        <p>Used packetdrill to validate SK_MEM_QUANTUM fix on both 4K and 64K page-sized kernels, confirming zero forward-allocation on idle sockets.</p>
+                        <code class="cheat-sheet-command"># Run packetdrill test for socket memory behavior</code>
+                        <code class="cheat-sheet-command">packetdrill sk_mem_quantum_test.pkt</code>
+                        <code class="cheat-sheet-command"># Verify on 64K-page kernel: no memory waste</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>blktests I/O scheduling validation:</strong>
+                        <p>Validated cgroup-based foreground/background I/O scheduling across all UniFi NAS platforms (ENAS, UNAS2, UNAS4, Pro8).</p>
+                        <code class="cheat-sheet-command"># Run blktests suite for I/O scheduling</code>
+                        <code class="cheat-sheet-command">./check block/group_00*   # cgroup I/O weight tests</code>
+                        <code class="cheat-sheet-command"># Stress test: concurrent Drive sync + Samba throughput</code>
+                        <code class="cheat-sheet-command">fio --name=stress --numjobs=8 --rw=randrw --runtime=300</code>
+                    </div>`
+    }
+});
+</script>
