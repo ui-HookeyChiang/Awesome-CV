@@ -29,7 +29,7 @@ For universal presentation guidelines, see the parent `SKILL.md`.
 
 - CI/CD pipeline achievement from QNAP (<20 support cases) properly attributed to QNAP experience
 - Platform scaling (1 to 6 product variants, 3 to 5 engineering team growth)
-- Performance improvements (544 to 730 MB/s Samba, +40% SSD IOPS, 300% metadata boost, 93% socket memory reduction, 65% ustd CPU reduction via gRPC)
+- Performance improvements (544 to 830 MB/s Samba write, 592 to 930 MB/s Samba read, +40% SSD IOPS, 300% metadata boost, 93% socket memory reduction, 65% ustd CPU reduction via gRPC)
 
 ## Result Metric Visualizations
 
