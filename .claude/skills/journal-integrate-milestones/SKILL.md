@@ -38,6 +38,8 @@ Read all files in `journal/` (or `journal/raw/` if already structured). Classify
 | `work-report_*.md` | Auto-generated host reports | Keep in raw (reference data) |
 | `annual_summary.md` | Raw annual data | Keep in raw (reference data) |
 | `*-performance.csv` | fio benchmark data | Keep in raw, refine into `refined/performance-summary.md` |
+| `git-sar/<date>/index.md` | SAR git commit index | Keep in raw (reference data for both pipelines) |
+| `git-sar/<date>/<category>.md` | SAR categorized commits | Keep in raw — use in Step 3 for gap detection + enrichment |
 
 Create the directory structure if it doesn't exist:
 
@@ -69,9 +71,17 @@ Read the target company milestone file to understand:
 - Last quarter covered
 - Writing style and formatting conventions
 
+### SAR Gap Detection (if git-sar data exists)
+
+If `journal/raw/git-sar/` directories exist, read the `index.md` to check for milestone gaps:
+
+1. **Compare SAR categories against milestone sections** — if a category has 10+ commits but no corresponding milestone section, flag it as a potential new achievement
+2. **Enrich existing sections** — for milestone sections that match a SAR category, read the per-category file to add precise commit counts, date ranges, and cross-repo detail
+3. **Do NOT move SAR files** — they stay in `raw/` permanently as reference data for both this pipeline and `sar-extraction`
+
 ### Extract Achievements by Theme
 
-From each refined weekly report, group entries by theme (NOT by date):
+From each refined weekly report (and SAR category files if available), group entries by theme (NOT by date):
 
 - Kernel Development (eCryptfs, NFS, eBPF, etc.)
 - Filesystem Support (ZFS, Btrfs, EXT4)
