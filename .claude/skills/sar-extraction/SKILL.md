@@ -11,7 +11,8 @@ Extract SAR (Situation-Action-Result) case studies from milestone and journal da
 
 - `milestone/ubiquiti.md`, `milestone/qnap.md`, `milestone/summary.md` — primary SAR content
 - `src/present/fragments/achievements/*.html` — check for overlap/suppression
-- `journal/` — supplementary detail for cheat sheets (raw data, commands, dates)
+- `journal/raw/git-sar/<date>/<category>.md` — categorized git commits (from host-work-journal SAR collection)
+- `journal/` — other supplementary detail (work reports, weekly reports)
 - Existing case study fragments in `src/present/fragments/case-studies/` — use as HTML template
 
 ## Step 1: Discover
@@ -31,7 +32,8 @@ Present candidates with rationale. Let user pick.
 Read all source material for the chosen topic:
 1. Milestone sections — the primary content
 2. Achievement bullets — check `achievements/*.html` for overlap
-3. Journal entries — search `journal/` for supplementary detail (specific commands, dates, raw data)
+3. SAR git data — read `journal/raw/git-sar/<date>/<category>.md` for the matching topic (commit subjects, bodies, file paths map to flow boxes and cheat sheets)
+4. Other journal entries — search `journal/` for additional context (work reports, weekly reports)
 
 ## Step 3: Extract
 

@@ -79,21 +79,13 @@ Read the target company milestone file to understand:
 
 If `journal/raw/git-sar/` directories exist, read the `index.md` to check for milestone gaps:
 
-1. **Compare SAR categories against milestone sections** — if a category has 10+ commits but no corresponding milestone section, flag it as a potential new achievement
+1. **Compare SAR categories against milestone sections** (see `_shared/categories.md` for category list) — if a category has 10+ commits but no corresponding milestone section, flag it as a potential new achievement
 2. **Enrich existing sections** — for milestone sections that match a SAR category, read the per-category file to add precise commit counts, date ranges, and cross-repo detail
 3. **Do NOT move SAR files** — they stay in `raw/` permanently as reference data for both this pipeline and `sar-extraction`
 
 ### Extract Achievements by Theme
 
-From each refined weekly report (and SAR category files if available), group entries by theme (NOT by date):
-
-- Kernel Development (eCryptfs, NFS, eBPF, etc.)
-- Filesystem Support (ZFS, Btrfs, EXT4)
-- Performance Engineering (CPU affinity, network tuning, benchmarking)
-- Platform Migration (Debian Trixie, package porting)
-- System Stability (OOM prevention, memory management)
-- Tooling & Automation (test frameworks, CI/CD, scripts)
-- Support Excellence (case count, diagnostics, SOPs)
+From each refined weekly report (and SAR category files if available), group entries by theme (NOT by date). See `_shared/categories.md` for the milestone tag → theme mapping.
 
 ### Writing Style: SAR Format
 
