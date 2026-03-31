@@ -78,18 +78,57 @@ Tag work streams with milestone categories for faster processing by `journal-int
 
 ## SAR Git Output
 
-The collector's `git_sar` JSON key contains commits from 9 target repos, categorized by 12 topic keywords. Per commit: SHA, date, subject, body (first 3 lines), files changed. See `_shared/categories.md` for the full SAR categories table and target repo list.
+The collector's `git_sar` JSON key contains commits from target repos (see `_shared/categories.md`), categorized by topic keywords. See `_shared/categories.md` for the full category → achievement → case study mapping.
 
-Write per-category files under `journal/raw/git-sar/<START>-to-<END>/`:
+### Directory naming: exact dates
+
+Use **exact dates** in directory names so incremental collections don't re-sweep the same range:
 
 ```
-journal/raw/git-sar/2025-11-to-2026-01/
-  index.md              # summary table (category, commits, repos)
-  zfs-backend.md        # only ZFS commits
-  kernel-upgrade.md     # only kernel commits
+journal/raw/git-sar/<START-DATE>-to-<END-DATE>/
+```
+
+Example: `journal/raw/git-sar/2018-01-01-to-2026-03-30/`
+
+**When re-collecting**, check existing directories to find the last sweep end date, then collect only from that date forward. For example, if `2018-01-01-to-2026-03-30/` exists and today is 2026-04-15, collect `2026-03-31-to-2026-04-14/` (yesterday, to avoid partial-day issues).
+
+### Directory structure
+
+```
+journal/raw/git-sar/2018-01-01-to-2026-03-30/
+  index.md              # summary table + sweep metadata
+  zfs-backend.md        # one file per category
+  kernel-upgrade.md
   ...
   other.md              # uncategorized
 ```
+
+### index.md sweep metadata
+
+The `index.md` header records what was swept, so future collections know where to resume:
+
+```markdown
+# Git SAR Index: 2018-01-01 to 2026-03-30
+
+**Sweep metadata:**
+- Collected: 2026-03-30
+- Repos swept: debbox, debfactory, unifi-drive-config, ustd, ustate-exporter, prompt-hub, unifi-protobufs, debbox-base-files, hybridmount
+- Authors: ui-HookeyChiang, Hookey, HookeyChiang
+- Total unique commits: 4305
+
+| Category | Commits | Repos |
+|---|---|---|
+...
+```
+
+### Incremental collection
+
+When asked to "collect SAR git data" or "update SAR data":
+
+1. **Check existing** — scan `journal/raw/git-sar/` for directories, find the latest end date
+2. **Collect from next day** — use `--start-date <last-end + 1 day>` and `--end-date <yesterday>`
+3. **Write new directory** — e.g., `git-sar/2026-03-31-to-2026-04-14/`
+4. **Both old and new directories coexist** — downstream skills read all directories
 
 Each category file lists commits grouped by repo with subject, body, and file stats. This data feeds two downstream skills:
 - **sar-extraction** — reads per-category files to build SAR case study fragments
@@ -108,4 +147,5 @@ Each category file lists commits grouped by repo with subject, body, and file st
 | "work report 2025/11 to 2026/02" | Specified date range |
 | "just git activity" | Skip shell/Claude sections |
 | "collect SAR git data for Q4" | SAR output only |
+| "update SAR data" | Incremental — collect from last sweep end date to yesterday |
 | "journal and integrate" | Generate raw, then invoke journal-integrate-milestones |

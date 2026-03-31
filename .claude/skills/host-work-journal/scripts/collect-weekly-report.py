@@ -142,24 +142,26 @@ def _load_categories():
     if not cats:
         log.warning("Could not load _shared/categories.md — using built-in defaults")
         cats = {
-            "kernel-upgrade": ["kernel", "btrfs checksum", "alpine sdk", "driver", "phy", "pca9575"],
-            "nas-stability": ["stability", "stress", "xfstest", "fio stress", "sqa"],
-            "samba-perf": ["samba", "smb", "irq", "tcp tuning", "network tuning", "throughput"],
-            "zfs-backend": ["zfs", "dataset", "zpool", "snapshot", "quota", "refquota", "ustgcore"],
-            "btrfs-backend": ["btrfs", "subvolume", "qgroup", "ecryptfs"],
-            "grpc-streamer": ["grpc", "protobuf", "event stream", "poller"],
-            "metadata-perf": ["metadata", "cache", "database", "sqlite", "dir listing"],
-            "memory-opt": ["memory", "oom", "socket buffer", "64kb page"],
-            "cloud-gateway": ["fuse", "cloud", "gateway", "rclone", "cache tier"],
-            "build-system": ["debfactory", "debbox", "deb package", "backport"],
-            "debian-trixie": ["trixie", "bullseye", "porting", "pyzfs"],
-            "ai-skill": ["skill", "claude", "prompt", "ai", "agent", "mcp"],
+            "kernel-upgrade": ["kernel", "btrfs checksum", "alpine sdk", "driver", "phy", "pca9575", "kconfig", "kasan", "menuconfig", "btf", "ebpf"],
+            "samba-perf": ["samba", "smb", "irq", "tcp tuning", "network tuning", "throughput", "async", "zero-copy", "pause frame", "rx-usecs", "qdisc", "nfsd", "sunrpc", "cpu affinity"],
+            "zfs-backend": ["zfs", "dataset", "zpool", "snapshot", "quota", "refquota", "ustgcore", "dfree"],
+            "nas-stability": ["stability", "stress", "xfstest", "fio stress", "sqa", "slab", "fio", "benchmark", "perf test", "preflight", "iperf"],
+            "system-perf": ["memory", "oom", "socket buffer", "64kb page", "cgroup", "memhigh", "min_free_kbytes", "vm.", "sk_mem", "swap", "resource limit", "idle.slice"],
+            "grpc-streamer": ["grpc", "protobuf", "event stream", "poller", "ustated", "ustate", "ustd", "gnet", "streaming"],
+            "btrfs-backend": ["btrfs", "subvolume", "qgroup", "ecryptfs", "scrub", "balance", "trashcan", "worm", "snapshot prun"],
+            "cloud-perf": ["async gc", "deadlock", "download state", "readdirplus", "one-shot delete", "readdir", "dir listing", "metadata", "cache invalidat", "vfs cache", "db optim", "sqlite", "page fault"],
+            "cloud-cache": ["cache pin", "predownload", "autoupdate", "partial download", "cache gc", "watermark", "smart sync", "cache entry", "cache state", "bitmap"],
+            "cloud-encrypt": ["client.side.encrypt", "enc.dir", "enc.unlock", "encryption"],
+            "fuse-arch": ["fuse", "qrpc", "libev", "socket.handling", "daemon", "ipc", "fuse3", "meson", "autotools", "pjdfstest", "filebench"],
+            "ai-skill": ["skill", "claude", "prompt", "ai", "agent", "mcp", "worktree"],
+            "debian-trixie": ["trixie", "bullseye", "porting", "pyzfs", "migration"],
+            "build-system": ["debfactory", "debbox", "deb package", "backport", "firmware", "build", "bootstrap", "reprepro", "package bump"],
         }
     if not repos:
         repos = {
             "unifi-drive-config", "debbox", "debfactory", "prompt-hub",
             "debbox-kernel", "debbox-base-files", "ustd", "ustate-exporter",
-            "unifi-protobufs",
+            "unifi-protobufs", "hybridmount",
         }
     return cats, repos
 
