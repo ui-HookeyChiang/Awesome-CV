@@ -1,0 +1,282 @@
+<!-- fragment:
+  id: cloud-perf
+  type: case-study
+  tags: [fuse, cloud, metadata, caching, sqlite, deadlock, performance, qnap]
+  domain: Cloud Filesystem Performance
+  metrics: [+300% metadata, 22s→1s deletion, -36% latency, 50M+ files]
+  source: milestone/qnap.md#architecture-algorithm-optimization
+-->
+        <div class="slide">
+            <div class="slide-number">{{N}} / {{TOTAL}}</div>
+            <h1>Case Study {{CASE_NUM}}: Cloud FS Performance</h1>
+
+            <div class="sar-format">
+                <!-- ===== SITUATION ===== -->
+                <div class="sar-item sar-situation">
+                    <h3 class="sar-header-situation">Situation</h3>
+                    <p style="margin: 10px 0; font-size: 1rem; line-height: 1.5; color: var(--text-secondary);">
+                        FUSE-based <span style="color: var(--accent); font-weight: 700;">cloud filesystem</span> metadata operations were 3-5x slower than local ext4, with <span style="color: var(--accent); font-weight: 700;">deadlocks</span> under concurrent access and <span style="color: var(--accent); font-weight: 700;">OOM</span> at 10M+ files.
+                    </p>
+                </div>
+
+                <!-- ===== ACTION ===== -->
+                <div class="sar-item sar-action">
+                    <h3 class="sar-header-action">Action</h3>
+
+                    <div style="margin-top: 20px;">
+
+                        <!-- Preparation Step (1 box, 220px wide) -->
+                        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="cloud-perf-profile" style="width: 220px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Baseline Setup &amp;</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Bottleneck Analysis</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Down Arrow -->
+                        <div style="display: flex; justify-content: center; margin-bottom: 25px;">
+                            <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
+                        </div>
+
+                        <!-- Top Row: 3 boxes (200px wide each) -->
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="cloud-perf-cache" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Multi-Layer</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Caching</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">VFS + metadata LRU + readahead</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="cloud-perf-deadlock" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Deadlock</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Resolution</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">FUSE xattr ↔ RPC cycles</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="cloud-perf-download" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Download</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">State Machine</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Condition-variable coordination</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Down Arrow -->
+                        <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+                            <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
+                        </div>
+
+                        <!-- Bottom Row: 3 boxes (200px wide each) -->
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="cloud-perf-readdir" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Directory Ops</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Optimization</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">readdirplus, one-shot delete</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="cloud-perf-db" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Database</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Optimization</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">SQLite indexing, deferred writes</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="cloud-perf-scale" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">50M+ File</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Scale</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Metadata redesign, OOM fix</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Flow Description -->
+                        <div style="text-align: center; margin-top: 20px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
+                            Cloud Performance: Profile → Cache → Fix Deadlocks → Optimize I/O → Scale
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== RESULT ===== -->
+                <div class="sar-item sar-result">
+                    <h3 class="sar-header-result">Result</h3>
+                    <div class="metrics-row" style="margin-top: 20px; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                            <span class="metric-number">+300%</span>
+                            <span class="metric-label">Metadata Ops</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                            <span class="metric-number">22s→1s</span>
+                            <span class="metric-label">Dir Deletion</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                            <span class="metric-number">-36%</span>
+                            <span class="metric-label">Download Latency</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                            <span class="metric-number">50M+</span>
+                            <span class="metric-label">Files Supported</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<script>
+Object.assign(window.cheatSheets = window.cheatSheets || {}, {
+    'cloud-perf-profile': {
+        title: 'Baseline Setup & Bottleneck Analysis',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Metadata gap vs local filesystem:</strong>
+                        <p>FUSE cloud filesystem metadata operations (stat, readdir, lookup) were 3-5x slower than native ext4. Every metadata call traversed FUSE kernel→userspace boundary, then hit SQLite for cloud-local mapping before returning.</p>
+                        <code class="cheat-sheet-command"># Benchmark metadata ops: FUSE vs ext4</code>
+                        <code class="cheat-sheet-command">filebench -f fileserver.f  # compare local vs mounted</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Identified three bottleneck classes:</strong>
+                        <p>(1) Synchronous DB writes on every metadata update, (2) cyclic deadlocks between FUSE xattr and RPC daemon, (3) linear memory growth past 10M files causing OOM.</p>
+                        <code class="cheat-sheet-command"># Profile hotspots</code>
+                        <code class="cheat-sheet-command">perf record -g -p $(pgrep hybridmount)</code>
+                        <code class="cheat-sheet-command"># Deadlock detection</code>
+                        <code class="cheat-sheet-command">gdb -ex 'thread apply all bt' -p $(pgrep hybridmount)</code>
+                    </div>`
+    },
+    'cloud-perf-cache': {
+        title: 'Multi-Layer Caching',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>VFS cache + metadata LRU:</strong>
+                        <p>Introduced VFS kernel cache for attr/entry results, reducing kernel-FUSE round-trips. Added userspace LRU cache for metadata (inode→cloud mapping) so repeated stat calls skip SQLite entirely.</p>
+                        <code class="cheat-sheet-command"># VFS cache: kernel caches attr for entry_timeout seconds</code>
+                        <code class="cheat-sheet-command"># LRU cache: userspace inode→metadata, evicts at watermark</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Cache invalidation via parent mtime:</strong>
+                        <p>Outdated VFS cache entries caused file disappearance in SMB/NFS clients. Fixed by forcing cache invalidation through parent directory mtime updates on child modifications.</p>
+                        <code class="cheat-sheet-command"># Invalidate stale VFS entries</code>
+                        <code class="cheat-sheet-command">fuse_lowlevel_notify_inval_entry(se, parent_ino, name, namelen)</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Read-ahead with page-aligned buffers:</strong>
+                        <p>Adopted larger page-aligned read/write buffers for sequential access patterns. Read-ahead prefetches next chunks during streaming reads.</p>
+                        <code class="cheat-sheet-command"># Page-aligned buffer for read-ahead</code>
+                        <code class="cheat-sheet-command"># 128KB aligned reads instead of 4KB default</code>
+                    </div>`
+    },
+    'cloud-perf-deadlock': {
+        title: 'Deadlock Resolution',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>FUSE xattr ↔ RPC cycle:</strong>
+                        <p>FUSE xattr handler called RPC daemon which called back into FUSE for metadata — classic A→B→A deadlock. Resolved by architectural redesign: eliminated the reverse dependency by caching RPC results locally.</p>
+                        <code class="cheat-sheet-command"># Deadlock pattern: FUSE → qrpc → syncagent → FUSE</code>
+                        <code class="cheat-sheet-command"># Fix: break cycle by caching syncagent state in FUSE process</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Delete-while-in-use deadlock:</strong>
+                        <p>Deleting files still open by NFS/SMB caused cache invalidation to block on the open file handle. Fixed with deferred invalidation — mark for cleanup, invalidate on close.</p>
+                        <code class="cheat-sheet-command"># Deferred invalidation pattern</code>
+                        <code class="cheat-sheet-command"># mark_for_delete(ino) → actual delete on close/fsync</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Process consolidation:</strong>
+                        <p>Merged the cache daemon into the FUSE process to eliminate blocking IPC entirely. Single process, single event loop, no cross-process locks.</p>
+                        <code class="cheat-sheet-command"># Before: FUSE process ↔ cache daemon (IPC)</code>
+                        <code class="cheat-sheet-command"># After: single process, in-memory cache</code>
+                    </div>`
+    },
+    'cloud-perf-download': {
+        title: 'Download State Machine',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Centralized download coordination:</strong>
+                        <p>Only one thread downloads a given chunk while others wait on a condition variable. Eliminated async read deadlocks where multiple threads tried to download the same region simultaneously.</p>
+                        <code class="cheat-sheet-command"># Condition-variable coordination</code>
+                        <code class="cheat-sheet-command">pthread_mutex_lock(&chunk->lock);</code>
+                        <code class="cheat-sheet-command">while (chunk->state == DOWNLOADING) pthread_cond_wait(&chunk->cv, &chunk->lock);</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>-36% download latency:</strong>
+                        <p>Applied the same coordination pattern to opendir operations. Reduced duplicate cloud API calls and eliminated contention between concurrent directory opens.</p>
+                        <code class="cheat-sheet-command"># Before: N threads × N cloud API calls for same dir</code>
+                        <code class="cheat-sheet-command"># After: 1 download + (N-1) waiters → -36% latency</code>
+                    </div>`
+    },
+    'cloud-perf-readdir': {
+        title: 'Directory Ops Optimization',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>readdirplus for 4-5x speedup:</strong>
+                        <p>Enabled readdirplus which returns file attributes alongside directory entries in a single call. Large directory listing (3000 entries via NFS) dropped from 1s to 0.3s.</p>
+                        <code class="cheat-sheet-command"># readdirplus: stat + readdir in one FUSE call</code>
+                        <code class="cheat-sheet-command"># ls on 3000-entry NFS dir: 1s → 0.3s</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>One-shot delete API:</strong>
+                        <p>Reduced kernel-FUSE context switch overhead for nested directory deletion. Single API call deletes entire subtree instead of per-file unlink. 1000 nested dirs: 22s → 1s.</p>
+                        <code class="cheat-sheet-command"># One-shot recursive delete</code>
+                        <code class="cheat-sheet-command"># Before: 1000 × (lookup + unlink + rmdir) = 22s</code>
+                        <code class="cheat-sheet-command"># After: single delete_tree() call = 1s</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>RCU-like buffer updates:</strong>
+                        <p>Fixed readdir corruption during concurrent directory modifications by implementing RCU-like buffer swaps — readers see a consistent snapshot, writer prepares a new buffer atomically.</p>
+                        <code class="cheat-sheet-command"># RCU-like dirbuf update</code>
+                        <code class="cheat-sheet-command"># Reader: hold ref to current buffer</code>
+                        <code class="cheat-sheet-command"># Writer: build new buffer, atomic swap, free old after grace period</code>
+                    </div>`
+    },
+    'cloud-perf-db': {
+        title: 'Database Optimization',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Deferred timestamp writes:</strong>
+                        <p>Moved timestamp updates from every write() to close/fsync/setattr. Dramatically reduced SQLite write frequency during sequential I/O — one DB write per file instead of one per 4KB chunk.</p>
+                        <code class="cheat-sheet-command"># Before: UPDATE mtime on every write()</code>
+                        <code class="cheat-sheet-command"># After: UPDATE mtime only on close/fsync</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Index and key optimization:</strong>
+                        <p>Replaced string-based DB keys (cloud paths) with integer inode-based keys. Added partial indexes for auto-download queue. Upgraded glibc to fix high page fault rates during DB operations.</p>
+                        <code class="cheat-sheet-command"># Integer keys instead of string paths</code>
+                        <code class="cheat-sheet-command"># CREATE INDEX idx_ino ON meta(ino) -- integer, fast</code>
+                        <code class="cheat-sheet-command"># vs old: CREATE INDEX idx_path ON meta(path) -- string, slow</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Bitmap data separation:</strong>
+                        <p>Moved bitmap data (partial download tracking) from metadb to cachedb, cutting DB operations in half during partial reads and cache invalidation.</p>
+                        <code class="cheat-sheet-command"># Separate bitmap from metadata</code>
+                        <code class="cheat-sheet-command"># metadb: inode, attrs, cloud mapping</code>
+                        <code class="cheat-sheet-command"># cachedb: bitmap, cache state, partial chunks</code>
+                    </div>`
+    },
+    'cloud-perf-scale': {
+        title: '50M+ File Scale',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>OOM at 10M files resolved:</strong>
+                        <p>v1.2 slowed to 1 file/s after 10M files and eventually OOM'd. Root cause: linear metadata growth in memory. Fixed by redesigning metadata layout to eliminate inode count limits and avoid cache clustering in single directories.</p>
+                        <code class="cheat-sheet-command"># v1.2: 50M file copy → OOM at 10M</code>
+                        <code class="cheat-sheet-command"># v1.5: redesigned metadata + cache layout</code>
+                        <code class="cheat-sheet-command"># HDD: 100 files/s sustained, SSD: 200 files/s</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Cache FSM simplification:</strong>
+                        <p>Simplified the cache finite state machine — each cache entry triggers only one DB insert/delete instead of multiple state transitions. Reduced DB contention at scale.</p>
+                        <code class="cheat-sheet-command"># Simplified cache state machine</code>
+                        <code class="cheat-sheet-command"># Before: NEW → DOWNLOADING → CACHED → DIRTY → SYNCED</code>
+                        <code class="cheat-sheet-command"># After: each entry = 1 insert + 1 delete, no intermediate states</code>
+                    </div>`
+    }
+});
+</script>
