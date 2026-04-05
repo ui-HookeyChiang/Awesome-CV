@@ -14,8 +14,8 @@
                 <!-- ===== SITUATION ===== -->
                 <div class="sar-item sar-situation">
                     <h3 class="sar-header-situation">Situation</h3>
-                    <p style="margin: 10px 0; font-size: 1rem; line-height: 1.5; color: var(--text-secondary);">
-                        Application consumed system resources indefinitely, causing <span style="color: var(--accent); font-weight: 700;">resource contention</span> &mdash; core services starved of CPU, <span style="color: var(--accent); font-weight: 700;">contended I/O</span>, memory <span style="color: var(--accent); font-weight: 700;">thrashing</span>, and <span style="color: var(--accent); font-weight: 700;">OOM kills</span> across 6 NAS product variants.
+                    <p class="sar-text">
+                        Application consumed system resources indefinitely, causing <span class="text-accent">resource contention</span> &mdash; core services starved of CPU, <span class="text-accent">contended I/O</span>, memory <span class="text-accent">thrashing</span>, and <span class="text-accent">OOM kills</span> across 6 NAS product variants.
                     </p>
                 </div>
 
@@ -26,81 +26,77 @@
                     <div style="margin-top: 20px;">
 
                         <!-- Preparation Step (1 box, 180px wide) -->
-                        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="system-perf-profile" style="width: 220px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Linux</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Control Group v2</div>
+                        <div class="flow-row" style="margin-bottom: 25px;">
+                            <div class="flow-step">
+                                <div class="flow-box flow-box--lg" tabindex="0" role="button" data-cheat="system-perf-profile">
+                                    <div class="flow-box__title">Linux</div>
+                                    <div class="flow-box__subtitle">Control Group v2</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Down Arrow -->
-                        <div style="display: flex; justify-content: center; margin-bottom: 25px;">
-                            <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
-                        </div>
+                        <div class="flow-arrow-down"></div>
 
                         <!-- Top Row: 3 boxes (160px wide each) -->
-                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="system-perf-kernel" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Kernel Enablement</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">CFS + cgroup ioprio</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">CONFIG_CFS_BANDWIDTH patches</div>
+                        <div class="flow-row flow-row--mb">
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="system-perf-kernel">
+                                    <div class="flow-box__title">Kernel Enablement</div>
+                                    <div class="flow-box__subtitle">CFS + cgroup ioprio</div>
+                                    <div class="flow-box__desc">CONFIG_CFS_BANDWIDTH patches</div>
                                 </div>
                             </div>
-                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="system-perf-slices" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Slice Architecture</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">app / drive / fg / bg</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">systemd cgroup v2 hierarchy</div>
+                            <div class="flow-arrow">&#8594;</div>
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="system-perf-slices">
+                                    <div class="flow-box__title">Slice Architecture</div>
+                                    <div class="flow-box__subtitle">app / drive / fg / bg</div>
+                                    <div class="flow-box__desc">systemd cgroup v2 hierarchy</div>
                                 </div>
                             </div>
-                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="system-perf-cpu" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">CPU Quota Scaling</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Per-Platform Tuning</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">ENAS 540%, UNAS 270%</div>
+                            <div class="flow-arrow">&#8594;</div>
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="system-perf-cpu">
+                                    <div class="flow-box__title">CPU Quota Scaling</div>
+                                    <div class="flow-box__subtitle">Per-Platform Tuning</div>
+                                    <div class="flow-box__desc">ENAS 540%, UNAS 270%</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Down Arrow -->
-                        <div style="display: flex; justify-content: center; margin-bottom: 30px;">
-                            <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
-                        </div>
+                        <div class="flow-arrow-down" style="margin-bottom: 30px;"></div>
 
                         <!-- Bottom Row: 3 boxes (160px wide each) -->
-                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="system-perf-memory" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Memory Caps</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">MemoryHigh + SwapMax</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Soft throttle before OOM kill</div>
+                        <div class="flow-row">
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="system-perf-memory">
+                                    <div class="flow-box__title">Memory Caps</div>
+                                    <div class="flow-box__subtitle">MemoryHigh + SwapMax</div>
+                                    <div class="flow-box__desc">Soft throttle before OOM kill</div>
                                 </div>
                             </div>
-                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="system-perf-io" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">FG/BG</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">I/O Priority</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">cgroup ioprio class separation</div>
+                            <div class="flow-arrow">&#8594;</div>
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="system-perf-io">
+                                    <div class="flow-box__title">FG/BG</div>
+                                    <div class="flow-box__subtitle">I/O Priority</div>
+                                    <div class="flow-box__desc">cgroup ioprio class separation</div>
                                 </div>
                             </div>
-                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="system-perf-validation" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Cross-Platform</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Validation</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">ENAS, UNAS2/4, Pro, Pro8</div>
+                            <div class="flow-arrow">&#8594;</div>
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="system-perf-validation">
+                                    <div class="flow-box__title">Cross-Platform</div>
+                                    <div class="flow-box__subtitle">Validation</div>
+                                    <div class="flow-box__desc">ENAS, UNAS2/4, Pro, Pro8</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Flow Description -->
-                        <div style="text-align: center; margin-top: 20px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
+                        <div class="flow-caption">
                             Resource Management: cgroup Framework &#8594; Kernel Enablement &#8594; Service Isolation &#8594; Platform Validation
                         </div>
                     </div>

@@ -92,6 +92,9 @@ if (outIdx !== -1 && args[outIdx + 1]) {
 // Helpers
 // ---------------------------------------------------------------------------
 
+// Indent depth for card fragments inside the achievements wrapper (8 slide + 8 key-points)
+const CARD_INDENT = 16;
+
 /** Read a file relative to BASE_DIR */
 function readFile(relPath) {
     return fs.readFileSync(path.join(BASE_DIR, relPath), 'utf8');
@@ -103,14 +106,14 @@ function readFragment(relPath) {
     return raw.replace(/^<!--[\s\S]*?-->\n?/, '');
 }
 
-/** Read a card fragment, strip frontmatter, and add 16-space base indent */
-function readCardFragment(relPath) {
+/** Read a card fragment, strip frontmatter, and add base indent */
+function readCardFragment(relPath, indent = CARD_INDENT) {
     let content = readFragment(relPath).trimEnd();
-    // Add 16 spaces of base indent to each line (preserving relative indent)
+    const pad = ' '.repeat(indent);
     const lines = content.split('\n');
     return lines.map(line => {
         if (line.trim() === '') return '';
-        return '                ' + line;
+        return pad + line;
     }).join('\n');
 }
 
@@ -205,10 +208,7 @@ for (const name of profile['case-studies']) {
 
 // Achievements wrapper slide
 const achievementCards = profile.achievements
-    .map(name => {
-        let card = readCardFragment(`achievements/${name}.html`);
-        return stripDataId(card);
-    })
+    .map(name => readCardFragment(`achievements/${name}.html`))
     .join('\n');
 
 slideCounter++;
@@ -232,13 +232,14 @@ parts.push(addSlideComment(SLIDE_COMMENTS.qna) + '\n' + readFragment('qna.html')
 
 let assembled = parts.join('\n\n');
 
-// 4. Apply suppressions
+// 4. Apply suppressions, then strip data-id attributes
 if (profile.suppress && profile.suppress.length > 0) {
     for (const id of profile.suppress) {
         const re = new RegExp(`\\s*<li data-id="${id}">.*?</li>`, 'g');
         assembled = assembled.replace(re, '');
     }
 }
+assembled = stripDataId(assembled);
 
 // 5. Count total slides
 const totalSlides = (assembled.match(/<div class="slide"/g) || []).length;
@@ -269,6 +270,16 @@ if (fs.existsSync(cheatSheetDataPath)) {
 } else {
     cheatSheetData = cheatSheetParts.join(',\n');
 }
+
+// Validate cheat sheet data forms a valid JS object
+try {
+    new Function(`return {${cheatSheetData}}`);
+} catch (e) {
+    console.error(`Cheat sheet syntax error: ${e.message}`);
+    console.error('Check fragment <script> blocks for missing commas or syntax issues.');
+    process.exit(1);
+}
+
 output = output.replace('<!-- CHEAT_SHEETS -->', cheatSheetData);
 
 // 10. Write output

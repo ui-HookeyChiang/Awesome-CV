@@ -14,8 +14,8 @@
                 <!-- ===== SITUATION ===== -->
                 <div class="sar-item sar-situation">
                     <h3 class="sar-header-situation">Situation</h3>
-                    <p style="margin: 10px 0; font-size: 1rem; line-height: 1.5; color: var(--text-secondary);">
-                        Core storage daemon polling via <span style="color: var(--accent); font-weight: 700;">dlopen</span>-heavy CLI caused high CPU and <span style="color: var(--accent); font-weight: 700;">eMMC read amplification</span> across <span style="color: var(--accent); font-weight: 700;">10+ UniFi-OS platforms</span>, worsening as new polling states added.
+                    <p class="sar-text">
+                        Core storage daemon polling via <span class="text-accent">dlopen</span>-heavy CLI caused high CPU and <span class="text-accent">eMMC read amplification</span> across <span class="text-accent">10+ UniFi-OS platforms</span>, worsening as new polling states added.
                     </p>
                 </div>
 
@@ -26,81 +26,77 @@
                     <div style="margin-top: 20px;">
 
                         <!-- Preparation Step (1 box, 180px wide) -->
-                        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="grpc-streamer-profile" style="width: 220px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Profile &</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Baseline</div>
+                        <div class="flow-row" style="margin-bottom: 25px;">
+                            <div class="flow-step">
+                                <div class="flow-box flow-box--lg" tabindex="0" role="button" data-cheat="grpc-streamer-profile">
+                                    <div class="flow-box__title">Profile &</div>
+                                    <div class="flow-box__subtitle">Baseline</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Down Arrow -->
-                        <div style="display: flex; justify-content: center; margin-bottom: 25px;">
-                            <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
-                        </div>
+                        <div class="flow-arrow-down"></div>
 
                         <!-- Top Row: 3 boxes (160px wide each) -->
-                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="grpc-streamer-ustdbox" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Reduce Import</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">ustdbox Cleanup</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">dlopen reductions</div>
+                        <div class="flow-row flow-row--mb">
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="grpc-streamer-ustdbox">
+                                    <div class="flow-box__title">Reduce Import</div>
+                                    <div class="flow-box__subtitle">ustdbox Cleanup</div>
+                                    <div class="flow-box__desc">dlopen reductions</div>
                                 </div>
                             </div>
-                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="grpc-streamer-pubsub" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Pub-Sub Design</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Replace Polling CLI</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Event-driven gRPC streaming</div>
+                            <div class="flow-arrow">&#8594;</div>
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="grpc-streamer-pubsub">
+                                    <div class="flow-box__title">Pub-Sub Design</div>
+                                    <div class="flow-box__subtitle">Replace Polling CLI</div>
+                                    <div class="flow-box__desc">Event-driven gRPC streaming</div>
                                 </div>
                             </div>
-                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="grpc-streamer-events" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Event-Trigger</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Init-Value + udev</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">RAID state, disk hotplug</div>
+                            <div class="flow-arrow">&#8594;</div>
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="grpc-streamer-events">
+                                    <div class="flow-box__title">Event-Trigger</div>
+                                    <div class="flow-box__subtitle">Init-Value + udev</div>
+                                    <div class="flow-box__desc">RAID state, disk hotplug</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Down Arrow -->
-                        <div style="display: flex; justify-content: center; margin-bottom: 30px;">
-                            <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
-                        </div>
+                        <div class="flow-arrow-down" style="margin-bottom: 30px;"></div>
 
                         <!-- Bottom Row: 3 boxes (160px wide each) -->
-                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="grpc-streamer-sdb" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Unix Socket IPC</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">SDB Client Layer</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">&#956;s latency, auto-reconnect</div>
+                        <div class="flow-row">
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="grpc-streamer-sdb">
+                                    <div class="flow-box__title">Unix Socket IPC</div>
+                                    <div class="flow-box__subtitle">SDB Client Layer</div>
+                                    <div class="flow-box__desc">&#956;s latency, auto-reconnect</div>
                                 </div>
                             </div>
-                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="grpc-streamer-protobuf" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Protobuf Schema</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Cross-Team Design</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">unifi-protobufs shared repo</div>
+                            <div class="flow-arrow">&#8594;</div>
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="grpc-streamer-protobuf">
+                                    <div class="flow-box__title">Protobuf Schema</div>
+                                    <div class="flow-box__subtitle">Cross-Team Design</div>
+                                    <div class="flow-box__desc">unifi-protobufs shared repo</div>
                                 </div>
                             </div>
-                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="grpc-streamer-deploy" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">10+ Platform</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Deployment</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Console + NAS product lines</div>
+                            <div class="flow-arrow">&#8594;</div>
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="grpc-streamer-deploy">
+                                    <div class="flow-box__title">10+ Platform</div>
+                                    <div class="flow-box__subtitle">Deployment</div>
+                                    <div class="flow-box__desc">Console + NAS product lines</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Flow Description -->
-                        <div style="text-align: center; margin-top: 20px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
+                        <div class="flow-caption">
                             System Architecture: Profile &#8594; Optimize &#8594; Redesign &#8594; Deploy
                         </div>
                     </div>

@@ -14,8 +14,8 @@
                 <!-- ===== SITUATION ===== -->
                 <div class="sar-item sar-situation">
                     <h3 class="sar-header-situation">Situation</h3>
-                    <p style="margin: 10px 0; font-size: 1rem; line-height: 1.5; color: var(--text-secondary);">
-                        Architected a <span style="color: var(--accent); font-weight: 700;">FUSE-based cloud filesystem</span> from scratch — local-like access to cloud storage with <span style="color: var(--accent); font-weight: 700;">NFS/SMB</span> protocol support, deployed on <span style="color: var(--accent); font-weight: 700;">190K+ QNAP NAS</span> devices.
+                    <p class="sar-text">
+                        Architected a <span class="text-accent">FUSE-based cloud filesystem</span> from scratch — local-like access to cloud storage with <span class="text-accent">NFS/SMB</span> protocol support, deployed on <span class="text-accent">190K+ QNAP NAS</span> devices.
                     </p>
                 </div>
 
@@ -26,81 +26,77 @@
                     <div style="margin-top: 20px;">
 
                         <!-- Preparation Step (1 box, 220px wide) -->
-                        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="fuse-arch-design" style="width: 220px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">FUSE Daemon</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Architecture</div>
+                        <div class="flow-row" style="margin-bottom: 25px;">
+                            <div class="flow-step">
+                                <div class="flow-box flow-box--lg" tabindex="0" role="button" data-cheat="fuse-arch-design">
+                                    <div class="flow-box__title">FUSE Daemon</div>
+                                    <div class="flow-box__subtitle">Architecture</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Down Arrow -->
-                        <div style="display: flex; justify-content: center; margin-bottom: 25px;">
-                            <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
-                        </div>
+                        <div class="flow-arrow-down"></div>
 
                         <!-- Top Row: 3 boxes (200px wide each) -->
-                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="fuse-arch-ipc" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">QRPC</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Inter-Daemon IPC</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Socket-based packet protocol</div>
+                        <div class="flow-row flow-row--mb">
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="fuse-arch-ipc">
+                                    <div class="flow-box__title">QRPC</div>
+                                    <div class="flow-box__subtitle">Inter-Daemon IPC</div>
+                                    <div class="flow-box__desc">Socket-based packet protocol</div>
                                 </div>
                             </div>
-                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="fuse-arch-mount" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Selective</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Mounting</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Multi-folder, NFS/SMB export</div>
+                            <div class="flow-arrow">&#8594;</div>
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="fuse-arch-mount">
+                                    <div class="flow-box__title">Selective</div>
+                                    <div class="flow-box__subtitle">Mounting</div>
+                                    <div class="flow-box__desc">Multi-folder, NFS/SMB export</div>
                                 </div>
                             </div>
-                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="fuse-arch-sync" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Smart Sync +</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Cache Pinning</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Predownload, autoupdate, pin stats</div>
+                            <div class="flow-arrow">&#8594;</div>
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="fuse-arch-sync">
+                                    <div class="flow-box__title">Smart Sync +</div>
+                                    <div class="flow-box__subtitle">Cache Pinning</div>
+                                    <div class="flow-box__desc">Predownload, autoupdate, pin stats</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Down Arrow -->
-                        <div style="display: flex; justify-content: center; margin-bottom: 30px;">
-                            <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
-                        </div>
+                        <div class="flow-arrow-down" style="margin-bottom: 30px;"></div>
 
                         <!-- Bottom Row: 3 boxes (200px wide each) -->
-                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="fuse-arch-syncck" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">syncck</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Integrity Checker</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Cloud-local consistency</div>
+                        <div class="flow-row">
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="fuse-arch-syncck">
+                                    <div class="flow-box__title">syncck</div>
+                                    <div class="flow-box__subtitle">Integrity Checker</div>
+                                    <div class="flow-box__desc">Cloud-local consistency</div>
                                 </div>
                             </div>
-                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="fuse-arch-build" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Build System</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Modernization</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">autotools → Meson, -13% code</div>
+                            <div class="flow-arrow">&#8594;</div>
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="fuse-arch-build">
+                                    <div class="flow-box__title">Build System</div>
+                                    <div class="flow-box__subtitle">Modernization</div>
+                                    <div class="flow-box__desc">autotools → Meson, -13% code</div>
                                 </div>
                             </div>
-                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="fuse-arch-validation" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Testing &</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">CI/CD</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">pjdfstest, filebench, Coverity</div>
+                            <div class="flow-arrow">&#8594;</div>
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="fuse-arch-validation">
+                                    <div class="flow-box__title">Testing &</div>
+                                    <div class="flow-box__subtitle">CI/CD</div>
+                                    <div class="flow-box__desc">pjdfstest, filebench, Coverity</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Flow Description -->
-                        <div style="text-align: center; margin-top: 20px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
+                        <div class="flow-caption">
                             System Architecture: Design → IPC → Consolidate → Modernize → Validate
                         </div>
                     </div>

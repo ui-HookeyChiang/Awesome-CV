@@ -14,8 +14,8 @@
                 <!-- ===== SITUATION ===== -->
                 <div class="sar-item sar-situation">
                     <h3 class="sar-header-situation">Situation</h3>
-                    <p style="margin: 10px 0; font-size: 1rem; line-height: 1.5; color: var(--text-secondary);">
-                        Fragmented developer workflows across <span style="color: var(--accent); font-weight: 700;">multi-repo build systems</span> &mdash; significant time spent on <span style="color: var(--accent); font-weight: 700;">manual coordination</span>, <span style="color: var(--accent); font-weight: 700;">device recovery</span>, and <span style="color: var(--accent); font-weight: 700;">environment setup</span> with no unified tooling.
+                    <p class="sar-text">
+                        Fragmented developer workflows across <span class="text-accent">multi-repo build systems</span> &mdash; significant time spent on <span class="text-accent">manual coordination</span>, <span class="text-accent">device recovery</span>, and <span class="text-accent">environment setup</span> with no unified tooling.
                     </p>
                 </div>
 
@@ -26,81 +26,77 @@
                     <div style="margin-top: 20px;">
 
                         <!-- Preparation Step -->
-                        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="ai-skill-framework" style="width: 220px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Skill</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Frameworking</div>
+                        <div class="flow-row" style="margin-bottom: 25px;">
+                            <div class="flow-step">
+                                <div class="flow-box flow-box--lg" tabindex="0" role="button" data-cheat="ai-skill-framework">
+                                    <div class="flow-box__title">Skill</div>
+                                    <div class="flow-box__subtitle">Frameworking</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Down Arrow -->
-                        <div style="display: flex; justify-content: center; margin-bottom: 25px;">
-                            <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
-                        </div>
+                        <div class="flow-arrow-down"></div>
 
                         <!-- Top Row: 3 boxes -->
-                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="ai-skill-recovery" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Device Discovery</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Auto-Recovery</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Firmware brick detection + fix</div>
+                        <div class="flow-row flow-row--mb">
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="ai-skill-recovery">
+                                    <div class="flow-box__title">Device Discovery</div>
+                                    <div class="flow-box__subtitle">Auto-Recovery</div>
+                                    <div class="flow-box__desc">Firmware brick detection + fix</div>
                                 </div>
                             </div>
-                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="ai-skill-devbuild" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Dev-Build-Test</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Orchestrator</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Multi-repo CI coordination</div>
+                            <div class="flow-arrow">&#8594;</div>
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="ai-skill-devbuild">
+                                    <div class="flow-box__title">Dev-Build-Test</div>
+                                    <div class="flow-box__subtitle">Orchestrator</div>
+                                    <div class="flow-box__desc">Multi-repo CI coordination</div>
                                 </div>
                             </div>
-                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="ai-skill-reviewer" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">AI Code Reviewer</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">GitHub CI Integration</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">400 PRs/quarter automated</div>
+                            <div class="flow-arrow">&#8594;</div>
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="ai-skill-reviewer">
+                                    <div class="flow-box__title">AI Code Reviewer</div>
+                                    <div class="flow-box__subtitle">GitHub CI Integration</div>
+                                    <div class="flow-box__desc">400 PRs/quarter automated</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Down Arrow -->
-                        <div style="display: flex; justify-content: center; margin-bottom: 30px;">
-                            <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
-                        </div>
+                        <div class="flow-arrow-down" style="margin-bottom: 30px;"></div>
 
                         <!-- Bottom Row: 3 boxes -->
-                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="ai-skill-perftest" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Perf Test Matrix</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Storage Benchmarking</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Multi-device, multi-RAID</div>
+                        <div class="flow-row">
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="ai-skill-perftest">
+                                    <div class="flow-box__title">Perf Test Matrix</div>
+                                    <div class="flow-box__subtitle">Storage Benchmarking</div>
+                                    <div class="flow-box__desc">Multi-device, multi-RAID</div>
                                 </div>
                             </div>
-                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="ai-skill-adoption" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Cross-Team</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Sharing</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Network, SQA, storage, system</div>
+                            <div class="flow-arrow">&#8594;</div>
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="ai-skill-adoption">
+                                    <div class="flow-box__title">Cross-Team</div>
+                                    <div class="flow-box__subtitle">Sharing</div>
+                                    <div class="flow-box__desc">Network, SQA, storage, system</div>
                                 </div>
                             </div>
-                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="ai-skill-writer" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Skill-Writer</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Dedup & Refactor</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Overlap detection + consolidation</div>
+                            <div class="flow-arrow">&#8594;</div>
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="ai-skill-writer">
+                                    <div class="flow-box__title">Skill-Writer</div>
+                                    <div class="flow-box__subtitle">Dedup & Refactor</div>
+                                    <div class="flow-box__desc">Overlap detection + consolidation</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Flow Description -->
-                        <div style="text-align: center; margin-top: 20px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
+                        <div class="flow-caption">
                             Developer Productivity: Analyze &#8594; Automate &#8594; Orchestrate &#8594; Scale
                         </div>
                     </div>

@@ -14,8 +14,8 @@
                 <!-- ===== SITUATION ===== -->
                 <div class="sar-item sar-situation">
                     <h3 class="sar-header-situation">Situation</h3>
-                    <p style="margin: 10px 0; font-size: 1rem; line-height: 1.5; color: var(--text-secondary);">
-                        Ubiquiti NAS platform supported only <span style="color: var(--accent); font-weight: 700;">Btrfs</span> as the filesystem backend. Enterprise customers required <span style="color: var(--accent); font-weight: 700;">ZFS</span> for advanced data protection and storage management, demanding <span style="color: var(--accent); font-weight: 700;">complete feature parity</span> with the existing Btrfs backend without disrupting user-facing workflows.
+                    <p class="sar-text">
+                        Ubiquiti NAS platform supported only <span class="text-accent">Btrfs</span> as the filesystem backend. Enterprise customers required <span class="text-accent">ZFS</span> for advanced data protection and storage management, demanding <span class="text-accent">complete feature parity</span> with the existing Btrfs backend without disrupting user-facing workflows.
                     </p>
                 </div>
 
@@ -26,81 +26,77 @@
                     <div style="margin-top: 20px;">
 
                         <!-- Preparation Step -->
-                        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="zfs-backend-design" style="width: 220px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Architecture</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Design</div>
+                        <div class="flow-row" style="margin-bottom: 25px;">
+                            <div class="flow-step">
+                                <div class="flow-box flow-box--lg" tabindex="0" role="button" data-cheat="zfs-backend-design">
+                                    <div class="flow-box__title">Architecture</div>
+                                    <div class="flow-box__subtitle">Design</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Down Arrow -->
-                        <div style="display: flex; justify-content: center; margin-bottom: 25px;">
-                            <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
-                        </div>
+                        <div class="flow-arrow-down"></div>
 
                         <!-- Top Row: 3 boxes -->
-                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="zfs-backend-dataset-mgmt" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Dataset</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Management</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">create, destroy, rename + rollback</div>
+                        <div class="flow-row flow-row--mb">
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="zfs-backend-dataset-mgmt">
+                                    <div class="flow-box__title">Dataset</div>
+                                    <div class="flow-box__subtitle">Management</div>
+                                    <div class="flow-box__desc">create, destroy, rename + rollback</div>
                                 </div>
                             </div>
-                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="zfs-backend-property-system" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Property</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">System</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">batch ops, field mask, quotas</div>
+                            <div class="flow-arrow">&#8594;</div>
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="zfs-backend-property-system">
+                                    <div class="flow-box__title">Property</div>
+                                    <div class="flow-box__subtitle">System</div>
+                                    <div class="flow-box__desc">batch ops, field mask, quotas</div>
                                 </div>
                             </div>
-                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="zfs-backend-snapshot-system" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Snapshot</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">System</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">create, rollback, symlink migration</div>
+                            <div class="flow-arrow">&#8594;</div>
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="zfs-backend-snapshot-system">
+                                    <div class="flow-box__title">Snapshot</div>
+                                    <div class="flow-box__subtitle">System</div>
+                                    <div class="flow-box__desc">create, rollback, symlink migration</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Down Arrow -->
-                        <div style="display: flex; justify-content: center; margin-bottom: 30px;">
-                            <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
-                        </div>
+                        <div class="flow-arrow-down" style="margin-bottom: 30px;"></div>
 
                         <!-- Bottom Row: 3 boxes -->
-                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="zfs-backend-space-mgmt" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Space</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Management</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">dfree integration, reclamation</div>
+                        <div class="flow-row">
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="zfs-backend-space-mgmt">
+                                    <div class="flow-box__title">Space</div>
+                                    <div class="flow-box__subtitle">Management</div>
+                                    <div class="flow-box__desc">dfree integration, reclamation</div>
                                 </div>
                             </div>
-                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="zfs-backend-encryption" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Encryption</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Support</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">native AES, key lifecycle</div>
+                            <div class="flow-arrow">&#8594;</div>
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="zfs-backend-encryption">
+                                    <div class="flow-box__title">Encryption</div>
+                                    <div class="flow-box__subtitle">Support</div>
+                                    <div class="flow-box__desc">native AES, key lifecycle</div>
                                 </div>
                             </div>
-                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
-                            <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="zfs-backend-path-encoding" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Path</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Encoding</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">UTF-8 Base64 for ASCII-only ZFS</div>
+                            <div class="flow-arrow">&#8594;</div>
+                            <div class="flow-step">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="zfs-backend-path-encoding">
+                                    <div class="flow-box__title">Path</div>
+                                    <div class="flow-box__subtitle">Encoding</div>
+                                    <div class="flow-box__desc">UTF-8 Base64 for ASCII-only ZFS</div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Flow Description -->
-                        <div style="text-align: center; margin-top: 20px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
+                        <div class="flow-caption">
                             Dual Filesystem Engineering: Design &#8594; Implementation &#8594; Integration
                         </div>
                     </div>
