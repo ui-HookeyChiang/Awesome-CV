@@ -144,8 +144,7 @@ function stripDataId(html) {
 // ---------------------------------------------------------------------------
 const SLIDE_COMMENTS = {
     cover: 'Cover',
-    intro: 'Self Introduction',
-    skills: 'Core Technical Expertise',
+    background: 'Background',
     achievements: 'Additional Achievements',
     summary: 'Summary',
     qna: 'Q&A'
@@ -180,26 +179,8 @@ function addSlideComment(label) {
 // cover.html
 parts.push(addSlideComment(SLIDE_COMMENTS.cover) + '\n' + readFragment('cover.html').trimEnd());
 
-// intro.html
-parts.push(addSlideComment(SLIDE_COMMENTS.intro) + '\n' + readFragment('intro.html').trimEnd());
-
-// Skills wrapper slide
-const skillCards = profile.skills
-    .map(name => readCardFragment(`skills/${name}.html`))
-    .join('\n\n');
-
-slideCounter++;
-parts.push(
-    `        <!-- Slide ${slideCounter}: ${SLIDE_COMMENTS.skills} -->\n` +
-    `        <div class="slide">\n` +
-    `            <div class="slide-number">{{N}} / {{TOTAL}}</div>\n` +
-    `            <h1>Technical Experience</h1>\n` +
-    `\n` +
-    `            <div class="key-points">\n` +
-    skillCards + '\n' +
-    `            </div>\n` +
-    `        </div>`
-);
+// background.html
+parts.push(addSlideComment(SLIDE_COMMENTS.background) + '\n' + readFragment('background.html').trimEnd());
 
 // Highlight slide fragments (in profile order) — already contain their own comments
 for (const name of profile.highlights) {
@@ -211,10 +192,12 @@ for (const name of profile.highlights) {
 // Case study slide fragments (in profile order) — already contain comments
 // Collect cheat sheet data separately
 const cheatSheetParts = [];
+let caseNum = 0;
 for (const name of profile['case-studies']) {
     const { html, cheatSheetEntries } = readCaseStudyFragment(`case-studies/${name}.html`);
     slideCounter++;
-    parts.push(html);
+    caseNum++;
+    parts.push(html.replace(/\{\{CASE_NUM\}\}/g, String(caseNum)));
     if (cheatSheetEntries) {
         cheatSheetParts.push(cheatSheetEntries);
     }
