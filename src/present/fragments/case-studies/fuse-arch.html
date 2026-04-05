@@ -1,0 +1,295 @@
+<!-- fragment:
+  id: fuse-arch
+  type: case-study
+  tags: [fuse, architecture, c, ipc, qrpc, libev, meson, qnap, cloud-filesystem]
+  domain: System Architecture
+  metrics: [190K+ deployments, -13% code size, 30→10min build, FUSE3]
+  source: milestone/qnap.md#feature-highlights
+-->
+        <div class="slide">
+            <div class="slide-number">{{N}} / {{TOTAL}}</div>
+            <h1>Case Study {{CASE_NUM}}: Cloud FS Architecture</h1>
+
+            <div class="sar-format">
+                <!-- ===== SITUATION ===== -->
+                <div class="sar-item sar-situation">
+                    <h3 class="sar-header-situation">Situation</h3>
+                    <p style="margin: 10px 0; font-size: 1rem; line-height: 1.5; color: var(--text-secondary);">
+                        Architected a <span style="color: var(--accent); font-weight: 700;">FUSE-based cloud filesystem</span> from scratch — local-like access to cloud storage with <span style="color: var(--accent); font-weight: 700;">NFS/SMB</span> protocol support, deployed on <span style="color: var(--accent); font-weight: 700;">190K+ QNAP NAS</span> devices.
+                    </p>
+                </div>
+
+                <!-- ===== ACTION ===== -->
+                <div class="sar-item sar-action">
+                    <h3 class="sar-header-action">Action</h3>
+
+                    <div style="margin-top: 20px;">
+
+                        <!-- Preparation Step (1 box, 220px wide) -->
+                        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="fuse-arch-design" style="width: 220px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">FUSE Daemon</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Architecture</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Down Arrow -->
+                        <div style="display: flex; justify-content: center; margin-bottom: 25px;">
+                            <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
+                        </div>
+
+                        <!-- Top Row: 3 boxes (200px wide each) -->
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="fuse-arch-ipc" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">QRPC</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Inter-Daemon IPC</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Socket-based packet protocol</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="fuse-arch-mount" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Selective</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Mounting</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Multi-folder, NFS/SMB export</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="fuse-arch-sync" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Smart Sync +</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Cache Pinning</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Predownload, autoupdate, pin stats</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Down Arrow -->
+                        <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+                            <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
+                        </div>
+
+                        <!-- Bottom Row: 3 boxes (200px wide each) -->
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="fuse-arch-syncck" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">syncck</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Integrity Checker</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Cloud-local consistency</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="fuse-arch-build" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Build System</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Modernization</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">autotools → Meson, -13% code</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="fuse-arch-validation" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Testing &</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">CI/CD</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">pjdfstest, filebench, Coverity</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Flow Description -->
+                        <div style="text-align: center; margin-top: 20px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
+                            System Architecture: Design → IPC → Consolidate → Modernize → Validate
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== RESULT ===== -->
+                <div class="sar-item sar-result">
+                    <h3 class="sar-header-result">Result</h3>
+                    <div class="metrics-row" style="margin-top: 20px; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                            <span class="metric-number">190K+</span>
+                            <span class="metric-label">NAS Deployments</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                            <span class="metric-number">-13%</span>
+                            <span class="metric-label">Code Size</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                            <span class="metric-number">30→10</span>
+                            <span class="metric-label">Min Build Time</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                            <span class="metric-number"><20</span>
+                            <span class="metric-label">Support Escalations</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<script>
+Object.assign(window.cheatSheets = window.cheatSheets || {}, {
+    'fuse-arch-design': {
+        title: 'FUSE Daemon Architecture',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Cloud-to-local transparent mount:</strong>
+                        <p>FUSE daemon presents cloud storage as a local POSIX filesystem. Applications (Samba, NFS, rsync) access cloud files through standard syscalls — no application changes needed. SQLite stores cloud-local inode mapping, ext4 backs the local cache.</p>
+                        <code class="cheat-sheet-command"># Mount cloud storage as local filesystem</code>
+                        <code class="cheat-sheet-command"># /mnt/cloud/photos → cloud API (S3, Azure, Google)</code>
+                        <code class="cheat-sheet-command"># Apps see regular POSIX files and directories</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>libev event-driven core:</strong>
+                        <p>Event loop powered by libev handles FUSE kernel callbacks, QRPC messages, and timer-based housekeeping (GC, sync, cache eviction) in a single thread without blocking.</p>
+                        <code class="cheat-sheet-command"># libev event loop: FUSE fd + QRPC socket + timers</code>
+                        <code class="cheat-sheet-command">ev_io_start(loop, &fuse_watcher);</code>
+                        <code class="cheat-sheet-command">ev_io_start(loop, &qrpc_watcher);</code>
+                        <code class="cheat-sheet-command">ev_timer_start(loop, &gc_timer);</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Process consolidation:</strong>
+                        <p>Evolved from 3-process architecture (FUSE ↔ fsagent ↔ syncagent) to 2-process (FUSE ↔ syncagent) by removing the fsagent proxy. Cache daemon merged into FUSE process for zero-IPC cache lookups.</p>
+                        <code class="cheat-sheet-command"># Before: FUSE ↔ fsagent ↔ syncagent (2 IPC hops)</code>
+                        <code class="cheat-sheet-command"># After:  FUSE ↔ syncagent (1 hop, cache in-process)</code>
+                    </div>`
+    },
+    'fuse-arch-ipc': {
+        title: 'QRPC Inter-Daemon IPC',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Custom socket protocol:</strong>
+                        <p>QRPC (QNAP RPC) provides lightweight IPC between the FUSE daemon, sync agent, and management daemon. Packet-based protocol over Unix domain sockets with operation indexing for fast dispatch.</p>
+                        <code class="cheat-sheet-command"># QRPC packet format</code>
+                        <code class="cheat-sheet-command"># [op_code:4][payload_len:4][payload:N]</code>
+                        <code class="cheat-sheet-command"># Dispatch via op_code index table</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Bidirectional communication:</strong>
+                        <p>FUSE daemon sends download requests to sync agent; sync agent notifies FUSE of completed uploads, xattr changes, and state transitions. All async, non-blocking.</p>
+                        <code class="cheat-sheet-command"># FUSE → syncagent: request download</code>
+                        <code class="cheat-sheet-command"># syncagent → FUSE: notify upload complete</code>
+                        <code class="cheat-sheet-command"># All via QRPC over Unix domain socket</code>
+                    </div>`
+    },
+    'fuse-arch-mount': {
+        title: 'Selective Mounting',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Multi-folder cloud mount:</strong>
+                        <p>Mount multiple cloud folders independently with selective metadata exposure. Each mount point exposes only the requested subtree — users share specific folders without exposing their entire cloud storage.</p>
+                        <code class="cheat-sheet-command"># Mount specific cloud folders</code>
+                        <code class="cheat-sheet-command"># /mnt/cloud/photos  → cloud:/photos</code>
+                        <code class="cheat-sheet-command"># /mnt/cloud/docs    → cloud:/work/documents</code>
+                        <code class="cheat-sheet-command"># Each mount: independent cache + metadata</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>NFS/SMB transparent export:</strong>
+                        <p>FUSE mounts are exported via NFS and Samba to network clients. Applications see standard POSIX files — no awareness of cloud backend. Supports Time Machine backups over SMB.</p>
+                        <code class="cheat-sheet-command"># Export cloud mount via Samba</code>
+                        <code class="cheat-sheet-command"># [cloud-photos]</code>
+                        <code class="cheat-sheet-command">#   path = /mnt/cloud/photos</code>
+                        <code class="cheat-sheet-command"># NFS: /mnt/cloud/docs *(rw,fsid=2)</code>
+                    </div>`
+    },
+    'fuse-arch-sync': {
+        title: 'Smart Sync + Cache Pinning',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Predownload &amp; autoupdate:</strong>
+                        <p>Smart sync fetches cloud files in mtime order — most recently modified files downloaded first. Falls back to alternate versions when files are too large or local space is insufficient. Seamless handling of frequent mode switching between predownload and on-demand.</p>
+                        <code class="cheat-sheet-command"># Sync modes</code>
+                        <code class="cheat-sheet-command"># predownload: fetch all files (mtime order)</code>
+                        <code class="cheat-sheet-command"># autoupdate: fetch on access + background sync</code>
+                        <code class="cheat-sheet-command"># Fallback: skip oversized files, resume later</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Cache pinning with progress tracking:</strong>
+                        <p>Pin specific files/folders to guarantee local availability. Real-time progress tracking with precise read/write/pin byte statistics. Built-in retry and stable behavior during frequent pin/unpin switches.</p>
+                        <code class="cheat-sheet-command"># Pin folder for offline access</code>
+                        <code class="cheat-sheet-command"># pin /mnt/cloud/critical-docs → always cached</code>
+                        <code class="cheat-sheet-command"># Stats: pinned 2.3GB / 4.1GB (56%), 12MB/s</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Cache GC with watermarks:</strong>
+                        <p>Async garbage collection reclaims space from high to low watermark during idle periods. Unpinned, least-recently-used files evicted first. Never evicts pinned content.</p>
+                        <code class="cheat-sheet-command"># Cache watermarks</code>
+                        <code class="cheat-sheet-command"># high: 90% → start eviction</code>
+                        <code class="cheat-sheet-command"># low:  70% → stop eviction</code>
+                        <code class="cheat-sheet-command"># Pinned files: never evicted</code>
+                    </div>`
+    },
+    'fuse-arch-syncck': {
+        title: 'syncck Integrity Checker',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Cloud-local consistency verification:</strong>
+                        <p>syncck (sync check) walks the local metadata database and compares against cloud state. Detects and repairs: missing local entries, orphaned cache files, inode mismatches, stale upload markers.</p>
+                        <code class="cheat-sheet-command"># Run integrity check</code>
+                        <code class="cheat-sheet-command"># syncck scans: local metadb ↔ cloud API</code>
+                        <code class="cheat-sheet-command"># Detects: orphaned files, missing entries, inode mismatches</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>syncck remove:</strong>
+                        <p>Prototype for cleaning up cloud-side orphans — files deleted locally but not yet synced. Uses dupino markers to track progress across interrupted checks.</p>
+                        <code class="cheat-sheet-command"># syncck remove: clean cloud orphans</code>
+                        <code class="cheat-sheet-command"># Track progress with g_dupino markers</code>
+                        <code class="cheat-sheet-command"># Resume from last checkpoint after interruption</code>
+                    </div>`
+    },
+    'fuse-arch-build': {
+        title: 'Build System Modernization',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>autotools → Meson migration:</strong>
+                        <p>Evaluated and adopted Meson build system. Removed QTS dependency for standalone builds. Build time dropped from 30 minutes to under 10 minutes.</p>
+                        <code class="cheat-sheet-command"># Meson build: fast, declarative</code>
+                        <code class="cheat-sheet-command">meson setup builddir && ninja -C builddir</code>
+                        <code class="cheat-sheet-command"># vs autotools: ./configure && make (30 min)</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Library consolidation — -13% code:</strong>
+                        <p>Removed redundant third-party libraries (libcurl, libssl, xxHASH, duplicate threadpool). Consolidated libev/libevent into single event library. Repackaged with autotools for Debian-compatible builds.</p>
+                        <code class="cheat-sheet-command"># Removed: libcurl, libssl, xxHASH (unused)</code>
+                        <code class="cheat-sheet-command"># Consolidated: libev + libevent → libev only</code>
+                        <code class="cheat-sheet-command"># Result: -13% code size, cleaner dependencies</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>FUSE 3 upgrade:</strong>
+                        <p>Migrated from FUSE 2 to FUSE 3 API — readdirplus, writeback cache, splice-based zero-copy I/O. Built custom fusermount for cross-platform (x86 + ARM) without QTS dependency.</p>
+                        <code class="cheat-sheet-command"># FUSE 3: readdirplus, writeback cache, splice</code>
+                        <code class="cheat-sheet-command"># Custom fusermount: no system libfuse needed</code>
+                    </div>`
+    },
+    'fuse-arch-validation': {
+        title: 'Testing & CI/CD',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>POSIX compliance testing:</strong>
+                        <p>Ran pjdfstest (POSIX filesystem test suite) and filebench (workload simulation) to verify FUSE filesystem correctness. nfstest for NFS protocol compliance over the FUSE mount.</p>
+                        <code class="cheat-sheet-command"># POSIX compliance</code>
+                        <code class="cheat-sheet-command">pjdfstest /mnt/cloud  # POSIX syscall tests</code>
+                        <code class="cheat-sheet-command">filebench -f fileserver.f  # workload simulation</code>
+                        <code class="cheat-sheet-command">nfstest_posix --server=localhost --path=/mnt/cloud</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>GitLab + Jenkins CI pipeline:</strong>
+                        <p>Containerized build system executing builds, Coverity static analysis, unit tests, and performance benchmarks on every commit. Verified FUSE compatibility in container environments.</p>
+                        <code class="cheat-sheet-command"># CI pipeline: build → scan → test → benchmark</code>
+                        <code class="cheat-sheet-command"># Coverity: static analysis on every merge</code>
+                        <code class="cheat-sheet-command"># Container: verified FUSE works in Docker</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong><20 support escalations:</strong>
+                        <p>Comprehensive testing reduced production issues to fewer than 20 cases requiring R&D involvement across the entire 190K+ deployment base.</p>
+                        <code class="cheat-sheet-command"># Quality outcome</code>
+                        <code class="cheat-sheet-command"># 190K+ deployed NAS devices</code>
+                        <code class="cheat-sheet-command"># <20 support cases needed R&D involvement</code>
+                    </div>`
+    }
+});
+</script>
