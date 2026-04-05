@@ -5,16 +5,16 @@ For universal presentation guidelines, see the parent `SKILL.md`.
 
 ## Experience-Specific Slide Content
 
-1. **Cover Slide**: OS Engineer — Linux Development, Performance & Storage Infrastructure (8+ years, 5K sales, 190K+ deployments) - *Use milestone/summary.md*
-2. **Self Introduction**: Computer Science background, storage/performance/QA expertise - *Use milestone/summary.md*
-3. **Technical Expertise**: Tools & DevOps (top-left), Storage & Filesystem (top-right), Programming & System Languages (bottom-left), Frameworks & Protocols (bottom-right) - *Use milestone/summary.md*
-4. **Ubiquiti Highlights**: UniFi-OS Storage Software Engineer achievements - *Use milestone/ubiquiti.md*
-5. **QNAP Highlights**: Cloud filesystem and performance engineering - *Use milestone/qnap.md*
-6. **Case Study 1: NAS Stability Testing**: Cross-team collaboration and platform stability - *Use milestone/ubiquiti.md, no charts (qualitative)*
-7. **Case Study 2: Linux Kernel Upgrade**: System infrastructure modernization (4.19 → 5.10) - *Use milestone/ubiquiti.md, no charts (qualitative)*
-8. **Case Study 3: Samba Performance**: Full-stack performance engineering - *Use milestone/ubiquiti.md, with performance comparison charts*
-9. **Additional Achievements**: Product Innovation & Leadership, Performance Engineering Excellence, Business Impact & Scalability, Technical Architecture & Innovation
-10. **Summary**: Customizable based on job requirements - *Align with role-specific needs*
+1. **Cover Slide**: OS Engineer — Linux Development, Performance & Storage Infrastructure | 8+ Years - *Use milestone/summary.md*
+2. **Background**: Education + career timeline (QNAP → Ubiquiti with role descriptions) - *Use milestone/summary.md*
+3. **Ubiquiti Highlights**: Vertical tech stack (Drive → Drive Config → Btrfs/ZFS → Kernel/Debian → BSP) + metrics - *Use milestone/ubiquiti.md*
+4. **QNAP Highlights**: Vertical tech stack (Cloud Syncd → FUSE+libev+SQLite → ext4/VFS → Kernel) + metrics - *Use milestone/qnap.md*
+5. **Case Study 1: NAS Stability Testing**: Cross-team collaboration and platform stability - *Use milestone/ubiquiti.md, no charts (qualitative)*
+6. **Case Study 2: Linux Kernel Upgrade**: System infrastructure modernization (4.19 → 5.10) - *Use milestone/ubiquiti.md, no charts (qualitative)*
+7. **Case Study 3: Samba Performance**: Full-stack performance engineering - *Use milestone/ubiquiti.md, with performance comparison charts*
+8. **Additional Achievements**: Product Innovation & Leadership, Performance Engineering Excellence, Business Impact & Scalability, Technical Architecture & Innovation
+9. **Summary**: Customizable based on job requirements - *Align with role-specific needs*
+10. **Q&A**: Discussion with contact information
 
 ## Case Study Domains
 
@@ -41,7 +41,7 @@ For universal presentation guidelines, see the parent `SKILL.md`.
 
 - **Milestone documentation**:
   - `milestone/ubiquiti.md` and `milestone/qnap.md` and `milestone/summary.md` except core expertise sections for achievements and SAR case studies
-  - `milestone/summary.md` for: Cover slide, Self Introduction, Core Technical Expertise, and Summary slide
+  - `milestone/summary.md` for: Cover slide, Background, and Summary slide
   - **Content Guidelines**:
     - Use `milestone/summary.md` for high-level expertise and capability descriptions
     - Use specific milestone files (`ubiquiti.md`, `qnap.md`) for detailed achievements, case studies, and quantified results

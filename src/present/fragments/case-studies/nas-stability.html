@@ -1,127 +1,130 @@
 <!-- fragment:
   id: nas-stability
   type: case-study
-  tags: [stability, testing, qa, cross-platform, validation]
+  tags: [stability, testing, qa, stress, cross-platform, xfstests, raid, sqa]
   domain: Quality Engineering
-  metrics: [multi-issue, multi-day, 6-product]
-  source: milestone/ubiquiti.md#stability-testing
+  metrics: [6 products, 4 critical bugs, 72h+ stress, 3-4 escalations/qtr]
+  source: milestone/ubiquiti.md#comprehensive-nas-stability-stress-testing
 -->
-        <!-- Slide 7: Case Study 2 - NAS Stability Testing -->
         <div class="slide">
             <div class="slide-number">{{N}} / {{TOTAL}}</div>
-            <h1>Case Study 2: NAS Stability Testing</h1>
+            <h1>Case Study {{CASE_NUM}}: NAS Stability Testing</h1>
 
             <div class="sar-format">
+                <!-- ===== SITUATION ===== -->
                 <div class="sar-item sar-situation">
                     <h3 class="sar-header-situation">Situation</h3>
                     <p style="margin: 10px 0; font-size: 1rem; line-height: 1.5; color: var(--text-secondary);">
-                        <span style="color: var(--accent); font-weight: 700;">NAS platform</span> lacked
-                        comprehensive <span style="color: var(--accent); font-weight: 700;">stability
-                        testing</span> under IO stress.
+                        NAS platform lacked <span style="color: var(--accent); font-weight: 700;">comprehensive stability testing</span> &mdash; no validated behavior under sustained I/O stress, <span style="color: var(--accent); font-weight: 700;">RAID expansion</span>, or <span style="color: var(--accent); font-weight: 700;">cross-platform</span> client concurrency.
                     </p>
                 </div>
 
+                <!-- ===== ACTION ===== -->
                 <div class="sar-item sar-action">
                     <h3 class="sar-header-action">Action</h3>
 
                     <div style="margin-top: 20px;">
-                        <!-- NAS Stability Testing & Validation Flow -->
 
-                        <!-- Preparation Step -->
+                        <!-- Preparation Step (1 box, 220px wide) -->
                         <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
                             <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="stability-analysis" style="width: 220px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="nas-stab-gap" style="width: 220px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
                                     <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Stability Gap</div>
                                     <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Analysis</div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Flow Separator -->
+                        <!-- Down Arrow -->
                         <div style="display: flex; justify-content: center; margin-bottom: 25px;">
                             <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
                         </div>
 
-                        <!-- Top Row: Planning & Framework -->
+                        <!-- Top Row: 3 boxes (200px wide each) -->
                         <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
                             <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="qa-planning" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Test</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Draft</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Hardware + software</div>
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="nas-stab-plan" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Test Plan</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Co-Design with SQA</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">HW + SW stress coverage</div>
                                 </div>
                             </div>
                             <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
                             <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="cross-team-collaboration" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Human Resource</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Allocation</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">SQA partnership</div>
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="nas-stab-storage" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Storage Stress</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">RAID + Btrfs</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">xfstests, fio, 72h+ loops</div>
                                 </div>
                             </div>
                             <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
                             <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="test-automation" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Test</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Finalization</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Multi-day cycles</div>
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="nas-stab-platform" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Cross-Platform</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Client Testing</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Linux/Mac/Windows concurrent</div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Central Flow Arrow -->
+                        <!-- Down Arrow -->
                         <div style="display: flex; justify-content: center; margin-bottom: 30px;">
                             <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
                         </div>
 
-                        <!-- Bottom Row: Testing & Validation -->
+                        <!-- Bottom Row: 3 boxes (200px wide each) -->
                         <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
                             <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="storage-testing" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Storage</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Testing</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">RAID + Btrfs stress</div>
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="nas-stab-crypto" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Encryption &</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Protocol Stress</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">eCryptFS, Samba, NFS, AFP</div>
                                 </div>
                             </div>
                             <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
                             <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="cross-platform-testing" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Cross-Platform</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Testing</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Linux/Mac/Windows</div>
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="nas-stab-bugs" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Critical Bug</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Discovery</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">4 showstoppers found + fixed</div>
                                 </div>
                             </div>
                             <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
                             <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="stability-validation" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Stability</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Validation</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Issue discovery</div>
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="nas-stab-sop" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">SOP &</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Regression Framework</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Continuous validation pipeline</div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Testing Flow Description -->
+                        <!-- Flow Description -->
                         <div style="text-align: center; margin-top: 20px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
-                            NAS Stability Engineering: Analysis &#8594; Planning &#8594; Automation &#8594; Validation
+                            Quality Engineering: Analyze &#8594; Plan &#8594; Stress &#8594; Validate &#8594; Institutionalize
                         </div>
                     </div>
                 </div>
 
+                <!-- ===== RESULT ===== -->
                 <div class="sar-item sar-result">
                     <h3 class="sar-header-result">Result</h3>
                     <div class="metrics-row" style="margin-top: 20px; justify-content: center; gap: 20px; flex-wrap: wrap;">
-                        <div class="metric-box" style="min-width: 130px; flex: 1; cursor: pointer;" data-cheat="multi-issue-discovered">
-                            <span class="metric-number">Multi-issue</span>
-                            <span class="metric-label">Discovered</span>
-                        </div>
-                        <div class="metric-box" style="min-width: 130px; flex: 1;">
-                            <span class="metric-number">Multi-day</span>
-                            <span class="metric-label">Validation</span>
-                        </div>
-                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                        <div class="metric-box" style="flex: 1;">
                             <span class="metric-number">6</span>
-                            <span class="metric-label">Product Stability</span>
+                            <span class="metric-label">Products Validated</span>
+                        </div>
+                        <div class="metric-box" style="flex: 1;">
+                            <span class="metric-number">4</span>
+                            <span class="metric-label">Critical Bugs Found</span>
+                        </div>
+                        <div class="metric-box" style="flex: 1;">
+                            <span class="metric-number">72h+</span>
+                            <span class="metric-label">Stress Loop Duration</span>
+                        </div>
+                        <div class="metric-box" style="flex: 1;">
+                            <span class="metric-number">3-4</span>
+                            <span class="metric-label">Escalations/Quarter</span>
                         </div>
                     </div>
                 </div>
@@ -130,201 +133,152 @@
 
 <script>
 Object.assign(window.cheatSheets = window.cheatSheets || {}, {
-    'stability-analysis': {
+    'nas-stab-gap': {
         title: 'Stability Gap Analysis',
         content: `
                     <div class="cheat-sheet-item">
-                        <strong>Identified lack of comprehensive stability testing:</strong>
-                        <p>NAS platform needed real-world deployment scenario validation</p>
-                        <code class="cheat-sheet-command"># Initial stability assessment</code>
-                        <code class="cheat-sheet-command">uptime && cat /proc/loadavg</code>
-                        <code class="cheat-sheet-command"># Check for previous crashes or issues</code>
+                        <strong>No sustained stress testing existed:</strong>
+                        <p>NAS platform had unit tests and basic functional tests but no multi-day stress validation. Real-world failure modes (RAID expansion under I/O, concurrent multi-protocol access, encryption + deletion) were never tested together.</p>
+                        <code class="cheat-sheet-command"># Gap: no multi-day I/O stress validation</code>
+                        <code class="cheat-sheet-command"># Gap: no cross-platform concurrency testing</code>
+                        <code class="cheat-sheet-command"># Gap: no RAID expansion + I/O stress combination</code>
                     </div>
                     <div class="cheat-sheet-item">
-                        <strong>Product reliability concerns:</strong>
-                        <p>Customer satisfaction issues from frequent support escalations</p>
-                        <code class="cheat-sheet-command"># System stability metrics</code>
-                        <code class="cheat-sheet-command">journalctl --since="30 days ago" | grep -i error</code>
-                        <code class="cheat-sheet-command"># Analysis of failure patterns</code>
-                    </div>
-                    <div class="cheat-sheet-item">
-                        <strong>Multi-service interaction gaps:</strong>
-                        <p>Insufficient validation under sustained high-load conditions</p>
-                        <code class="cheat-sheet-command"># Service interaction monitoring</code>
-                        <code class="cheat-sheet-command">systemctl list-units --failed</code>
-                        <code class="cheat-sheet-command"># Inter-service dependency analysis</code>
-                    </div>
-                `
+                        <strong>Support escalations signaled hidden issues:</strong>
+                        <p>Customer-facing bugs (large file upload failures, reconnection issues, file locking) indicated systemic stability problems that point testing couldn't catch.</p>
+                        <code class="cheat-sheet-command"># Support signals before stress testing</code>
+                        <code class="cheat-sheet-command"># - Samba: large file upload failures since launch</code>
+                        <code class="cheat-sheet-command"># - Samba: reconnection issues on unstable networks</code>
+                        <code class="cheat-sheet-command"># - Cross-platform: file locking across clients</code>
+                    </div>`
     },
-    'qa-planning': {
-        title: 'QA Planning & Framework',
+    'nas-stab-plan': {
+        title: 'Test Plan Co-Design with SQA',
         content: `
                     <div class="cheat-sheet-item">
-                        <strong>Drafted QA plans for hardware and software stress testing:</strong>
-                        <p>Comprehensive testing framework design covering all system layers</p>
-                        <code class="cheat-sheet-command"># Test plan structure</code>
-                        <code class="cheat-sheet-command">mkdir -p /qa-plans/{hardware,software,integration}</code>
-                        <code class="cheat-sheet-command">vim qa-plans/master-test-plan.md</code>
+                        <strong>Joint planning with SQA team:</strong>
+                        <p>Co-led test plan design covering hardware stress (RAID expansion, disk hot-swap, power cycle) and software stress (concurrent I/O, snapshot creation/deletion, encryption lock/unlock). Secured dedicated SQA resources and PDM buy-in.</p>
+                        <code class="cheat-sheet-command"># Test plan coverage matrix</code>
+                        <code class="cheat-sheet-command"># Hardware: RAID expand, disk swap, power cycle</code>
+                        <code class="cheat-sheet-command"># Software: concurrent I/O, snapshot, encryption</code>
+                        <code class="cheat-sheet-command"># Platforms: UNAS2, UNAS4, Pro4, Pro7, Pro8, ENAS</code>
                     </div>
                     <div class="cheat-sheet-item">
-                        <strong>Resource allocation with PDM focus:</strong>
-                        <p>Secured product reliability focus and human resource allocation</p>
-                        <code class="cheat-sheet-command"># Resource planning documentation</code>
-                        <code class="cheat-sheet-command">cat > resource-allocation.md << 'EOF'</code>
-                        <code class="cheat-sheet-command"># PDM: Product reliability priority</code>
-                        <code class="cheat-sheet-command"># Team: Dedicated QA resources</code>
-                    </div>
-                    <div class="cheat-sheet-item">
-                        <strong>Platform-wide testing strategy:</strong>
-                        <p>Designed comprehensive coverage across NAS-series product releases</p>
-                        <code class="cheat-sheet-command"># Testing strategy framework</code>
-                        <code class="cheat-sheet-command">echo "Unit -> Integration -> System -> Acceptance" > test-levels.txt</code>
-                    </div>
-                `
+                        <strong>Platform-wide scope across 6 products:</strong>
+                        <p>Each product variant has different SoC (RTD1619, Alpine, CN10K), disk count (2-8), and link speed (2.5G/10G). Test matrix covers all combinations relevant to each platform.</p>
+                        <code class="cheat-sheet-command"># 6 product variants &times; multiple test scenarios</code>
+                        <code class="cheat-sheet-command"># UNAS2: raid1x2, 2.5G, 4-core</code>
+                        <code class="cheat-sheet-command"># UNAS Pro 8: raid5x8, 10G, 4-core high-BW</code>
+                        <code class="cheat-sheet-command"># ENAS: raidz1, 10G, 8-core</code>
+                    </div>`
     },
-    'cross-team-collaboration': {
-        title: 'Cross-Team Collaboration',
+    'nas-stab-storage': {
+        title: 'Storage Stress &mdash; RAID + Btrfs',
         content: `
                     <div class="cheat-sheet-item">
-                        <strong>Co-led comprehensive test planning with SQA team:</strong>
-                        <p>Joint planning sessions designing platform-wide stress testing framework</p>
-                        <code class="cheat-sheet-command"># Collaboration workflow</code>
-                        <code class="cheat-sheet-command">git clone sqa-team/stability-tests.git</code>
-                        <code class="cheat-sheet-command">cd stability-tests && git checkout -b joint-planning</code>
-                    </div>
-                    <div class="cheat-sheet-item">
-                        <strong>Cross-functional team integration:</strong>
-                        <p>Established communication channels and shared responsibilities</p>
-                        <code class="cheat-sheet-command"># Team communication setup</code>
-                        <code class="cheat-sheet-command">slack-cli create-channel #nas-stability-qa</code>
-                        <code class="cheat-sheet-command">confluence create-space "NAS QA Collaboration"</code>
-                    </div>
-                    <div class="cheat-sheet-item">
-                        <strong>Shared testing infrastructure:</strong>
-                        <p>Joint ownership of testing framework and result analysis</p>
-                        <code class="cheat-sheet-command"># Shared infrastructure setup</code>
-                        <code class="cheat-sheet-command">docker-compose up -d test-infrastructure</code>
-                        <code class="cheat-sheet-command"># Both teams access same test environment</code>
-                    </div>
-                `
-    },
-    'test-automation': {
-        title: 'Test Automation',
-        content: `
-                    <div class="cheat-sheet-item">
-                        <strong>Multi-day continuous validation cycles:</strong>
-                        <p>Automated testing infrastructure supporting extended stress testing</p>
-                        <code class="cheat-sheet-command"># Multi-day automation setup</code>
-                        <code class="cheat-sheet-command">crontab -e</code>
-                        <code class="cheat-sheet-command"># 0 */6 * * * /qa/scripts/stability-cycle.sh</code>
-                    </div>
-                    <div class="cheat-sheet-item">
-                        <strong>Automated testing infrastructure:</strong>
-                        <p>Comprehensive coverage across storage, network, and filesystem layers</p>
-                        <code class="cheat-sheet-command"># Automation framework</code>
-                        <code class="cheat-sheet-command">./automation/run-stability-suite.sh --duration=72h</code>
-                        <code class="cheat-sheet-command"># Automated reporting and alerting</code>
-                    </div>
-                    <div class="cheat-sheet-item">
-                        <strong>Continuous monitoring and alerting:</strong>
-                        <p>Real-time issue detection during extended testing periods</p>
-                        <code class="cheat-sheet-command"># Monitoring setup</code>
-                        <code class="cheat-sheet-command">prometheus --config.file=qa-monitoring.yml</code>
-                        <code class="cheat-sheet-command">alertmanager --config.file=qa-alerts.yml</code>
-                    </div>
-                `
-    },
-    'storage-testing': {
-        title: 'Storage Testing',
-        content: `
-                    <div class="cheat-sheet-item">
-                        <strong>RAID expansion testing with concurrent I/O:</strong>
-                        <p>Multi-day I/O stress loops with RAID expansion and snapshot operations</p>
-                        <code class="cheat-sheet-command"># RAID expansion stress test</code>
+                        <strong>Multi-day I/O stress with RAID expansion:</strong>
+                        <p>72h+ fio stress loops running concurrent random read/write while RAID expansion (mdadm --grow) adds disks. Validates no data corruption or performance collapse during rebuild.</p>
+                        <code class="cheat-sheet-command"># 72h RAID expansion stress test</code>
                         <code class="cheat-sheet-command">mdadm --grow /dev/md0 --raid-devices=6 &</code>
-                        <code class="cheat-sheet-command">fio --name=concurrent-io --rw=randrw --bs=4k --runtime=72h</code>
+                        <code class="cheat-sheet-command">fio --name=stress --rw=randrw --bs=4k --numjobs=8 --runtime=72h</code>
                     </div>
                     <div class="cheat-sheet-item">
-                        <strong>Btrfs filesystem validation:</strong>
-                        <p>Integrated xfstests for subvolume operations, balance, and scrub</p>
-                        <code class="cheat-sheet-command"># Btrfs stress testing</code>
+                        <strong>Btrfs validation with xfstests:</strong>
+                        <p>Ran xfstests stress group targeting subvolume operations, balance, scrub, and snapshot pruning under sustained I/O. Validated filesystem integrity across power cycles.</p>
+                        <code class="cheat-sheet-command"># xfstests for Btrfs stress</code>
                         <code class="cheat-sheet-command">./check -btrfs -g stress</code>
-                        <code class="cheat-sheet-command">btrfs scrub start /mnt/nas &</code>
+                        <code class="cheat-sheet-command">btrfs scrub start /mnt/data &</code>
+                        <code class="cheat-sheet-command">btrfs balance start /mnt/data &</code>
                     </div>
                     <div class="cheat-sheet-item">
-                        <strong>Filesystem integrity validation:</strong>
-                        <p>Power cycle testing and service interruption scenarios</p>
-                        <code class="cheat-sheet-command"># Power failure simulation</code>
-                        <code class="cheat-sheet-command">echo b > /proc/sysrq-trigger # Immediate reboot</code>
-                        <code class="cheat-sheet-command">fsck.btrfs /dev/sda1 # Post-crash validation</code>
-                    </div>
-                `
+                        <strong>Snapshot + deletion under load:</strong>
+                        <p>Concurrent snapshot creation and mass deletion while fio runs. Exposed OOM conditions from unbounded subvolume deletion queues (later fixed with memory-capped throttling).</p>
+                        <code class="cheat-sheet-command"># Concurrent snapshot + deletion stress</code>
+                        <code class="cheat-sheet-command">while true; do btrfs subvolume snapshot ...; sleep 60; done &</code>
+                        <code class="cheat-sheet-command">btrfs subvolume delete /mnt/data/@snapshots/old-* &</code>
+                        <code class="cheat-sheet-command">fio --name=bg --rw=write --runtime=24h &</code>
+                    </div>`
     },
-    'cross-platform-testing': {
-        title: 'Cross-Platform Testing',
+    'nas-stab-platform': {
+        title: 'Cross-Platform Client Testing',
         content: `
                     <div class="cheat-sheet-item">
-                        <strong>Cross-platform validation using concurrent clients:</strong>
-                        <p>Linux/Mac/Windows clients running FIO workloads simultaneously</p>
-                        <code class="cheat-sheet-command"># Multi-platform client coordination</code>
-                        <code class="cheat-sheet-command"># Linux: fio --client=nas-server --name=linux-test</code>
-                        <code class="cheat-sheet-command"># Mac: fio --client=nas-server --name=mac-test</code>
-                        <code class="cheat-sheet-command"># Windows: fio.exe --client=nas-server --name=win-test</code>
+                        <strong>Concurrent Linux/Mac/Windows clients:</strong>
+                        <p>Multiple clients running fio workloads simultaneously against the same NAS shares. Exposed protocol-level contention and locking issues invisible in single-client testing.</p>
+                        <code class="cheat-sheet-command"># Multi-platform concurrent access</code>
+                        <code class="cheat-sheet-command"># Linux client: fio --name=linux --rw=randrw</code>
+                        <code class="cheat-sheet-command"># Mac client: fio --name=mac --rw=randrw</code>
+                        <code class="cheat-sheet-command"># Windows: fio.exe --name=win --rw=randrw</code>
                     </div>
                     <div class="cheat-sheet-item">
                         <strong>Mac Time Machine backup validation:</strong>
-                        <p>Comprehensive testing across all supported drive types and configurations</p>
-                        <code class="cheat-sheet-command"># Time Machine test setup</code>
-                        <code class="cheat-sheet-command">tmutil setdestination /Volumes/NAS-TimeMachine</code>
-                        <code class="cheat-sheet-command">tmutil startbackup --block # Full backup test</code>
-                    </div>
-                    <div class="cheat-sheet-item">
-                        <strong>Protocol compatibility validation:</strong>
-                        <p>SMB/NFS/AFP protocol testing across different OS versions</p>
-                        <code class="cheat-sheet-command"># Protocol testing matrix</code>
-                        <code class="cheat-sheet-command">smbclient -L nas-server # SMB discovery</code>
-                        <code class="cheat-sheet-command">showmount -e nas-server # NFS exports</code>
-                    </div>
-                `
+                        <p>Full Time Machine backup and restore cycles across encrypted and non-encrypted volumes. Validated fruit VFS module behavior under sustained backup workloads.</p>
+                        <code class="cheat-sheet-command"># Time Machine stress test</code>
+                        <code class="cheat-sheet-command">tmutil startbackup --block  # full backup</code>
+                        <code class="cheat-sheet-command">tmutil startbackup --block  # incremental</code>
+                        <code class="cheat-sheet-command"># Verify backup integrity after power cycle</code>
+                    </div>`
     },
-    'stability-validation': {
-        title: 'Stability Validation',
+    'nas-stab-crypto': {
+        title: 'Encryption & Protocol Stress',
         content: `
                     <div class="cheat-sheet-item">
-                        <strong>Critical issue discovery and resolution:</strong>
-                        <p>Systematic identification and fixing of stability problems</p>
-                        <code class="cheat-sheet-command"># Issue tracking and resolution</code>
-                        <code class="cheat-sheet-command">grep -r "RAID expansion crashes" /var/log/</code>
-                        <code class="cheat-sheet-command"># Fix: Concurrent I/O throttling during expansion</code>
+                        <strong>eCryptFS under RAID operations:</strong>
+                        <p>Discovered eCryptFS lock-ups when RAID expansion triggered metadata writes through the encryption layer. Architectural conflict between ecryptfs page locking and mdadm rebuild I/O.</p>
+                        <code class="cheat-sheet-command"># eCryptFS + RAID expansion = deadlock</code>
+                        <code class="cheat-sheet-command"># ecryptfs_writepage() waits on page lock</code>
+                        <code class="cheat-sheet-command"># mdadm rebuild holds page lock for I/O</code>
+                        <code class="cheat-sheet-command"># Fix: reorder locking in ecryptfs path</code>
                     </div>
                     <div class="cheat-sheet-item">
-                        <strong>eCryptFS lock-up prevention:</strong>
-                        <p>Resolved filesystem hangs during RAID operations</p>
-                        <code class="cheat-sheet-command"># eCryptFS stability fix</code>
-                        <code class="cheat-sheet-command">echo 0 > /sys/fs/ecryptfs/global_auth_tok_list_mutex_debug</code>
-                        <code class="cheat-sheet-command"># Prevent deadlock during RAID operations</code>
-                    </div>
-                    <div class="cheat-sheet-item">
-                        <strong>Samba file locking issue resolution:</strong>
-                        <p>Fixed client connection durability problems causing lock issues</p>
-                        <code class="cheat-sheet-command"># Samba locking fix</code>
-                        <code class="cheat-sheet-command">echo "oplocks = no" >> /etc/samba/smb.conf</code>
-                        <code class="cheat-sheet-command">echo "level2 oplocks = no" >> /etc/samba/smb.conf</code>
-                    </div>
-                `
+                        <strong>Multi-protocol concurrent stress:</strong>
+                        <p>SMB + NFS + AFP clients accessing same encrypted volume simultaneously. Exposed file locking conflicts between Samba oplock/lease management and NFS stateless access patterns.</p>
+                        <code class="cheat-sheet-command"># Multi-protocol concurrent access</code>
+                        <code class="cheat-sheet-command"># SMB: oplocks + durable handles</code>
+                        <code class="cheat-sheet-command"># NFS: stateless, no lock coordination</code>
+                        <code class="cheat-sheet-command"># Conflict: SMB lock vs NFS write &rarr; stale data</code>
+                    </div>`
     },
-    'multi-issue-discovered': {
-        title: 'Critical Issues Discovered',
+    'nas-stab-bugs': {
+        title: 'Critical Bug Discovery',
         content: `
-                    <div style="padding: 30px;">
-                        <ul style="font-size: 1.2rem; line-height: 2; margin: 0; list-style-type: disc; padding-left: 20px;">
-                            <li>RAID expansion crashes during concurrent high I/O operations</li>
-                            <li>eCryptFS lock-ups during RAID operations preventing system hangs</li>
-                            <li>Samba file locking issues caused by non-durable client connections</li>
-                            <li>Cross-platform client compatibility problems (Linux/Mac/Windows)</li>
+                    <div class="cheat-sheet-item">
+                        <strong>4 showstopper bugs found and fixed:</strong>
+                        <ul style="font-size: 0.95rem; line-height: 1.8; margin: 10px 0; padding-left: 20px;">
+                            <li><strong>RAID expansion crash:</strong> Concurrent high I/O during mdadm --grow caused kernel panic from race condition in block layer &mdash; fixed with I/O throttling during reshape</li>
+                            <li><strong>eCryptFS lock-up:</strong> Deadlock between ecryptfs page lock and RAID rebuild I/O path &mdash; fixed with lock ordering change</li>
+                            <li><strong>Samba file locking:</strong> Non-durable client connections left stale oplocks preventing other clients from accessing files &mdash; fixed with oplock timeout and lease break logic</li>
+                            <li><strong>Cross-platform compat:</strong> Case-sensitivity mismatch between macOS (case-insensitive) and Linux (case-sensitive) caused file disappearance on shared volumes &mdash; fixed with case-folding in Samba VFS</li>
                         </ul>
+                    </div>`
+    },
+    'nas-stab-sop': {
+        title: 'SOP & Regression Framework',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>SOPs for support team:</strong>
+                        <p>Created diagnostic SOPs and performance checklists enabling support engineers to resolve most issues independently. Reduced R&D escalations from frequent to 3-4 per quarter.</p>
+                        <code class="cheat-sheet-command"># SOP-driven support workflow</code>
+                        <code class="cheat-sheet-command"># Step 1: Collect support bundle</code>
+                        <code class="cheat-sheet-command"># Step 2: Check known-issue checklist</code>
+                        <code class="cheat-sheet-command"># Step 3: Apply standard fix or escalate</code>
+                        <code class="cheat-sheet-command"># Result: 3-4 R&D escalations/quarter</code>
                     </div>
-                `
+                    <div class="cheat-sheet-item">
+                        <strong>Continuous regression testing:</strong>
+                        <p>Test suite integrated into release pipeline. Each firmware release runs the stability stress suite before shipping. Prevents regression of the 4 critical bugs discovered.</p>
+                        <code class="cheat-sheet-command"># Release gate: stability stress suite</code>
+                        <code class="cheat-sheet-command"># Must pass: 72h fio stress, xfstests, cross-platform</code>
+                        <code class="cheat-sheet-command"># Must pass: RAID expansion + I/O, eCryptFS stress</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>180 support bundles analyzed:</strong>
+                        <p>Cumulative 2024-2026 support analysis: 180 bundles across 60+ unique issues (63 GB diagnostic data). Categorized: 18 storage, 17 Samba, 10 performance, 6 NFS, 5 network, 8 system.</p>
+                        <code class="cheat-sheet-command"># Support bundle analysis (2024-2026)</code>
+                        <code class="cheat-sheet-command"># 180 bundles, 60+ unique issues, 63 GB data</code>
+                        <code class="cheat-sheet-command"># Categories: storage(18), samba(17), perf(10),</code>
+                        <code class="cheat-sheet-command">#   nfs(6), network(5), system(8)</code>
+                    </div>`
     }
 });
 </script>

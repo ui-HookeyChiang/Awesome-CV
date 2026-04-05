@@ -139,7 +139,6 @@ summary:
   tagline: "Preview"
   strengths: [A, B, C]
 
-skills: [os, tools, languages, frameworks]
 highlights: [ubiquiti, qnap]
 case-studies: [NEW_FRAGMENT_ID, kernel-upgrade, nas-stability]
 achievements: [innovation, performance]
