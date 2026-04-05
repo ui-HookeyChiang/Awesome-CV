@@ -124,18 +124,19 @@ Career highlight metrics are **fixed** per role — always shown, never suppress
 ## HTML Presentation Generation
 The interview presentation (`interview-presentation.html`) is a professional, interactive HTML slideshow created from resume content and milestone documentation.
 
-## Universal 11-Slide Structure (12-15 minutes total)
-1. **Cover Slide (30s)**: Name, position, tagline, contact information, key metrics overview
-2. **Self Introduction (1min)**: Educational background as bullet points, core expertise with highlighted technical terms
-3. **Core Technical Expertise (1-2min)**: Technical capabilities organized in 2x2 grid layout
-4. **Current Role Career Highlights (1-2min)**: Role description above metrics, quantified achievements without redundant bullet points
-5. **Previous Role Career Highlights (1-2min)**: Role description above metrics, performance improvements and scale achievements
-6. **Case Study 1 (2-3min)**: Primary technical domain using SAR framework with interactive flowchart
-7. **Case Study 2 (2-3min)**: Secondary technical domain using SAR framework with interactive flowchart
-8. **Case Study 3 (2-3min)**: Tertiary technical domain using SAR framework with interactive flowchart
-9. **Additional Achievements (1-2min)**: Most contributing items excluding case study overlaps, organized into 4 categories
-10. **Summary (1min)**: Professional tagline, three key strengths, and quantified metrics
-11. **Q&A (open)**: Interactive discussion with contact information and growth potential metrics
+## Universal 10-Slide Structure (12-15 minutes total)
+1. **Cover Slide (30s)**: Name, position with years, tagline, contact information
+2. **Background (1min)**: Educational background, career timeline (QNAP→Ubiquiti with role descriptions)
+3. **Current Role Career Highlights (1-2min)**: Vertical tech stack + quantified achievements
+4. **Previous Role Career Highlights (1-2min)**: Vertical tech stack + quantified achievements
+5. **Case Study 1 (2-3min)**: Primary technical domain using SAR framework with interactive flowchart
+6. **Case Study 2 (2-3min)**: Secondary technical domain using SAR framework with interactive flowchart
+7. **Case Study 3 (2-3min)**: Tertiary technical domain using SAR framework with interactive flowchart
+8. **Additional Achievements (1-2min)**: Most contributing items excluding case study overlaps
+9. **Summary (1min)**: Professional tagline, three key strengths, and quantified metrics
+10. **Q&A (open)**: Interactive discussion with contact information
+
+Career highlight slides show a vertical tech stack (app → kernel → BSP) alongside metrics. Integration layers (owned by other teams) use dashed borders and muted opacity.
 
 > For Storage & System Engineering experience-specific content (slide mapping, case study domains, metrics), read `references/storage-engineering.md`.
 > For visual design (unified color palette, typography, layout, SAR treatment — applies to both HTML and PPTX), read `references/visual-design.md`.
@@ -221,8 +222,8 @@ Each major project follows the enhanced visual SAR structure presented in Situat
 ### Content Organization Principles
 - **Technical Depth**: Balance high-level overview with specific technical examples and quantified results
 - **Content Structure**:
-  - Self-introduction sections formatted as bullet point lists
-  - Career highlights with one-liner responsibility descriptions above metric boxes
+  - Background slide with education and career timeline
+  - Career highlights with vertical tech stack (app → kernel → BSP) alongside metric boxes
   - Technical expertise with brief descriptive words (e.g., "C/C++ system programming")
 - **Design Principle**: Self-contained boxes eliminate redundant bullet points while providing deeper technical access
 
