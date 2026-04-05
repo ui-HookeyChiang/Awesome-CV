@@ -76,7 +76,7 @@
             font-family: 'Avenir Next', Calibri, sans-serif;
             color: var(--text-primary);
             font-size: 2.2rem;
-            margin-bottom: 8px;
+            margin-bottom: 20px;
             font-weight: 600;
             position: relative;
         }
@@ -315,7 +315,7 @@
         .point-card h4 {
             font-family: 'Avenir Next', Calibri, sans-serif;
             color: var(--text-primary);
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             font-size: 1.3rem;
             font-weight: 600;
         }
@@ -334,7 +334,7 @@
             border-radius: 10px;
             border: 2px solid var(--border);
             text-align: center;
-            min-width: 140px;
+            min-width: 120px;
             box-shadow: none;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
@@ -346,7 +346,7 @@
         }
 
         .metric-number {
-            font-family: 'Avenir Next', 'Avenir Next', Calibri, sans-serif;
+            font-family: 'Avenir Next', Calibri, sans-serif;
             font-size: 2.5rem;
             font-weight: 700;
             color: var(--accent) !important;
@@ -560,13 +560,13 @@
 
         ul {
             margin: 20px 0;
-            padding-left: 30px;
+            padding-left: 20px;
         }
 
         li {
             margin-bottom: 12px;
             font-size: 1.05rem;
-            line-height: 1.7;
+            line-height: 1.8;
             color: var(--text-secondary);
         }
 
@@ -760,8 +760,8 @@
             <h1>Background</h1>
 
             <div class="point-card" style="margin-top: 15px; margin-bottom: 0;">
-                <h4 style="margin: 0;">Education</h4>
-                <ul style="line-height: 1.8; margin: 15px 0;">
+                <h4>Education</h4>
+                <ul style="margin: 15px 0;">
                     <li><strong>M.S. Computer Science and Information Engineering</strong> &#8212; <span style="color: var(--accent); font-weight: 600;">National Taiwan University</span> (GPA: 3.84/4.30)</li>
                     <li><strong>B.S. Electrical Engineering and Computer Science</strong> &#8212; <span style="color: var(--accent); font-weight: 600;">National Chiao Tung University</span> (90.2%)</li>
                     <li><strong>Exchange Student</strong> &#8212; <span style="color: var(--accent); font-weight: 600;">University of Illinois at Urbana&#8211;Champaign</span></li>
@@ -776,11 +776,11 @@
             <!-- QNAP (previous — dashed, lightened) -->
             <div class="point-card" style="opacity: 0.75; margin-bottom: 0;">
                 <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px;">
-                    <h4 style="margin: 0;">QNAP</h4>
+                    <h4>QNAP</h4>
                     <span style="font-size: 0.9rem; color: var(--accent); font-weight: 600;">File System Engineer</span>
                     <span style="font-size: 0.8rem; color: var(--text-muted);">2018 &#8211; 2022</span>
                 </div>
-                <ul style="line-height: 1.8; margin: 0; padding-left: 18px;">
+                <ul style="margin: 0;">
                     <li><strong>Owned cloud storage gateway</strong> &#8212; full build-develop-test lifecycle</li>
                     <li><strong>FUSE-based caching architecture</strong> &#8212; multi-layer VFS optimization</li>
                     <li><strong>Cross-platform validation</strong> &#8212; Linux, macOS, Windows clients</li>
@@ -795,11 +795,11 @@
             <!-- Ubiquiti (current — primary border, prominent) -->
             <div class="point-card" style="border-color: var(--primary); margin-bottom: 0;">
                 <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px;">
-                    <h4 style="margin: 0;">Ubiquiti</h4>
+                    <h4>Ubiquiti</h4>
                     <span style="font-size: 0.9rem; color: var(--accent); font-weight: 600;">UniFi-OS Storage Engineer</span>
                     <span style="font-size: 0.8rem; color: var(--text-muted);">2022 &#8211; Present</span>
                 </div>
-                <ul style="line-height: 1.8; margin: 0; padding-left: 18px;">
+                <ul style="margin: 0;">
                     <li><strong>Built NAS platform end-to-end</strong> &#8212; BSP integration to filesystem to network services</li>
                     <li><strong>Dual filesystem architecture</strong> &#8212; Btrfs and ZFS with common abstraction</li>
                     <li><strong>Kernel upgrade and performance tuning</strong> &#8212; full-stack optimization</li>
@@ -815,30 +815,30 @@
             <div style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap; margin-top: 20px;">
                 <!-- Metrics (left) -->
                 <div style="flex: 1;">
-                    <div class="metrics-row" style="margin: 0 0 20px 0; justify-content: flex-start; gap: 20px; flex-wrap: wrap;">
-                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                    <div class="metrics-row" style="margin: 0 0 15px 0; justify-content: flex-start; gap: 20px; flex-wrap: wrap;">
+                        <div class="metric-box" style="flex: 1;">
                             <span class="metric-number">0&#8594;6</span>
                             <span class="metric-label">Product Variants</span>
                         </div>
-                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                        <div class="metric-box" style="flex: 1;">
                             <span class="metric-number">2M</span>
                             <span class="metric-label">Devices</span>
                         </div>
-                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                        <div class="metric-box" style="flex: 1;">
                             <span class="metric-number">180</span>
                             <span class="metric-label">Support Escalations</span>
                         </div>
                     </div>
                     <div class="metrics-row" style="margin: 0; justify-content: flex-start; gap: 20px; flex-wrap: wrap;">
-                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                        <div class="metric-box" style="flex: 1;">
                             <span class="metric-number">3&#8594;5</span>
                             <span class="metric-label">Team Scaling</span>
                         </div>
-                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                        <div class="metric-box" style="flex: 1;">
                             <span class="metric-number">3</span>
                             <span class="metric-label">OOM Issues</span>
                         </div>
-                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                        <div class="metric-box" style="flex: 1;">
                             <span class="metric-number">544&#8594;830</span>
                             <span class="metric-label">Transfer MB/s</span>
                         </div>
@@ -868,30 +868,30 @@
             <div style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap; margin-top: 20px;">
                 <!-- Metrics (left) -->
                 <div style="flex: 1;">
-                    <div class="metrics-row" style="margin: 0 0 20px 0; justify-content: flex-start; gap: 20px; flex-wrap: wrap;">
-                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                    <div class="metrics-row" style="margin: 0 0 15px 0; justify-content: flex-start; gap: 20px; flex-wrap: wrap;">
+                        <div class="metric-box" style="flex: 1;">
                             <span class="metric-number">190K+</span>
                             <span class="metric-label">Deployments</span>
                         </div>
-                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                        <div class="metric-box" style="flex: 1;">
                             <span class="metric-number">50M+</span>
                             <span class="metric-label">Files</span>
                         </div>
-                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                        <div class="metric-box" style="flex: 1;">
                             <span class="metric-number">+300%</span>
                             <span class="metric-label">Metadata Boost</span>
                         </div>
                     </div>
                     <div class="metrics-row" style="margin: 0; justify-content: flex-start; gap: 20px; flex-wrap: wrap;">
-                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                        <div class="metric-box" style="flex: 1;">
                             <span class="metric-number">&lt;20</span>
                             <span class="metric-label">Support Involvement</span>
                         </div>
-                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                        <div class="metric-box" style="flex: 1;">
                             <span class="metric-number">36%</span>
                             <span class="metric-label">Latency Cut</span>
                         </div>
-                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                        <div class="metric-box" style="flex: 1;">
                             <span class="metric-number">22s&#8594;1s</span>
                             <span class="metric-label">Dir Deletion</span>
                         </div>
@@ -1011,19 +1011,19 @@
                 <div class="sar-item sar-result">
                     <h3 class="sar-header-result">Result</h3>
                     <div class="metrics-row" style="margin-top: 20px; justify-content: center; gap: 20px; flex-wrap: wrap;">
-                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                        <div class="metric-box" style="flex: 1;">
                             <span class="metric-number">32x</span>
                             <span class="metric-label">Checksum Speed</span>
                         </div>
-                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                        <div class="metric-box" style="flex: 1;">
                             <span class="metric-number">0</span>
                             <span class="metric-label">Regression</span>
                         </div>
-                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                        <div class="metric-box" style="flex: 1;">
                             <span class="metric-number">5.10</span>
                             <span class="metric-label">LTS Aligned</span>
                         </div>
-                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                        <div class="metric-box" style="flex: 1;">
                             <span class="metric-number">+40%</span>
                             <span class="metric-label">SSD IOPS</span>
                         </div>
@@ -1136,19 +1136,19 @@
                 <div class="sar-item sar-result">
                     <h3 class="sar-header-result">Result</h3>
                     <div class="metrics-row" style="margin-top: 20px; justify-content: center; gap: 20px; flex-wrap: wrap;">
-                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                        <div class="metric-box" style="flex: 1;">
                             <span class="metric-number">6</span>
                             <span class="metric-label">Products Validated</span>
                         </div>
-                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                        <div class="metric-box" style="flex: 1;">
                             <span class="metric-number">4</span>
                             <span class="metric-label">Critical Bugs Found</span>
                         </div>
-                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                        <div class="metric-box" style="flex: 1;">
                             <span class="metric-number">72h+</span>
                             <span class="metric-label">Stress Loop Duration</span>
                         </div>
-                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                        <div class="metric-box" style="flex: 1;">
                             <span class="metric-number">3-4</span>
                             <span class="metric-label">Escalations/Quarter</span>
                         </div>
@@ -1176,25 +1176,25 @@
                             <div style="text-align: center; flex: 1;">
                                 <div style="font-family: 'Avenir Next', Calibri, sans-serif; font-size: 0.75rem; font-weight: 500; color: var(--alert); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Network Write</div>
                                 <div style="height: 41px; width: 50px; background: var(--alert); border-radius: 4px; position: relative; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
-                                    <span style="font-family: 'Avenir Next', 'Avenir Next', Calibri, sans-serif; color: white; font-size: 0.75rem; font-weight: 700;">544</span>
+                                    <span style="font-family: 'Avenir Next', Calibri, sans-serif; color: white; font-size: 0.75rem; font-weight: 700;">544</span>
                                 </div>
                             </div>
                             <div style="text-align: center; flex: 1;">
                                 <div style="font-family: 'Avenir Next', Calibri, sans-serif; font-size: 0.75rem; font-weight: 500; color: var(--alert); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Network Read</div>
                                 <div style="height: 45px; width: 50px; background: var(--alert); border-radius: 4px; position: relative; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
-                                    <span style="font-family: 'Avenir Next', 'Avenir Next', Calibri, sans-serif; color: white; font-size: 0.75rem; font-weight: 700;">592</span>
+                                    <span style="font-family: 'Avenir Next', Calibri, sans-serif; color: white; font-size: 0.75rem; font-weight: 700;">592</span>
                                 </div>
                             </div>
                             <div style="text-align: center; flex: 1;">
                                 <div style="font-family: 'Avenir Next', Calibri, sans-serif; font-size: 0.75rem; font-weight: 500; color: var(--success); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Local Write</div>
                                 <div style="height: 72px; width: 50px; background: var(--success); border-radius: 4px; position: relative; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
-                                    <span style="font-family: 'Avenir Next', 'Avenir Next', Calibri, sans-serif; color: white; font-size: 0.75rem; font-weight: 700;">951</span>
+                                    <span style="font-family: 'Avenir Next', Calibri, sans-serif; color: white; font-size: 0.75rem; font-weight: 700;">951</span>
                                 </div>
                             </div>
                             <div style="text-align: center; flex: 1;">
                                 <div style="font-family: 'Avenir Next', Calibri, sans-serif; font-size: 0.75rem; font-weight: 500; color: var(--success); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Local Read</div>
                                 <div style="height: 140px; width: 50px; background: var(--success); border-radius: 4px; position: relative; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
-                                    <span style="font-family: 'Avenir Next', 'Avenir Next', Calibri, sans-serif; color: white; font-size: 0.75rem; font-weight: 700;">1850</span>
+                                    <span style="font-family: 'Avenir Next', Calibri, sans-serif; color: white; font-size: 0.75rem; font-weight: 700;">1850</span>
                                 </div>
                             </div>
                         </div>
@@ -1292,15 +1292,15 @@
                 <div class="sar-item sar-result">
                     <h3 class="sar-header-result">Result</h3>
                     <div class="metrics-row" style="margin-top: 20px; justify-content: center; gap: 20px; flex-wrap: wrap;">
-                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                        <div class="metric-box" style="flex: 1;">
                             <span class="metric-number">544&#8594;830</span>
                             <span class="metric-label">Write MB/s</span>
                         </div>
-                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                        <div class="metric-box" style="flex: 1;">
                           <span class="metric-number">592&#8594;930</span>
                             <span class="metric-label">Read MB/s</span>
                         </div>
-                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                        <div class="metric-box" style="flex: 1;">
                             <span class="metric-number">-30%</span>
                             <span class="metric-label">CPU Utilization</span>
                         </div>
@@ -1317,7 +1317,7 @@
             <div class="key-points">
                 <div class="point-card">
                     <h4>Innovation & Business Impact</h4>
-                    <ul style="line-height: 1.8; margin: 25px 0;">
+                    <ul style="margin: 25px 0;">
                         <li><strong>Build System Upgrade:</strong> Resolved years-disabled backport package installation</li>
                         <li><strong>ZFS Filesystem Support:</strong> Full ZFS backend (245 commits, 8 PRs) achieving complete feature parity with Btrfs</li>
                         <li><strong>Debian Trixie Migration:</strong> Ported 6+ packages (ZFS, Samba, wsdd2, UDC, rclone, ustd) from Bullseye to Trixie</li>
@@ -1327,7 +1327,7 @@
                 </div>
                 <div class="point-card">
                     <h4>Product Reliability & Performance Engineering</h4>
-                    <ul style="line-height: 1.8; margin: 25px 0;">
+                    <ul style="margin: 25px 0;">
                         <li><strong>NAS Performance Testing Platform:</strong> Built end-to-end automated benchmarking across 23 devices with 20+ AI skills orchestrating the full test lifecycle</li>
                         <li><strong>NAS Performance Engineering:</strong> CPU affinity framework + network tuning, iperf 1.9&#8594;2.3 Gb/s (+21%)</li>
                         <li><strong>gRPC Event Streamer:</strong> Replaced polling CLI with microsecond-latency event streaming, reducing CPU usage by 65%</li>
