@@ -185,22 +185,27 @@ parts.push(addSlideComment(SLIDE_COMMENTS.cover) + '\n' + readFragment('cover.ht
 // background.html
 parts.push(addSlideComment(SLIDE_COMMENTS.background) + '\n' + readFragment('background.html').trimEnd());
 
-// Highlight slide fragments (in profile order) — already contain their own comments
+// Highlight slide fragments (in profile order)
 for (const name of profile.highlights) {
-    const content = readFragment(`highlights/${name}.html`).trimEnd();
-    slideCounter++;
-    parts.push(content);
+    let content = readFragment(`highlights/${name}.html`).trimEnd();
+    // Strip any hardcoded slide comment from the fragment
+    content = content.replace(/^\s*<!--\s*Slide\s+\d+:.*?-->\n?/, '');
+    const label = name.charAt(0).toUpperCase() + name.slice(1) + ' Career Highlights';
+    parts.push(addSlideComment(label) + '\n' + content);
 }
 
-// Case study slide fragments (in profile order) — already contain comments
+// Case study slide fragments (in profile order)
 // Collect cheat sheet data separately
 const cheatSheetParts = [];
 let caseNum = 0;
 for (const name of profile['case-studies']) {
-    const { html, cheatSheetEntries } = readCaseStudyFragment(`case-studies/${name}.html`);
-    slideCounter++;
+    let { html, cheatSheetEntries } = readCaseStudyFragment(`case-studies/${name}.html`);
     caseNum++;
-    parts.push(html.replace(/\{\{CASE_NUM\}\}/g, String(caseNum)));
+    // Strip any hardcoded slide comment from the fragment
+    html = html.replace(/^\s*<!--\s*Slide\s+\d+:.*?-->\n?/, '');
+    html = html.replace(/\{\{CASE_NUM\}\}/g, String(caseNum));
+    const label = `Case Study ${caseNum}: ${name}`;
+    parts.push(addSlideComment(label) + '\n' + html);
     if (cheatSheetEntries) {
         cheatSheetParts.push(cheatSheetEntries);
     }

@@ -4,23 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hookey Chiang - Interview Presentation</title>
-    <!-- Fonts: Avenir Next (system), Calibri (fallback), Consolas (code) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --page-bg: #12121f;
-            --slide-bg: #1A1A2E;
-            --card-bg: #25253A;
-            --text-primary: #FFFFFF;
-            --text-secondary: #F0F0F5;
-            --text-muted: #888899;
-            --primary: #006FFF;
-            --success: #00C853;
-            --accent: #00D4FF;
-            --orange: #FF9F00;
-            --alert: #FF4545;
-            --border: #3A3A55;
-            --code-bg: #0D0D1A;
-            --code-text: #00C853;
+            --page-bg: #0c0c18;
+            --slide-bg: #141424;
+            --card-bg: #242440;
+            --text-primary: #F4F4F8;
+            --text-secondary: #D0D0DA;
+            --text-muted: #7a7a90;
+            --primary: #4B8BFF;
+            --success: #34D399;
+            --accent: #67E8F9;
+            --orange: #FBBF24;
+            --alert: #F87171;
+            --border: #333350;
+            --code-bg: #0a0a16;
+            --code-text: #34D399;
+            --font-display: 'Avenir Next', Calibri, sans-serif;
+            --font-body: 'Avenir Next', Calibri, sans-serif;
+            --font-mono: 'JetBrains Mono', Consolas, 'Courier New', monospace;
         }
 
         * {
@@ -30,7 +35,7 @@
         }
 
         body {
-            font-family: 'Avenir Next', Calibri, sans-serif;
+            font-family: var(--font-body);
             line-height: 1.6;
             color: var(--text-secondary);
             background: var(--page-bg);
@@ -46,7 +51,10 @@
         }
 
         .slide {
-            background: var(--slide-bg);
+            background:
+                radial-gradient(ellipse 80% 60% at 10% 0%, rgba(75,139,255,0.04) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 90% 100%, rgba(52,211,153,0.03) 0%, transparent 60%),
+                var(--slide-bg);
             border-radius: 14px;
             padding: 30px;
             margin-bottom: 25px;
@@ -61,15 +69,56 @@
             position: relative;
             overflow: hidden;
             box-sizing: border-box;
+            /* Entrance animation */
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
         }
+
+        .slide.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide.visible .sar-item,
+        .slide.visible .point-card,
+        .slide.visible .metric-box,
+        .slide.visible .flow-box {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .sar-item,
+        .point-card,
+        .metric-box,
+        .flow-box {
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        /* Stagger child animations */
+        .slide.visible .sar-item:nth-child(1),
+        .slide.visible .point-card:nth-child(1),
+        .slide.visible .metric-box:nth-child(1),
+        .slide.visible .flow-box:nth-child(1) { transition-delay: 0.1s; }
+        .slide.visible .sar-item:nth-child(2),
+        .slide.visible .point-card:nth-child(2),
+        .slide.visible .metric-box:nth-child(2),
+        .slide.visible .flow-box:nth-child(2) { transition-delay: 0.2s; }
+        .slide.visible .sar-item:nth-child(3),
+        .slide.visible .point-card:nth-child(3),
+        .slide.visible .metric-box:nth-child(3),
+        .slide.visible .flow-box:nth-child(3) { transition-delay: 0.3s; }
 
 
         .slide h1 {
-            font-family: 'Avenir Next', Calibri, sans-serif;
+            font-family: var(--font-display);
             color: var(--text-primary);
             font-size: 2.2rem;
             margin-bottom: 20px;
-            font-weight: 600;
+            font-weight: 700;
+            letter-spacing: -0.01em;
             position: relative;
         }
 
@@ -78,13 +127,13 @@
             display: block;
             width: 35%;
             height: 3px;
-            background: var(--primary);
+            background: linear-gradient(90deg, var(--primary), var(--accent));
             margin-top: 10px;
             border-radius: 2px;
         }
 
         .slide h2 {
-            font-family: 'Avenir Next', Calibri, sans-serif;
+            font-family: var(--font-display);
             color: var(--text-primary);
             font-size: 1.8rem;
             margin-bottom: 20px;
@@ -93,7 +142,7 @@
         }
 
         .slide h3 {
-            font-family: 'Avenir Next', Calibri, sans-serif;
+            font-family: var(--font-display);
             color: var(--text-primary);
             font-size: 1.3rem;
             margin-bottom: 20px;
@@ -254,7 +303,7 @@
         }
 
         .cheat-sheet-header {
-            font-family: 'Avenir Next', Calibri, sans-serif;
+            font-family: var(--font-display);
             color: var(--text-primary);
             font-size: 1.5rem;
             font-weight: 700;
@@ -295,7 +344,7 @@
         }
 
         .cheat-sheet-command {
-            font-family: Consolas, 'Courier New', monospace;
+            font-family: var(--font-mono);
             background: var(--code-bg);
             color: var(--code-text);
             padding: 8px 12px;
@@ -316,19 +365,16 @@
         }
 
         .name {
-            font-family: 'Avenir Next', Calibri, sans-serif;
+            font-family: var(--font-display);
             font-size: 3.5rem;
             color: var(--text-primary);
             margin-bottom: 15px;
             font-weight: 700;
-            background: none;
-            -webkit-background-clip: unset;
-            -webkit-text-fill-color: unset;
-            background-clip: unset;
+            letter-spacing: -0.02em;
         }
 
         .title {
-            font-family: 'Avenir Next', Calibri, sans-serif;
+            font-family: var(--font-display);
             font-size: 1.2rem;
             color: var(--text-muted);
             margin-bottom: 15px;
@@ -395,7 +441,7 @@
         }
 
         .point-card h4 {
-            font-family: 'Avenir Next', Calibri, sans-serif;
+            font-family: var(--font-display);
             color: var(--text-primary);
             margin-bottom: 10px;
             font-size: 1.3rem;
@@ -428,16 +474,18 @@
         }
 
         .metric-number {
-            font-family: 'Avenir Next', Calibri, sans-serif;
+            font-family: var(--font-display);
             font-size: 2.5rem;
             font-weight: 700;
             color: var(--accent);
             display: block;
             line-height: 1;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -0.02em;
         }
 
         .metric-label {
-            font-family: 'Avenir Next', Calibri, sans-serif;
+            font-family: var(--font-display);
             color: var(--text-muted);
             font-size: 0.75rem;
             margin-top: 8px;
@@ -469,7 +517,7 @@
             border: 1px solid rgba(0, 111, 255, 0.3);
             background: rgba(0, 111, 255, 0.08);
             color: var(--text-primary);
-            font-family: 'Avenir Next', Calibri, sans-serif;
+            font-family: var(--font-display);
             font-size: 0.95rem;
             font-weight: 600;
             text-align: center;
@@ -526,7 +574,7 @@
         }
 
         .story-header {
-            font-family: 'Avenir Next', Calibri, sans-serif;
+            font-family: var(--font-display);
             color: var(--primary);
             font-size: 1.5rem;
             margin-bottom: 20px;
@@ -557,14 +605,14 @@
             grid-column: 1 / -1;
             border: none;
             border-left: 4px solid var(--alert);
-            background: rgba(255,69,69,0.06);
+            background: rgba(248,113,113,0.1);
         }
 
         .sar-action {
             grid-column: 1 / -1;
             border: none;
             border-left: 4px solid var(--primary);
-            background: rgba(0,111,255,0.06);
+            background: #181830;
             margin-top: 0;
         }
 
@@ -572,7 +620,7 @@
             grid-column: 1 / -1;
             border: none;
             border-left: 4px solid var(--success);
-            background: rgba(0,200,83,0.06);
+            background: rgba(52,211,153,0.1);
             margin-top: 0;
         }
 
@@ -600,7 +648,7 @@
         }
 
         .closing-title {
-            font-family: 'Avenir Next', Calibri, sans-serif;
+            font-family: var(--font-display);
             font-size: 3.5rem;
             color: var(--text-primary);
             margin-bottom: 30px;
@@ -608,7 +656,7 @@
         }
 
         .closing-subtitle {
-            font-family: 'Avenir Next', Calibri, sans-serif;
+            font-family: var(--font-display);
             font-size: 1.8rem;
             color: var(--text-muted);
             margin-bottom: 50px;
@@ -618,7 +666,7 @@
             position: absolute;
             top: 20px;
             right: 30px;
-            font-family: 'Avenir Next', Calibri, sans-serif;
+            font-family: var(--font-display);
             background: transparent;
             color: var(--text-muted);
             padding: 8px 16px;
@@ -637,7 +685,7 @@
             border-radius: 25px;
             border: 1px solid var(--border);
             font-size: 0.85rem;
-            font-family: 'Avenir Next', Calibri, sans-serif;
+            font-family: var(--font-display);
             z-index: 100;
         }
 
@@ -667,7 +715,7 @@
 
         /* SAR header styling */
         .sar-header-situation {
-            font-family: 'Avenir Next', Calibri, sans-serif;
+            font-family: var(--font-display);
             color: var(--alert);
             font-size: 1.1rem;
             margin-bottom: 15px;
@@ -687,7 +735,7 @@
         }
 
         .sar-header-action {
-            font-family: 'Avenir Next', Calibri, sans-serif;
+            font-family: var(--font-display);
             color: var(--primary);
             font-size: 1.1rem;
             margin-bottom: 15px;
@@ -707,7 +755,7 @@
         }
 
         .sar-header-result {
-            font-family: 'Avenir Next', Calibri, sans-serif;
+            font-family: var(--font-display);
             color: var(--success);
             font-size: 1.1rem;
             margin-bottom: 15px;
@@ -795,6 +843,15 @@
                 page-break-after: always;
                 background: white;
                 color: #1f2937;
+                opacity: 1;
+                transform: none;
+            }
+            .slide .sar-item,
+            .slide .point-card,
+            .slide .metric-box,
+            .slide .flow-box {
+                opacity: 1;
+                transform: none;
             }
             .navigation-hint { display: none; }
         }
@@ -819,7 +876,7 @@
                 <h1 class="name" style="margin-bottom: 10px;">Tsunghan Chiang (Hookey)</h1>
                 <p class="title">Operating System & Performance Engineer | 8+ Years</p>
                 <div style="width: 80px; height: 3px; background: var(--primary); border-radius: 2px; margin: 20px 0 30px 0;"></div>
-                <div style="margin-top: 30px; font-family: 'Avenir Next', Calibri, sans-serif; font-size: 1.4rem; color: var(--primary); font-weight: 600;">
+                <div style="margin-top: 30px; font-family: var(--font-display); font-size: 1.4rem; color: var(--primary); font-weight: 600;">
                     "Delivering Solutions of Quality and Innovation"
                 </div>
             </div>
@@ -890,7 +947,7 @@
             </div>
         </div>
 
-        <!-- Slide 4: Ubiquiti Career Highlights -->
+        <!-- Slide 3: Ubiquiti Career Highlights -->
         <div class="slide">
             <div class="slide-number">3 / 10</div>
             <h1>Ubiquiti Career Highlights (2022-Present)</h1>
@@ -942,7 +999,7 @@
             </div>
         </div>
 
-        <!-- Slide 5: QNAP Career Highlights -->
+        <!-- Slide 4: Qnap Career Highlights -->
         <div class="slide">
             <div class="slide-number">4 / 10</div>
             <h1>QNAP Career Highlights (2018-2022)</h1>
@@ -990,6 +1047,7 @@
             </div>
         </div>
 
+        <!-- Slide 5: Case Study 1: kernel-upgrade -->
         <div class="slide">
             <div class="slide-number">5 / 10</div>
             <h1>Case Study 1: Linux Kernel Upgrade</h1>
@@ -1111,6 +1169,7 @@
             </div>
         </div>
 
+        <!-- Slide 6: Case Study 2: nas-stability -->
         <div class="slide">
             <div class="slide-number">6 / 10</div>
             <h1>Case Study 2: NAS Stability Testing</h1>
@@ -1232,7 +1291,7 @@
             </div>
         </div>
 
-        <!-- Slide 8: Case Study 3 - Samba Performance -->
+        <!-- Slide 7: Case Study 3: samba-perf -->
         <div class="slide">
             <div class="slide-number">7 / 10</div>
             <h1>Case Study 3: Samba Performance</h1>
@@ -1246,34 +1305,34 @@
                         <span class="text-accent">1050/1025 MB/s</span> network capacity, <span class="text-accent">951/1850 MB/s</span> storage capacity and high CPU utilization.
                     </p>
                     <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 15px; margin-top: 15px;">
-                        <div style="text-align: center; margin-bottom: 15px; font-family: 'Avenir Next', Calibri, sans-serif; font-weight: 600; color: var(--text-primary);">Network vs Local I/O Performance Gap</div>
+                        <div style="text-align: center; margin-bottom: 15px; font-family: var(--font-display); font-weight: 600; color: var(--text-primary);">Network vs Local I/O Performance Gap</div>
                         <div style="display: flex; align-items: end; justify-content: space-between; gap: 20px; padding: 0 20px;">
                             <div style="text-align: center; flex: 1;">
-                                <div style="font-family: 'Avenir Next', Calibri, sans-serif; font-size: 0.75rem; font-weight: 500; color: var(--alert); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Network Write</div>
+                                <div style="font-family: var(--font-display); font-size: 0.75rem; font-weight: 500; color: var(--alert); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Network Write</div>
                                 <div style="height: 41px; width: 50px; background: var(--alert); border-radius: 4px; position: relative; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
-                                    <span style="font-family: 'Avenir Next', Calibri, sans-serif; color: white; font-size: 0.75rem; font-weight: 700;">544</span>
+                                    <span style="font-family: var(--font-display); color: white; font-size: 0.75rem; font-weight: 700;">544</span>
                                 </div>
                             </div>
                             <div style="text-align: center; flex: 1;">
-                                <div style="font-family: 'Avenir Next', Calibri, sans-serif; font-size: 0.75rem; font-weight: 500; color: var(--alert); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Network Read</div>
+                                <div style="font-family: var(--font-display); font-size: 0.75rem; font-weight: 500; color: var(--alert); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Network Read</div>
                                 <div style="height: 45px; width: 50px; background: var(--alert); border-radius: 4px; position: relative; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
-                                    <span style="font-family: 'Avenir Next', Calibri, sans-serif; color: white; font-size: 0.75rem; font-weight: 700;">592</span>
+                                    <span style="font-family: var(--font-display); color: white; font-size: 0.75rem; font-weight: 700;">592</span>
                                 </div>
                             </div>
                             <div style="text-align: center; flex: 1;">
-                                <div style="font-family: 'Avenir Next', Calibri, sans-serif; font-size: 0.75rem; font-weight: 500; color: var(--success); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Local Write</div>
+                                <div style="font-family: var(--font-display); font-size: 0.75rem; font-weight: 500; color: var(--success); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Local Write</div>
                                 <div style="height: 72px; width: 50px; background: var(--success); border-radius: 4px; position: relative; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
-                                    <span style="font-family: 'Avenir Next', Calibri, sans-serif; color: white; font-size: 0.75rem; font-weight: 700;">951</span>
+                                    <span style="font-family: var(--font-display); color: white; font-size: 0.75rem; font-weight: 700;">951</span>
                                 </div>
                             </div>
                             <div style="text-align: center; flex: 1;">
-                                <div style="font-family: 'Avenir Next', Calibri, sans-serif; font-size: 0.75rem; font-weight: 500; color: var(--success); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Local Read</div>
+                                <div style="font-family: var(--font-display); font-size: 0.75rem; font-weight: 500; color: var(--success); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Local Read</div>
                                 <div style="height: 140px; width: 50px; background: var(--success); border-radius: 4px; position: relative; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
-                                    <span style="font-family: 'Avenir Next', Calibri, sans-serif; color: white; font-size: 0.75rem; font-weight: 700;">1850</span>
+                                    <span style="font-family: var(--font-display); color: white; font-size: 0.75rem; font-weight: 700;">1850</span>
                                 </div>
                             </div>
                         </div>
-                        <div style="text-align: center; margin-top: 8px; font-family: 'Avenir Next', Calibri, sans-serif; font-size: 0.75rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 1px;">MB/s</div>
+                        <div style="text-align: center; margin-top: 8px; font-family: var(--font-display); font-size: 0.75rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 1px;">MB/s</div>
                     </div>
                 </div>
 
@@ -1417,13 +1476,13 @@
 
             <!-- Tagline -->
             <div style="text-align: center; margin: 40px 0;">
-                <h2 style="font-family: 'Avenir Next', Calibri, sans-serif; color: var(--primary); font-size: 2.0rem; font-weight: 600; line-height: 1.4;">
+                <h2 style="font-family: var(--font-display); color: var(--primary); font-size: 2.0rem; font-weight: 600; line-height: 1.4;">
                     OS Engineer &#8212; Linux Development, Performance & Storage Infrastructure
                 </h2>
             </div>
 
             <!-- Three Key Strengths -->
-            <div style="display: flex; justify-content: center; align-items: center; gap: 40px; margin: 40px 0; font-family: 'Avenir Next', Calibri, sans-serif; font-size: 1.4rem; font-weight: 600; color: var(--text-muted);">
+            <div style="display: flex; justify-content: center; align-items: center; gap: 40px; margin: 40px 0; font-family: var(--font-display); font-size: 1.4rem; font-weight: 600; color: var(--text-muted);">
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <span>Performance</span>
                 </div>
@@ -1467,7 +1526,7 @@
 
                 <div style="background: var(--card-bg); border: 1px solid var(--border); padding: 60px; border-radius: 14px; margin: 40px 0; text-align: center;">
                     <div style="font-size: 3rem; margin-bottom: 30px; color: var(--primary);">&#9889;</div>
-                    <h2 style="font-family: 'Avenir Next', Calibri, sans-serif; color: var(--text-primary); margin-bottom: 20px;">Let's Connect</h2>
+                    <h2 style="font-family: var(--font-display); color: var(--text-primary); margin-bottom: 20px;">Let's Connect</h2>
                 </div>
 
                 <div class="contact-info" style="margin-top: 60px;">
@@ -2127,7 +2186,7 @@
         // Initialize
         updateNavigationHint();
 
-        // Update navigation hint when slide changes
+        // Update navigation hint and trigger entrance animations
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -2136,9 +2195,10 @@
                         currentSlide = slideIndex;
                         updateNavigationHint();
                     }
+                    entry.target.classList.add('visible');
                 }
             });
-        }, { threshold: 0.5 });
+        }, { threshold: 0.15 });
 
         slides.forEach(slide => observer.observe(slide));
 

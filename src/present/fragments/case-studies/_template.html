@@ -20,19 +20,19 @@
                     <!-- OPTIONAL: Situation chart — delete this block if no chart needed.
                          Use only when concrete before/after numbers exist. -->
                     <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 15px; margin-top: 15px;">
-                        <div style="text-align: center; margin-bottom: 15px; font-family: 'Avenir Next', Calibri, sans-serif; font-weight: 600; color: var(--text-primary);">{{CHART_TITLE}}</div>
+                        <div style="text-align: center; margin-bottom: 15px; font-family: var(--font-display); font-weight: 600; color: var(--text-primary);">{{CHART_TITLE}}</div>
                         <div style="display: flex; align-items: end; justify-content: space-between; gap: 20px; padding: 0 20px;">
                             <!-- Each bar: adjust height proportionally to max value.
                                  Red (var(--alert)) = before/problem, Green (var(--success)) = after/capacity -->
                             <div style="text-align: center; flex: 1;">
-                                <div style="font-family: 'Avenir Next', Calibri, sans-serif; font-size: 0.75rem; font-weight: 500; color: var(--alert); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">{{BAR_1_LABEL}}</div>
+                                <div style="font-family: var(--font-display); font-size: 0.75rem; font-weight: 500; color: var(--alert); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">{{BAR_1_LABEL}}</div>
                                 <div style="height: {{BAR_1_HEIGHT}}px; width: 50px; background: var(--alert); border-radius: 4px; position: relative; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
-                                    <span style="font-family: 'Avenir Next', Calibri, sans-serif; color: white; font-size: 0.75rem; font-weight: 700;">{{BAR_1_VALUE}}</span>
+                                    <span style="font-family: var(--font-display); color: white; font-size: 0.75rem; font-weight: 700;">{{BAR_1_VALUE}}</span>
                                 </div>
                             </div>
                             <!-- Repeat bar divs as needed (2-4 bars typical) -->
                         </div>
-                        <div style="text-align: center; margin-top: 8px; font-family: 'Avenir Next', Calibri, sans-serif; font-size: 0.75rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 1px;">{{CHART_UNIT}}</div>
+                        <div style="text-align: center; margin-top: 8px; font-family: var(--font-display); font-size: 0.75rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 1px;">{{CHART_UNIT}}</div>
                     </div>
                     <!-- END OPTIONAL CHART -->
                 </div>
