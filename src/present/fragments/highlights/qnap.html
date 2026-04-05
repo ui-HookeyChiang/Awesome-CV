@@ -9,36 +9,44 @@
             <h1>QNAP Career Highlights (2018-2022)</h1>
 
 
-            <div style="margin: 20px 0;">
-                <h3 style="font-family: 'Avenir Next', Calibri, sans-serif; color: var(--text-primary); margin-bottom: 8px;">Core Experience: File System Engineer</h3>
-                <p style="margin: 0 0 25px 0; font-size: 1rem; color: var(--text-secondary); line-height: 1.6;">Architected
-                    FUSE-based cloud storage gateway with advanced caching, encryption, and comprehensive performance optimization</p>
-                <div class="metrics-row" style="margin: 0 0 20px 0; justify-content: flex-start; gap: 20px; flex-wrap: wrap;">
-                    <div class="metric-box" style="min-width: 120px; flex: 1;">
-                        <span class="metric-number">190K+</span>
-                        <span class="metric-label">Deployments</span>
-                    </div>
-                    <div class="metric-box" style="min-width: 120px; flex: 1;">
-                        <span class="metric-number">50M+</span>
-                        <span class="metric-label">Files</span>
-                    </div>
-                    <div class="metric-box" style="min-width: 120px; flex: 1;">
-                        <span class="metric-number">+300%</span>
-                        <span class="metric-label">Metadata Boost</span>
-                    </div>
+            <div style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap; margin-top: 20px;">
+                <!-- Tech Stack (left) -->
+                <div class="tech-stack" style="width: 220px;">
+                    <div class="tech-layer tech-layer-dashed">Sync Daemon<div class="tech-layer-label">qRPC / Team B</div></div>
+                    <div class="tech-layer">FUSE + libev<div class="tech-layer-label">Service</div></div>
+                    <div class="tech-layer">SQLite / VFS Cache<div class="tech-layer-label">Data</div></div>
+                    <div class="tech-layer">ext4<div class="tech-layer-label">FS</div></div>
+                    <div class="tech-layer">Linux Kernel<div class="tech-layer-label">Kernel</div></div>
                 </div>
-                <div class="metrics-row" style="margin: 0; justify-content: flex-start; gap: 20px; flex-wrap: wrap;">
-                    <div class="metric-box" style="min-width: 120px; flex: 1;">
-                        <span class="metric-number">&lt;20</span>
-                        <span class="metric-label">Support Involvement</span>
+                <!-- Metrics (right) -->
+                <div style="flex: 1;">
+                    <div class="metrics-row" style="margin: 0 0 20px 0; justify-content: flex-start; gap: 20px; flex-wrap: wrap;">
+                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                            <span class="metric-number">190K+</span>
+                            <span class="metric-label">Deployments</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                            <span class="metric-number">50M+</span>
+                            <span class="metric-label">Files</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                            <span class="metric-number">+300%</span>
+                            <span class="metric-label">Metadata Boost</span>
+                        </div>
                     </div>
-                    <div class="metric-box" style="min-width: 120px; flex: 1;">
-                        <span class="metric-number">36%</span>
-                        <span class="metric-label">Latency Cut</span>
-                    </div>
-                    <div class="metric-box" style="min-width: 120px; flex: 1;">
-                        <span class="metric-number">22s&#8594;1s</span>
-                        <span class="metric-label">Dir Deletion</span>
+                    <div class="metrics-row" style="margin: 0; justify-content: flex-start; gap: 20px; flex-wrap: wrap;">
+                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                            <span class="metric-number">&lt;20</span>
+                            <span class="metric-label">Support Involvement</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                            <span class="metric-number">36%</span>
+                            <span class="metric-label">Latency Cut</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 120px; flex: 1;">
+                            <span class="metric-number">22s&#8594;1s</span>
+                            <span class="metric-label">Dir Deletion</span>
+                        </div>
                     </div>
                 </div>
             </div>
