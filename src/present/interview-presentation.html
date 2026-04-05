@@ -229,7 +229,7 @@
 
         .intro-header {
             text-align: left;
-            margin-bottom: 50px;
+            margin-bottom: 30px;
         }
 
         .name {
@@ -379,7 +379,7 @@
 
         .tech-stack-row {
             display: flex;
-            gap: 4px;
+            gap: 6px;
         }
 
         .tech-layer {
@@ -392,14 +392,32 @@
             font-weight: 600;
             text-align: center;
             flex: 1;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
         }
 
-        .tech-layer:first-child {
+        .tech-stack > .tech-layer:first-child {
             border-radius: 8px 8px 0 0;
         }
 
-        .tech-layer:last-child {
+        .tech-stack > .tech-layer:last-child {
             border-radius: 0 0 8px 8px;
+        }
+
+        .tech-stack > .tech-stack-row:first-child .tech-layer:first-child {
+            border-radius: 8px 0 0 0;
+        }
+
+        .tech-stack > .tech-stack-row:first-child .tech-layer:last-child {
+            border-radius: 0 8px 0 0;
+        }
+
+        .tech-stack > .tech-stack-row:last-child .tech-layer:first-child {
+            border-radius: 0 0 0 8px;
+        }
+
+        .tech-stack > .tech-stack-row:last-child .tech-layer:last-child {
+            border-radius: 0 0 8px 0;
         }
 
         .tech-layer-label {
@@ -665,6 +683,12 @@
             .sar-format {
                 grid-template-columns: 1fr;
                 gap: 20px;
+            }
+
+            .tech-stack {
+                width: 100% !important;
+                max-width: 100%;
+                margin-bottom: 20px;
             }
 
             .cheat-sheet-content {
