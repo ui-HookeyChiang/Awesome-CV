@@ -1,126 +1,128 @@
 <!-- fragment:
   id: kernel-upgrade
   type: case-study
-  tags: [kernel, linux, btrfs, infrastructure, validation]
-  domain: System Infrastructure
-  metrics: [32x checksum, 0 regression, +40% SSD IOPS]
-  source: milestone/ubiquiti.md#2026-q1
+  tags: [kernel, linux, btrfs, ebpf, ecryptfs, driver, arm64, checksum, debian]
+  domain: Kernel Engineering
+  metrics: [32x checksum, 0 regression, 5.10 LTS, +40% SSD IOPS]
+  source: milestone/ubiquiti.md#linux-kernel-upgrade
 -->
-        <!-- Slide 6: Case Study 1 - Linux Kernel Upgrade -->
         <div class="slide">
             <div class="slide-number">{{N}} / {{TOTAL}}</div>
-            <h1>Case Study 1: Linux Kernel Upgrade</h1>
+            <h1>Case Study {{CASE_NUM}}: Linux Kernel Upgrade</h1>
 
             <div class="sar-format">
+                <!-- ===== SITUATION ===== -->
                 <div class="sar-item sar-situation">
                     <h3 class="sar-header-situation">Situation</h3>
                     <p style="margin: 10px 0; font-size: 1rem; line-height: 1.5; color: var(--text-secondary);">
-                        Evaluated fast Btrfs checksum feature for data integrity and CPU resource-saving.
+                        NAS platform on <span style="color: var(--accent); font-weight: 700;">Linux 4.19</span> lacked modern Btrfs features, eBPF observability, and <span style="color: var(--accent); font-weight: 700;">Debian Bullseye</span> alignment &mdash; requiring a full <span style="color: var(--accent); font-weight: 700;">kernel upgrade to 5.10</span> across all product variants.
                     </p>
                 </div>
 
+                <!-- ===== ACTION ===== -->
                 <div class="sar-item sar-action">
                     <h3 class="sar-header-action">Action</h3>
-                    <div style="margin-top: 20px;">
-                        <!-- Kernel Upgrade & Modernization Flow -->
 
-                        <!-- Preparation Step -->
+                    <div style="margin-top: 20px;">
+
+                        <!-- Preparation Step (1 box, 220px wide) -->
                         <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
                             <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="btrfs-analysis" style="width: 220px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Btrfs Feature</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Backporting</div>
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="kernel-gap" style="width: 220px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Kernel Gap</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Analysis</div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Flow Separator -->
+                        <!-- Down Arrow -->
                         <div style="display: flex; justify-content: center; margin-bottom: 25px;">
                             <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
                         </div>
 
-                        <!-- Top Row: Core Upgrade Stages -->
+                        <!-- Top Row: 3 boxes (200px wide each) -->
                         <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
                             <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="kernel-upgrade" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="kernel-upgrade-510" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
                                     <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Kernel Upgrade</div>
                                     <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">4.19 &#8594; 5.10</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Alpine SDK compat</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Alpine SDK, debbox integration</div>
                                 </div>
                             </div>
                             <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
                             <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="driver-modernization" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">API</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Compatibility</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">PCI + AHCI + PHY</div>
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="kernel-driver" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Driver Compat</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">PCI + PHY + AHCI</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">API migration, regression fix</div>
                                 </div>
                             </div>
                             <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
                             <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="hardware-compat" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Driver</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Modernization</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">PCA9575 + RTL8211F</div>
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="kernel-checksum" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Btrfs Checksum</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">HW Acceleration</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">CRC32c ARM64, +40% IOPS</div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Central Flow Arrow -->
+                        <!-- Down Arrow -->
                         <div style="display: flex; justify-content: center; margin-bottom: 30px;">
                             <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
                         </div>
 
-                        <!-- Bottom Row: Bug Resolution & Validation -->
+                        <!-- Bottom Row: 3 boxes (200px wide each) -->
                         <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
                             <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="bug-fixes" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Critical Bug</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Resolution</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">RAID5 + PHY fixes</div>
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="kernel-bugs" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Bug Resolution</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">RAID5 + PHY Crash</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">50% regression, kdump analysis</div>
                                 </div>
                             </div>
                             <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
                             <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="comprehensive-validation" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Comprehensive</div>
-                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Validation</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">stress-ng + xfstests</div>
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="kernel-patches" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">eBPF + eCryptfs</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Kernel Patches</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">BTF, fallocate, nanosec, CFS</div>
                                 </div>
                             </div>
                             <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
                             <div style="text-align: center;">
-                                <div class="flow-box" tabindex="0" role="button" data-cheat="stable-deployment" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
-                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Stable</div>
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="kernel-validation" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Validation &amp;</div>
                                     <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Deployment</div>
-                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Zero regression</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">stress-ng, xfstests, packetdrill</div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Kernel Upgrade Flow Description -->
+                        <!-- Flow Description -->
                         <div style="text-align: center; margin-top: 20px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
-                            Kernel Infrastructure Modernization: Analysis &#8594; Upgrade &#8594; Validation &#8594; Deployment
+                            Kernel Engineering: Analyze &#8594; Upgrade &#8594; Fix &#8594; Validate &#8594; Deploy
                         </div>
                     </div>
                 </div>
 
+                <!-- ===== RESULT ===== -->
                 <div class="sar-item sar-result">
                     <h3 class="sar-header-result">Result</h3>
-                    <div class="metrics-row" style="margin-top: 20px; justify-content: center; gap: 15px; flex-wrap: wrap;">
-                        <div class="metric-box" style="min-width: 110px; flex: 1;">
+                    <div class="metrics-row" style="margin-top: 20px; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
                             <span class="metric-number">32x</span>
                             <span class="metric-label">Checksum Speed</span>
                         </div>
-                        <div class="metric-box" style="min-width: 110px; flex: 1;">
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
                             <span class="metric-number">0</span>
                             <span class="metric-label">Regression</span>
                         </div>
-                        <div class="metric-box" style="min-width: 110px; flex: 1; cursor: pointer;" data-cheat="product-scalability">
-                          <span class="metric-number">Feature</span>
-                            <span class="metric-label">Scalability</span>
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                            <span class="metric-number">5.10</span>
+                            <span class="metric-label">LTS Aligned</span>
                         </div>
-                        <div class="metric-box" style="min-width: 110px; flex: 1;">
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
                             <span class="metric-number">+40%</span>
                             <span class="metric-label">SSD IOPS</span>
                         </div>
@@ -131,200 +133,159 @@
 
 <script>
 Object.assign(window.cheatSheets = window.cheatSheets || {}, {
-    'btrfs-analysis': {
-        title: 'Btrfs Feature Analysis',
+    'kernel-gap': {
+        title: 'Kernel Gap Analysis',
         content: `
                     <div class="cheat-sheet-item">
-                        <strong>Evaluated fast Btrfs checksum feature:</strong>
-                        <p>For data integrity and CPU resource-saving improvements</p>
-                        <code class="cheat-sheet-command"># xxhash checksum algorithm evaluation</code>
-                        <code class="cheat-sheet-command">mount -o checksum=xxhash /dev/sda1 /mnt</code>
-                        <code class="cheat-sheet-command"># 15-20% performance improvement over crc32c</code>
+                        <strong>4.19 limitations blocking product roadmap:</strong>
+                        <p>Linux 4.19 lacked Btrfs xxhash/CRC32c checksum support (data integrity + CPU savings), eBPF/BTF for filesystem observability, and was out of Debian Bullseye LTS alignment. Backporting individual features was impractical — 3000+ commits between 4.19 and 5.10 in fs/btrfs/ alone.</p>
+                        <code class="cheat-sheet-command"># Features missing in 4.19</code>
+                        <code class="cheat-sheet-command">grep -r "BTRFS_CSUM_TYPE_XXHASH" linux-4.19/  # not found</code>
+                        <code class="cheat-sheet-command">grep -r "CONFIG_DEBUG_INFO_BTF" linux-4.19/    # not found</code>
                     </div>
                     <div class="cheat-sheet-item">
-                        <strong>Identified kernel limitations:</strong>
-                        <p>Required features blocked by Linux 4.19 limitations</p>
-                        <code class="cheat-sheet-command"># Required kernel features missing</code>
-                        <code class="cheat-sheet-command">grep -r "xxhash" /usr/src/linux-4.19/fs/btrfs/</code>
-                        <code class="cheat-sheet-command"># No results - feature not available</code>
-                    </div>
-                    <div class="cheat-sheet-item">
-                        <strong>Backport complexity assessment:</strong>
-                        <p>Thousands of commits involving xarray changes across modules</p>
-                        <code class="cheat-sheet-command"># Dependency analysis</code>
-                        <code class="cheat-sheet-command">git log --oneline v4.19..v5.10 -- fs/btrfs/ | wc -l</code>
-                        <code class="cheat-sheet-command"># Result: 3000+ commits to review and backport</code>
-                    </div>
-                `
+                        <strong>Debian Bullseye alignment required:</strong>
+                        <p>Product firmware was on Debian Buster (4.19 kernel). Bullseye shipped with 5.10 LTS — staying on 4.19 meant diverging from upstream security patches and package compatibility.</p>
+                        <code class="cheat-sheet-command"># Bullseye default kernel</code>
+                        <code class="cheat-sheet-command"># linux-image-5.10.0-* (LTS until 2026)</code>
+                        <code class="cheat-sheet-command"># Buster EOL: June 2024 — must migrate</code>
+                    </div>`
     },
-    'kernel-upgrade': {
-        title: 'Kernel Upgrade 4.19 -> 5.10',
+    'kernel-upgrade-510': {
+        title: 'Kernel Upgrade 4.19 → 5.10',
         content: `
-                    <div class="cheat-sheet-item">
-                        <strong>Prepared and stabilized Linux kernel upgrade:</strong>
-                        <p>From 4.19 to 5.10 with Alpine SDK compatibility</p>
-                        <code class="cheat-sheet-command"># Kernel build preparation</code>
-                        <code class="cheat-sheet-command">make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- defconfig</code>
-                        <code class="cheat-sheet-command">make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j8</code>
-                    </div>
                     <div class="cheat-sheet-item">
                         <strong>Alpine SDK integration:</strong>
-                        <p>Maintained compatibility with existing build infrastructure</p>
-                        <code class="cheat-sheet-command"># SDK compatibility testing</code>
-                        <code class="cheat-sheet-command">./build-system/alpine-sdk/test-kernel-compat.sh v5.10</code>
+                        <p>UNAS Pro uses Annapurna Labs Alpine SoC with vendor BSP. Merged Alpine SDK patches into mainline 5.10 tree — PCIe controller, thermal sensor, GPIO expander, SATA controller all required porting.</p>
+                        <code class="cheat-sheet-command"># Build kernel with Alpine BSP</code>
+                        <code class="cheat-sheet-command">make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- alpine_defconfig</code>
+                        <code class="cheat-sheet-command">make ARCH=arm64 -j$(nproc) Image dtbs modules</code>
                     </div>
                     <div class="cheat-sheet-item">
-                        <strong>Feature enablement validation:</strong>
-                        <p>Confirmed xxhash and inline scrubbing availability</p>
-                        <code class="cheat-sheet-command"># Verify new Btrfs features</code>
-                        <code class="cheat-sheet-command">grep -r "BTRFS_CHECKSUM_XXHASH" /usr/src/linux-5.10/</code>
-                        <code class="cheat-sheet-command">mount -o checksum=xxhash # Now supported</code>
-                    </div>
-                `
+                        <strong>debbox firmware build integration:</strong>
+                        <p>Integrated new kernel into the debbox build system — updated kernel package, headers, and module dependencies. CI pipeline validates kernel + rootfs compatibility before firmware image generation.</p>
+                        <code class="cheat-sheet-command"># debbox kernel package build</code>
+                        <code class="cheat-sheet-command">make -C debbox build arch=arm64 dist=bullseye linux-alpine</code>
+                        <code class="cheat-sheet-command"># Output: linux-image-5.10.216-alpine_arm64.deb</code>
+                    </div>`
     },
-    'driver-modernization': {
-        title: 'Driver Modernization',
+    'kernel-driver': {
+        title: 'Driver Compat — PCI + PHY + AHCI',
         content: `
                     <div class="cheat-sheet-item">
-                        <strong>PCI Controller modernization:</strong>
-                        <p>Updated resource management with devm_pci_alloc_host_bridge()</p>
-                        <code class="cheat-sheet-command"># PCI controller resource management</code>
-                        <code class="cheat-sheet-command">lspci -vv | grep -A5 "Host bridge"</code>
-                        <code class="cheat-sheet-command"># Verify modern resource allocation</code>
+                        <strong>PCI controller API migration:</strong>
+                        <p>5.10 replaced pci_create_root_bus() with devm_pci_alloc_host_bridge() for managed resource cleanup. Ported Alpine PCIe controller driver to new API while maintaining hotplug and MSI-X support.</p>
+                        <code class="cheat-sheet-command"># API change: managed resource allocation</code>
+                        <code class="cheat-sheet-command"># 4.19: pci_create_root_bus()</code>
+                        <code class="cheat-sheet-command"># 5.10: devm_pci_alloc_host_bridge() + devm_add_action()</code>
                     </div>
                     <div class="cheat-sheet-item">
-                        <strong>Ethernet Driver updates:</strong>
-                        <p>Updated deprecated APIs and enhanced PHY handling with phy_set_asym_pause</p>
-                        <code class="cheat-sheet-command"># PHY asymmetric pause support</code>
-                        <code class="cheat-sheet-command">ethtool eth0 | grep "Pause"</code>
-                        <code class="cheat-sheet-command"># Asymmetric pause frame support enabled</code>
+                        <strong>PHY driver regression fixes:</strong>
+                        <p>Generic PHY framework upgrade broke AR8033 (UNAS Pro 4) and RTL8211F (UNAS Pro 7/8) auto-negotiation. Fixed pause frame advertisement and asymmetric pause handling.</p>
+                        <code class="cheat-sheet-command"># PHY auto-negotiation fix</code>
+                        <code class="cheat-sheet-command">ethtool eth0  # verify link speed + pause</code>
+                        <code class="cheat-sheet-command"># AR8033: flow control, RTL8211F: ALDPS/EEE</code>
                     </div>
                     <div class="cheat-sheet-item">
-                        <strong>API compatibility updates:</strong>
-                        <p>Modernized ndo_select_queue and getnstimeofday deprecated API usage</p>
-                        <code class="cheat-sheet-command"># Network device queue selection</code>
-                        <code class="cheat-sheet-command">cat /proc/net/dev | grep eth0</code>
-                        <code class="cheat-sheet-command"># Multi-queue operation verified</code>
-                    </div>
-                `
-    },
-    'hardware-compat': {
-        title: 'Hardware Compatibility',
-        content: `
-                    <div class="cheat-sheet-item">
-                        <strong>PCA9575 chip compatibility fixes:</strong>
-                        <p>Implemented byte-by-byte read mode to resolve auto-increment failures</p>
-                        <code class="cheat-sheet-command"># PCA9575 I2C communication fix</code>
-                        <code class="cheat-sheet-command">i2cget -y 1 0x20 0x00</code>
-                        <code class="cheat-sheet-command"># Single-byte read mode active</code>
-                    </div>
-                    <div class="cheat-sheet-item">
-                        <strong>PHY auto-negotiation regression fixes:</strong>
-                        <p>Corrected AR8033 and RTL8211f issues from generic framework upgrades</p>
-                        <code class="cheat-sheet-command"># PHY auto-negotiation status</code>
-                        <code class="cheat-sheet-command">ethtool eth0 | grep "Auto-negotiation"</code>
-                        <code class="cheat-sheet-command"># Link partner advertisement</code>
-                    </div>
-                    <div class="cheat-sheet-item">
-                        <strong>Ethernet controller validation:</strong>
-                        <p>Verified full compatibility with existing network infrastructure</p>
-                        <code class="cheat-sheet-command"># Network interface validation</code>
-                        <code class="cheat-sheet-command">ethtool -i eth0</code>
-                        <code class="cheat-sheet-command">mii-tool eth0</code>
-                    </div>
-                `
-    },
-    'bug-fixes': {
-        title: 'Critical Bug Resolution',
-        content: `
-                    <div class="cheat-sheet-item">
-                        <strong>Fixed RAID5 50% performance regression:</strong>
-                        <p>By adjusting I/O size from 4K to 64K optimal chunks</p>
-                        <code class="cheat-sheet-command"># RAID5 I/O size optimization</code>
-                        <code class="cheat-sheet-command">echo 64 > /sys/block/md0/queue/optimal_io_size</code>
-                        <code class="cheat-sheet-command"># Result: 2x throughput improvement</code>
-                    </div>
-                    <div class="cheat-sheet-item">
-                        <strong>Resolved Realtek PHY system crashes:</strong>
-                        <p>From ALDPS/EEE behaviors using kdump analysis</p>
-                        <code class="cheat-sheet-command"># PHY power management fix</code>
-                        <code class="cheat-sheet-command">ethtool -s eth0 eee off</code>
-                        <code class="cheat-sheet-command"># Disable aggressive low power modes</code>
-                    </div>
-                    <div class="cheat-sheet-item">
-                        <strong>Fixed AHCI driver PCI IRQ vector setup:</strong>
-                        <p>Through dynamic IRQ vector selection replacing hardcoded assignments</p>
-                        <code class="cheat-sheet-command"># AHCI IRQ configuration</code>
+                        <strong>AHCI IRQ vector fix:</strong>
+                        <p>Hardcoded IRQ vector assignment failed on 5.10's dynamic MSI-X allocation. Replaced with runtime vector detection for SATA controller interrupt handling.</p>
+                        <code class="cheat-sheet-command"># AHCI IRQ: static → dynamic vectors</code>
                         <code class="cheat-sheet-command">cat /proc/interrupts | grep ahci</code>
-                        <code class="cheat-sheet-command"># Verify proper MSI-X vector assignment</code>
-                    </div>
-                `
+                        <code class="cheat-sheet-command"># Verify MSI-X vectors properly assigned</code>
+                    </div>`
     },
-    'comprehensive-validation': {
-        title: 'Comprehensive Validation',
+    'kernel-checksum': {
+        title: 'Btrfs Checksum HW Acceleration',
         content: `
                     <div class="cheat-sheet-item">
-                        <strong>Multi-framework testing approach:</strong>
-                        <p>Extensive validation using stress-ng, xfstests, and packetdrill</p>
-                        <code class="cheat-sheet-command"># Comprehensive stress testing</code>
+                        <strong>xxhash evaluation → CRC32c selection:</strong>
+                        <p>Evaluated Btrfs checksum algorithms on ARM64. xxhash was 32x faster than CRC32 in software, but Alpine SoC has hardware CRC32c instructions — making HW-accelerated CRC32c the best choice for UNAS Pro.</p>
+                        <code class="cheat-sheet-command"># Checksum benchmark on Alpine ARM64</code>
+                        <code class="cheat-sheet-command"># Software: xxhash 32x faster than crc32 (software)</code>
+                        <code class="cheat-sheet-command"># Hardware: CRC32c with ARM64 accel → fastest overall</code>
+                        <code class="cheat-sheet-command">mkfs.btrfs --csum crc32c /dev/md0</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>+40% SSD-RAID write IOPS:</strong>
+                        <p>ARM64 CRC32c hardware acceleration delivered +40% write IOPS on SSD-backed RAID arrays. UNAS (RTD1619) kept xxhash due to no HW CRC32 — per-platform default configured in ustd.</p>
+                        <code class="cheat-sheet-command"># Per-platform checksum default</code>
+                        <code class="cheat-sheet-command"># UNAS Pro (Alpine): crc32c (HW accelerated)</code>
+                        <code class="cheat-sheet-command"># UNAS (RTD1619): xxhash (no HW CRC32)</code>
+                        <code class="cheat-sheet-command"># fio result: +40% randwrite IOPS with crc32c</code>
+                    </div>`
+    },
+    'kernel-bugs': {
+        title: 'Bug Resolution — RAID5 + PHY Crash',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>RAID5 50% performance regression:</strong>
+                        <p>After kernel upgrade, RAID5 sequential write dropped 50%. Root cause: 5.10 changed default I/O request size from stripe-aligned to 4K. Fixed by setting optimal_io_size to match RAID chunk size (64K).</p>
+                        <code class="cheat-sheet-command"># RAID5 I/O size fix</code>
+                        <code class="cheat-sheet-command"># Before: 4K requests → 50% throughput drop</code>
+                        <code class="cheat-sheet-command">echo 64 > /sys/block/md0/queue/optimal_io_size</code>
+                        <code class="cheat-sheet-command"># After: stripe-aligned I/O → full throughput restored</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Realtek PHY system crash:</strong>
+                        <p>RTL8211F ALDPS (Advanced Low Power Sleep) and EEE (Energy Efficient Ethernet) caused intermittent system crashes. Diagnosed with kdump crash analysis — PHY entered sleep mode during active traffic. Disabled aggressive power management.</p>
+                        <code class="cheat-sheet-command"># PHY crash diagnosis via kdump</code>
+                        <code class="cheat-sheet-command">crash vmlinux vmcore</code>
+                        <code class="cheat-sheet-command"># Root cause: ALDPS sleep during active traffic</code>
+                        <code class="cheat-sheet-command">ethtool --set-eee eth0 eee off  # fix</code>
+                    </div>`
+    },
+    'kernel-patches': {
+        title: 'eBPF + eCryptfs Kernel Patches',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>BTF/eBPF enablement:</strong>
+                        <p>Enabled CONFIG_DEBUG_INFO_BTF for BPF Type Format support — allows eBPF programs to introspect kernel data structures for filesystem event auditing and observability without custom kernel modules.</p>
+                        <code class="cheat-sheet-command"># Enable BTF in kernel config</code>
+                        <code class="cheat-sheet-command">CONFIG_DEBUG_INFO_BTF=y</code>
+                        <code class="cheat-sheet-command"># eBPF filesystem auditing now possible</code>
+                        <code class="cheat-sheet-command">bpftrace -e 'tracepoint:btrfs:* { @[probe] = count(); }'</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>eCryptfs patches authored:</strong>
+                        <p>Implemented nanosecond timestamp support (propagate s_time_gran from lower filesystem) and fallocate() support (skip decrypt on all-zero pages, reduce truncate latency). Both merged into debbox kernel.</p>
+                        <code class="cheat-sheet-command"># eCryptfs kernel patches</code>
+                        <code class="cheat-sheet-command">ecryptfs: propagate s_time_gran  # nanosec timestamps</code>
+                        <code class="cheat-sheet-command">ecryptfs: add fallocate support  # skip zero-page decrypt</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>CFS bandwidth control:</strong>
+                        <p>Enabled CONFIG_CFS_BANDWIDTH for per-service CPU quota management via systemd CPUQuota=. Foundation for the cgroup resource isolation framework (see system-perf case study).</p>
+                        <code class="cheat-sheet-command"># CFS bandwidth for CPU quotas</code>
+                        <code class="cheat-sheet-command">CONFIG_CFS_BANDWIDTH=y</code>
+                        <code class="cheat-sheet-command"># Enables: systemctl set-property app.slice CPUQuota=540%</code>
+                    </div>`
+    },
+    'kernel-validation': {
+        title: 'Validation & Deployment',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Multi-framework stress testing:</strong>
+                        <p>stress-ng for CPU/memory/I/O stress (24h+), xfstests for Btrfs filesystem correctness (180+ tests), packetdrill for TCP state machine edge cases. All must pass before firmware release.</p>
+                        <code class="cheat-sheet-command"># Stress testing suite</code>
                         <code class="cheat-sheet-command">stress-ng --cpu 8 --io 4 --vm 2 --timeout 24h</code>
+                        <code class="cheat-sheet-command">./check -btrfs -g stress  # xfstests</code>
+                        <code class="cheat-sheet-command">packetdrill tcp-established.pkt  # TCP validation</code>
                     </div>
-                    <div class="cheat-sheet-item">
-                        <strong>Filesystem validation:</strong>
-                        <p>Btrfs functionality validated with complete xfstests suite</p>
-                        <code class="cheat-sheet-command"># Btrfs filesystem testing</code>
-                        <code class="cheat-sheet-command">./check -btrfs tests/btrfs/</code>
-                        <code class="cheat-sheet-command"># 180+ tests passed, 3 known issues</code>
-                    </div>
-                    <div class="cheat-sheet-item">
-                        <strong>Network stack validation:</strong>
-                        <p>TCP behavior validated with packetdrill for edge case scenarios</p>
-                        <code class="cheat-sheet-command"># Network protocol testing</code>
-                        <code class="cheat-sheet-command">packetdrill tcp-connection-established.pkt</code>
-                        <code class="cheat-sheet-command"># All TCP state machine tests passed</code>
-                    </div>
-                `
-    },
-    'stable-deployment': {
-        title: 'Stable Deployment',
-        content: `
                     <div class="cheat-sheet-item">
                         <strong>Zero regression deployment:</strong>
-                        <p>Successfully deployed stable Linux 5.10 with zero regression issues</p>
-                        <code class="cheat-sheet-command"># Production deployment validation</code>
-                        <code class="cheat-sheet-command">uname -r</code>
-                        <code class="cheat-sheet-command"># Output: 5.10.x-alpine-custom</code>
+                        <p>Deployed 5.10 kernel across all UNAS Pro variants (Pro4, Pro7, Pro8) with zero functional regressions. All existing features (Btrfs, eCryptfs, Samba, NFS, RAID) validated working identically to 4.19.</p>
+                        <code class="cheat-sheet-command"># Deployment verification</code>
+                        <code class="cheat-sheet-command">uname -r  # 5.10.216-alpine</code>
+                        <code class="cheat-sheet-command">btrfs fi show  # all volumes intact</code>
+                        <code class="cheat-sheet-command">mdadm --detail /dev/md0  # RAID healthy</code>
                     </div>
                     <div class="cheat-sheet-item">
-                        <strong>Feature enablement confirmation:</strong>
-                        <p>All target Btrfs features successfully enabled and operational</p>
-                        <code class="cheat-sheet-command"># Btrfs feature verification</code>
-                        <code class="cheat-sheet-command">btrfs filesystem show</code>
-                        <code class="cheat-sheet-command">mount | grep checksum=xxhash</code>
-                    </div>
-                    <div class="cheat-sheet-item">
-                        <strong>Performance improvements validated:</strong>
-                        <p>+40% SSD RAID write IOPS using ARM64 hardware-accelerated CRC32</p>
-                        <code class="cheat-sheet-command"># Performance validation</code>
-                        <code class="cheat-sheet-command">fio --name=raid-test --rw=randwrite --bs=4k --iodepth=32</code>
-                        <code class="cheat-sheet-command"># Baseline: 25K IOPS -> New: 35K IOPS</code>
-                    </div>
-                `
-    },
-    'product-scalability': {
-        title: 'Linux 5.10 Capabilities Enabled',
-        content: `
-                    <div style="padding: 30px;">
-                        <ul style="font-size: 1.2rem; line-height: 2; margin: 0; list-style-type: disc; padding-left: 20px;">
-                            <li>NVMe 1.4 support for next-generation storage performance</li>
-                            <li>Multi-queue block layer (blk-mq) for improved I/O scalability</li>
-                            <li>Multi-channel Samba for enhanced SMB performance</li>
-                            <li>Advanced TCP congestion control (BBR and CUBIC algorithms)</li>
-                            <li>Enhanced cgroup resource control and priority management</li>
-                            <li>Extremely low scheduler tail latency for real-time responsiveness</li>
-                        </ul>
-                    </div>
-                `
+                        <strong>Debian Bullseye aligned:</strong>
+                        <p>Kernel 5.10 LTS aligns with Debian Bullseye package ecosystem — upstream security patches, compatible module ABI, and preparation path for future Trixie (6.1+) migration.</p>
+                        <code class="cheat-sheet-command"># Bullseye alignment confirmed</code>
+                        <code class="cheat-sheet-command"># Security patches: upstream 5.10.y stable</code>
+                        <code class="cheat-sheet-command"># Package compat: all Bullseye debs install cleanly</code>
+                    </div>`
     }
 });
 </script>
