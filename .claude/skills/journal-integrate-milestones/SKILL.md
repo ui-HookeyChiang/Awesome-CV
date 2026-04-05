@@ -5,6 +5,8 @@ description: Process journals, integrate weekly reports into milestones, refine 
 
 # Integrating Journal into Milestones
 
+> **Orchestrator available**: For the full journal→milestone→SAR→cleanup pipeline, use `/journal-integrate` instead of calling this skill directly.
+
 Use this skill when the user asks to process journals, integrate weekly reports into milestones, refine work logs, or update career documentation from raw reports.
 
 ## Pipeline Overview

@@ -5,6 +5,8 @@ description: Extract SAR case studies from milestone/journal data and produce re
 
 # SAR Case Study Extraction
 
+> **Orchestrator available**: For the full journal→milestone→SAR→cleanup pipeline, use `/journal-integrate` instead of calling this skill directly. Run `/journal-integrate-milestones` first for best results — enriched milestones produce richer case studies.
+
 Extract SAR (Situation-Action-Result) case studies from milestone and journal data, producing ready-to-assemble HTML fragments for the interview presentation.
 
 ## Inputs
