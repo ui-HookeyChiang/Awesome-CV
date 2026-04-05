@@ -36,7 +36,7 @@ Each category maps 1:1 to a potential case study. The flow is: **category → ac
 | `cloud-cache` | cache pin, predownload, autoupdate, partial download, cache gc, watermark, smart sync, cache entry, cache state, bitmap | Cache layer: pinning, smart sync, partial DL | Needed |
 | `cloud-encrypt` | client.side.encrypt, enc.dir, enc.unlock, encryption | Client-side encryption integration | Needed |
 | `fuse-arch` | fuse, qrpc, libev, socket.handling, daemon, ipc, fuse3, meson, autotools, pjdfstest, filebench | FUSE daemon architecture + build system | Needed |
-| `ai-skill` | skill, claude, prompt, ai, agent, mcp, worktree | AI-assisted development tooling | Needed |
+| `ai-skill` | claude skill, ai review, pr agent, prompt-hub, ai-assisted, claude session, ai workflow, mcp server, skill framework | AI-powered developer platform | Needed |
 | `debian-trixie` | trixie, bullseye, porting, pyzfs, migration | Bullseye→Trixie package migration | Possible |
 | `build-system` | debfactory, debbox, deb package, backport, firmware, build, bootstrap, reprepro, package bump | debfactory/debbox packaging infra | Low priority |
 

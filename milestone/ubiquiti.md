@@ -70,7 +70,7 @@ Central hardware and storage state management daemon for Ubiquiti console and NA
 | Language | Go 1.21 |
 | Codebase | 16,600 LOC across 151 Go files |
 | Release | v1.20.1 (20 releases, monthly cadence) |
-| My contribution | Core architecture + V1 API (6 service endpoints) |
+| My contribution | Core architecture + V1 API (6 service endpoints, 45 commits) |
 
 #### What I Built
 
@@ -345,7 +345,7 @@ Go, gRPC, Protocol Buffers, Cobra, Logrus, gopsutil, systemd, Debian packaging, 
 - Disabled CONFIG_TCP_CONG_ADVANCED to reduce kernel image size, removing unused congestion control algorithms
 
 #### AI-Assisted Development Tooling (March)
-- Merged 192 PRs to the prompt-hub skills repository — major skill framework overhaul including XDG config migration (~/.config/ubiquiti/), Lua power-cycle rewrite, device auto-labeling from controller VLAN, recover-device skill, tie-fw-knot kernel header pipeline, dev-build orchestrator, semver-release, multi-controller support, and CI polling infrastructure
+- Merged 192 PRs to the prompt-hub skills repository (1,246 commits across 9 repos) — major skill framework overhaul including XDG config migration (~/.config/ubiquiti/), Lua power-cycle rewrite, device auto-labeling from controller VLAN, recover-device skill, tie-fw-knot kernel header pipeline, dev-build orchestrator, semver-release, multi-controller support, and CI polling infrastructure
 - Expanded to 20+ Claude skills covering the full development workflow: build, deploy, configure, test, analyze, and multi-repo CI coordination
 - Built auto-detection of devices via proxy/tunnel HTTPS and ENAS ZFS support in device infrastructure
 - Total AI-assisted development: 87 Claude sessions, 1,339 prompts, 11,420 tool calls across 18 active days
@@ -542,7 +542,7 @@ Go, gRPC, Protocol Buffers, Cobra, Logrus, gopsutil, systemd, Debian packaging, 
   - File locking issues across clients
 - Unified default DNS configurations across all platforms, reducing configuration inconsistencies and lowering maintenance overhead across teams
 
-#### Comprehensive NAS Stability & Stress Testing
+#### Comprehensive NAS Stability & Stress Testing (87 commits across 4 repos)
 
 ##### Situation
 - Ubiquiti NAS platform lacked comprehensive stability testing for real-world deployment scenarios
@@ -880,7 +880,7 @@ Go, gRPC, Protocol Buffers, Cobra, Logrus, gopsutil, systemd, Debian packaging, 
 - The polling model did not scale as new features (snapshots, ZFS, Drive) added more state to track
 
 ##### Action
-- Designed and initiated migration of ustd toward an event-triggered gRPC framework, replacing polling with event-driven state management
+- Designed and initiated migration of ustd toward an event-triggered gRPC framework, replacing polling with event-driven state management (175 commits across 9 repos)
 - Profiled and optimized the CLI hot paths, reducing redundant system calls and memory allocations
 
 ##### Result
