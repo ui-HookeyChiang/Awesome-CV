@@ -18,14 +18,12 @@ The speech script is derived from interview-presentation.html and includes:
 ## Speech Script Structure
 The interview speech script includes:
 1. **Opening (30 seconds)**: Professional introduction and overview
-2. **About Me (1 minute)**: Background, education, and career impact
-3. **Core Technical Expertise (2 minutes)**: Four key technical areas with examples
-4. **Professional Experience - Ubiquiti (3 minutes)**: Current role achievements
-5. **Professional Experience - QNAP (2 minutes)**: Previous role accomplishments
-6. **Research and Technical Projects (1 minute)**: Academic and technical contributions
-7. **Leadership Experience (1 minute)**: Management and community leadership
-8. **Key Accomplishments Summary (1 minute)**: Quantified impact across roles
-9. **Closing (30 seconds)**: Professional conclusion and discussion invitation
+2. **Background (1 minute)**: Education, career timeline (QNAP → Ubiquiti with role scope)
+3. **Professional Experience - Ubiquiti (3 minutes)**: Current role tech stack and achievements
+4. **Professional Experience - QNAP (2 minutes)**: Previous role tech stack and accomplishments
+5. **Case Studies (6 minutes)**: Three SAR deep dives
+6. **Key Accomplishments Summary (1 minute)**: Quantified impact across roles
+7. **Closing (30 seconds)**: Professional conclusion and discussion invitation
 
 ## Speech Script Features
 - **Timing optimized**: 12-15 minute presentation with 5-10 minutes for Q&A

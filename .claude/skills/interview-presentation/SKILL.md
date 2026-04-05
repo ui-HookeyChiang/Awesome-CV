@@ -56,7 +56,6 @@ summary:
   tagline: "OS Engineer — Linux Development, Performance & Storage Infrastructure"
   strengths: [Performance, Reliability, Scalability]
 
-skills: [os, tools, languages, frameworks]        # order = display order
 highlights: [ubiquiti, qnap]                      # order = slide order
 case-studies: [kernel-upgrade, nas-stability, samba-perf]  # pick 3 from pool
 achievements: [innovation, performance]           # order = display order
