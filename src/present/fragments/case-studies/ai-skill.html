@@ -1,0 +1,300 @@
+<!-- fragment:
+  id: ai-skill
+  type: case-study
+  tags: [ai, developer-tools, automation, code-review, ci-cd, orchestration, productivity]
+  domain: Developer Productivity
+  metrics: [400 PRs/quarter AI-reviewed, 20+ skills, 4 teams, 1wk→1day QA]
+  source: milestone/ubiquiti.md#ai-assisted-development-tooling
+-->
+        <div class="slide">
+            <div class="slide-number">{{N}} / {{TOTAL}}</div>
+            <h1>Case Study: AI-Skilled Dev Tooling</h1>
+
+            <div class="sar-format">
+                <!-- ===== SITUATION ===== -->
+                <div class="sar-item sar-situation">
+                    <h3 class="sar-header-situation">Situation</h3>
+                    <p style="margin: 10px 0; font-size: 1rem; line-height: 1.5; color: var(--text-secondary);">
+                        Fragmented developer workflows across <span style="color: var(--accent); font-weight: 700;">multi-repo build systems</span> &mdash; significant time spent on <span style="color: var(--accent); font-weight: 700;">manual coordination</span>, <span style="color: var(--accent); font-weight: 700;">device recovery</span>, and <span style="color: var(--accent); font-weight: 700;">environment setup</span> with no unified tooling.
+                    </p>
+                </div>
+
+                <!-- ===== ACTION ===== -->
+                <div class="sar-item sar-action">
+                    <h3 class="sar-header-action">Action</h3>
+
+                    <div style="margin-top: 20px;">
+
+                        <!-- Preparation Step -->
+                        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="ai-skill-framework" style="width: 220px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Skill</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Frameworking</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Down Arrow -->
+                        <div style="display: flex; justify-content: center; margin-bottom: 25px;">
+                            <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
+                        </div>
+
+                        <!-- Top Row: 3 boxes -->
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="ai-skill-recovery" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Device Discovery</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Auto-Recovery</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Firmware brick detection + fix</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="ai-skill-devbuild" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Dev-Build-Test</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Orchestrator</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Multi-repo CI coordination</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="ai-skill-reviewer" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">AI Code Reviewer</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">GitHub CI Integration</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">400 PRs/quarter automated</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Down Arrow -->
+                        <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+                            <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
+                        </div>
+
+                        <!-- Bottom Row: 3 boxes -->
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="ai-skill-perftest" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Perf Test Matrix</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Storage Benchmarking</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Multi-device, multi-RAID</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="ai-skill-adoption" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Cross-Team</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Sharing</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Network, SQA, storage, system</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="ai-skill-writer" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Skill-Writer</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Dedup & Refactor</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">Overlap detection + consolidation</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Flow Description -->
+                        <div style="text-align: center; margin-top: 20px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
+                            Developer Productivity: Analyze &#8594; Automate &#8594; Orchestrate &#8594; Scale
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== RESULT ===== -->
+                <div class="sar-item sar-result">
+                    <h3 class="sar-header-result">Result</h3>
+                    <div class="metrics-row" style="margin-top: 20px; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                            <span class="metric-number">400</span>
+                            <span class="metric-label">PRs/Quarter AI-Reviewed</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                            <span class="metric-number">20+</span>
+                            <span class="metric-label">Skills Built</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                            <span class="metric-number">4</span>
+                            <span class="metric-label">Teams Adopted</span>
+                        </div>
+                        <div class="metric-box" style="min-width: 130px; flex: 1;">
+                            <span class="metric-number">1wk&#8594;1d</span>
+                            <span class="metric-label">QA Cycle Time</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<script>
+Object.assign(window.cheatSheets = window.cheatSheets || {}, {
+    'ai-skill-framework': {
+        title: 'Skill Framework & Workflow Analysis',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Workflow bottlenecks identified:</strong>
+                        <p>Manual hash bumps between debbox &#8596; debfactory &#8596; source repos. CI watching required constant Jenkins polling. Tribal knowledge scattered across Slack threads, personal scripts, and undocumented wikis.</p>
+                        <code class="cheat-sheet-command"># Before: manual 4-step workflow per change</code>
+                        <code class="cheat-sheet-command"># 1. git commit → 2. manual hash bump</code>
+                        <code class="cheat-sheet-command"># 3. watch Jenkins 30+ min → 4. scp + dpkg -i</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>20+ Claude skills as encoded procedures:</strong>
+                        <p>Each skill captures operational knowledge — prerequisites, steps, verification, recovery. Skills compose into workflows (e.g., dev-build calls deploy-storage, deploy-nas-fs, nas-perf-test in sequence).</p>
+                        <code class="cheat-sheet-command"># Skills cover the full lifecycle</code>
+                        <code class="cheat-sheet-command"># build: debbox-fw-build, debfactory-build</code>
+                        <code class="cheat-sheet-command"># deploy: debbox-fw-deploy, debfactory-deploy</code>
+                        <code class="cheat-sheet-command"># test: nas-perf-test, nas-perf-matrix</code>
+                        <code class="cheat-sheet-command"># recover: recover-device, support-debug</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Stacking-dev with TDD and brainstorming:</strong>
+                        <p>Default development workflow enforces brainstorming gate (explore intent before coding), TDD loop (test first), and stacked PRs with isolated worktrees. Dev agent + QA agent per task.</p>
+                        <code class="cheat-sheet-command"># Stacking-dev workflow per task</code>
+                        <code class="cheat-sheet-command"># 1. Brainstorm &#8594; design spec</code>
+                        <code class="cheat-sheet-command"># 2. Dev agent: implement + self-test in worktree</code>
+                        <code class="cheat-sheet-command"># 3. QA agent: independent verification</code>
+                        <code class="cheat-sheet-command"># 4. Stack PRs: task-1 &#8592; task-2 &#8592; task-3</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Main agent as orchestrator:</strong>
+                        <p>The main Claude agent delegates all work to subagents — research, implementation, testing, review. Main agent only makes decisions and communicates with the user.</p>
+                        <code class="cheat-sheet-command"># Orchestration pattern</code>
+                        <code class="cheat-sheet-command"># Main agent: plan, decide, coordinate</code>
+                        <code class="cheat-sheet-command"># Sub-agents: research, implement, test, review</code>
+                        <code class="cheat-sheet-command"># No shared context — pass via CONTEXT.md</code>
+                    </div>`
+    },
+    'ai-skill-devbuild': {
+        title: 'Dev-Build Orchestrator',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Multi-repo CI coordination:</strong>
+                        <p>dev-build skill orchestrates the debbox &#8596; debfactory &#8596; source repo chain. Automatically updates PKG_SOURCE_VERSION hashes, triggers CI builds, polls Jenkins for completion, and deploys artifacts to devices.</p>
+                        <code class="cheat-sheet-command"># Four modes of operation</code>
+                        <code class="cheat-sheet-command"># Mode A: debbox feature dev</code>
+                        <code class="cheat-sheet-command"># Mode B: debfactory-backed source dev (2-repo PR)</code>
+                        <code class="cheat-sheet-command"># Mode C: debfactory-direct changes</code>
+                        <code class="cheat-sheet-command"># Mode D: debbox-kernel three-repo chain</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>CI polling with ci-poll.lua:</strong>
+                        <p>Lua script polls Jenkins build status, waits for completion, extracts artifact URLs from leaf.corp.ubnt.com. Replaces manual browser-based CI watching.</p>
+                        <code class="cheat-sheet-command"># Poll Jenkins until build completes</code>
+                        <code class="cheat-sheet-command">lua ci-poll.lua --pr 8054 --repo debfactory</code>
+                        <code class="cheat-sheet-command"># Returns leaf URL for artifact deployment</code>
+                    </div>`
+    },
+    'ai-skill-perftest': {
+        title: 'Perf Test Matrix',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Multi-device, multi-RAID, multi-protocol orchestration:</strong>
+                        <p>nas-perf-matrix skill runs fio benchmarks across combinations of devices (UNAS, UNAS Pro, ENAS), RAID types (raid1/5/6/10), and protocols (SMB, NFS, local). Devices run in parallel, configs in series.</p>
+                        <code class="cheat-sheet-command"># Run full test matrix</code>
+                        <code class="cheat-sheet-command"># Dispatches: device-reserve &#8594; deploy-storage</code>
+                        <code class="cheat-sheet-command">#   &#8594; deploy-nas-fs &#8594; nas-perf-test &#8594; test-results</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Automated result pipeline:</strong>
+                        <p>gather &#8594; dedup &#8594; analyze. SCP results from remote clients, deduplicate runs, generate Plotly charts and markdown reports with key observations.</p>
+                        <code class="cheat-sheet-command"># Three-step result pipeline</code>
+                        <code class="cheat-sheet-command">lua gather-results.lua --session 20260311</code>
+                        <code class="cheat-sheet-command">python dedup-results.py --dir raw/</code>
+                        <code class="cheat-sheet-command">python generate-charts.py --dir deduplicated/</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>QA verification time reduced:</strong>
+                        <p>From one week of manual testing across UNAS4/UNASPro4/UNASPro8 to one day of automated matrix execution with preflight validation.</p>
+                        <code class="cheat-sheet-command"># Before: 5 days manual (per platform x per RAID)</code>
+                        <code class="cheat-sheet-command"># After: 1 day automated (all combos in parallel)</code>
+                    </div>`
+    },
+    'ai-skill-reviewer': {
+        title: 'AI Code Reviewer',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>GitHub CI integration:</strong>
+                        <p>AI code reviewer deployed as GitHub Actions workflow. Automatically reviews every PR — generates contextual summaries, architectural flowcharts, and identifies issues. 400 PRs processed per quarter across multiple repos.</p>
+                        <code class="cheat-sheet-command"># GitHub Actions workflow triggers on PR</code>
+                        <code class="cheat-sheet-command"># AI reviewer: describe, review, ask</code>
+                        <code class="cheat-sheet-command"># Deployed to: ustate-exporter, unifi-drive-config</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>280 code reviews annually:</strong>
+                        <p>Combined human and AI review coverage. AI handles routine checks (style, logic, security patterns), human focuses on architectural decisions and domain-specific correctness.</p>
+                        <code class="cheat-sheet-command"># AI reviewer handles</code>
+                        <code class="cheat-sheet-command"># - Code summary generation</code>
+                        <code class="cheat-sheet-command"># - Architectural flowcharts</code>
+                        <code class="cheat-sheet-command"># - Pattern-based issue detection</code>
+                        <code class="cheat-sheet-command"># Human reviewer focuses on</code>
+                        <code class="cheat-sheet-command"># - Design decisions, domain correctness</code>
+                    </div>`
+    },
+    'ai-skill-recovery': {
+        title: 'Auto-Recovery & Device Discovery',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Firmware brick detection and recovery:</strong>
+                        <p>recover-device skill detects bricked devices (no SSH, boot loop) and guides recovery via UART console, U-Boot, or recovery mode. Preflight checks validate device state before testing.</p>
+                        <code class="cheat-sheet-command"># Auto-detect device state</code>
+                        <code class="cheat-sheet-command">ssh device 'uname -a' || echo "UNREACHABLE"</code>
+                        <code class="cheat-sheet-command"># Recovery via UART if SSH fails</code>
+                        <code class="cheat-sheet-command">picocom -b 115200 /dev/tty.usbserial</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Device discovery and auto-labeling:</strong>
+                        <p>discover-client.sh probes all SSH hosts, ranks by link speed (10G > 2.5G > 1G), auto-labels devices from controller VLAN. Eliminates manual SSH config maintenance for 23+ managed devices.</p>
+                        <code class="cheat-sheet-command"># Discover best client for a server</code>
+                        <code class="cheat-sheet-command">bash discover-client.sh --server UNASPro8-86</code>
+                        <code class="cheat-sheet-command"># Auto-label from UniFi controller</code>
+                        <code class="cheat-sheet-command"># Detected: UNAS4-141-Lan1 (2.5G, raid5x4)</code>
+                    </div>`
+    },
+    'ai-skill-adoption': {
+        title: 'Cross-Team Adoption',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Three teams onboarded:</strong>
+                        <ul style="margin: 8px 0; padding-left: 20px; color: var(--text-secondary);">
+                            <li><strong>Network team:</strong> uses dev-build for cross-repo CI coordination, gw-network for diagnostics</li>
+                            <li><strong>SQA team:</strong> uses nas-perf-matrix for automated storage benchmarking, test-results for chart generation</li>
+                            <li><strong>Storage team:</strong> uses stacking-dev for structured PR workflows, deploy-storage for RAID management</li>
+                            <li><strong>System team:</strong> uses debbox-fw-build for firmware images, support-debug for root cause analysis</li>
+                        </ul>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Exported to prompt-hub:</strong>
+                        <p>Full skill collection shared via prompt-hub repository (+9,702 lines). Skills are version-controlled, composable, and self-documenting with SKILL.md files.</p>
+                        <code class="cheat-sheet-command"># Skills exported for cross-team use</code>
+                        <code class="cheat-sheet-command">git clone prompt-hub && ls */SKILL.md</code>
+                        <code class="cheat-sheet-command"># 20+ skills, each with description, steps, references</code>
+                    </div>`
+    },
+    'ai-skill-writer': {
+        title: 'Skill-Writer: Dedup & Refactor',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Mandatory dedup sweep before creation:</strong>
+                        <p>Every new skill triggers an overlap scan across all existing skills. Prevents skill sprawl by detecting duplicates, partial overlaps, and refactoring opportunities before any code is written.</p>
+                        <code class="cheat-sheet-command"># Phase 1: sweep all SKILL.md files</code>
+                        <code class="cheat-sheet-command"># DUPLICATE → use existing skill</code>
+                        <code class="cheat-sheet-command"># PARTIAL OVERLAP → extend existing</code>
+                        <code class="cheat-sheet-command"># NO OVERLAP → safe to create</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Shared module extraction:</strong>
+                        <p>When 2+ skills need the same logic, extract to _shared/ directory. Categories, device lists, and common utilities live in one place — referenced by all skills, maintained once.</p>
+                        <code class="cheat-sheet-command"># Shared modules</code>
+                        <code class="cheat-sheet-command">_shared/categories.md  # SAR category definitions</code>
+                        <code class="cheat-sheet-command"># Referenced by: host-work-journal, sar-extraction,</code>
+                        <code class="cheat-sheet-command">#   journal-integrate-milestones, job-analysis</code>
+                    </div>`
+    }
+});
+</script>
