@@ -12,13 +12,14 @@ Unified design guide for the interview presentation across both HTML and PPTX fo
 | Text Primary | `#FFFFFF` | `--text-primary` | Headings, names |
 | Text Secondary | `#F0F0F5` | `--text-secondary` | Body text, descriptions |
 | Text Muted | `#888899` | `--text-muted` | Subtitles, labels, footnotes |
-| Primary Blue | `#006FFF` | `--primary` | Accent lines, section headers, Action SAR border |
-| Success Green | `#00C853` | `--success` | Result SAR border, positive metrics, code text |
-| Accent Cyan | `#00D4FF` | `--accent` | Metric numbers, technical term highlights |
-| Accent Orange | `#FF9F00` | `--orange` | Key achievements, important callouts |
-| Alert Red | `#FF4545` | `--alert` | Situation SAR border, problem/gap descriptions |
-| Border | `#3A3A55` | `--border` | Card borders, subtle separators |
-| Code BG | `#0D0D1A` | `--code-bg` | Code blocks, inset panels |
+| Primary Blue | `#4B8BFF` | `--primary` | Accent lines, section headers, Action SAR border |
+| Success Green | `#34D399` | `--success` | Result SAR border, positive metrics, code text |
+| Accent Cyan | `#67E8F9` | `--accent` | Metric numbers, technical term highlights |
+| Accent Orange | `#FBBF24` | `--orange` | Key achievements, important callouts |
+| Alert Red | `#F87171` | `--alert` | Situation SAR border, problem/gap descriptions |
+| Border | `#333350` | `--border` | Card borders, subtle separators |
+| Code BG | `#0a0a16` | `--code-bg` | Code blocks, inset panels |
+| Code Text | `#34D399` | `--code-text` | Code block text color |
 
 > **PptxGenJS rule:** Never prefix hex colors with `#`. Use bare hex strings like `"1A1A2E"`.
 
@@ -60,9 +61,9 @@ All text uses Avenir Next — headings, body, metrics, labels. Consolas only for
 
 | SAR Phase | Border Color | Tint Background | Header Color |
 |-----------|-------------|-----------------|-------------|
-| Situation | Alert Red (`#FF4545`) | `rgba(255,69,69,0.06)` | Alert Red |
-| Action | Primary Blue (`#006FFF`) | `rgba(0,111,255,0.06)` | Primary Blue |
-| Result | Success Green (`#00C853`) | `rgba(0,200,83,0.06)` | Success Green |
+| Situation | Alert Red (`#F87171`) | `rgba(248,113,113,0.06)` | Alert Red |
+| Action | Primary Blue (`#4B8BFF`) | `rgba(75,139,255,0.06)` | Primary Blue |
+| Result | Success Green (`#34D399`) | `rgba(52,211,153,0.06)` | Success Green |
 
 ## Layout Components
 

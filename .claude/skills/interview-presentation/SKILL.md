@@ -18,8 +18,7 @@ src/present/
   base.html              # HTML shell (CSS, JS, modal, navigation)
   fragments/             # 15+ fragment files (slides + cards)
     cover.html           # Fixed slide with {{tagline}} template var
-    intro.html           # Fixed slide
-    skills/*.html        # Card fragments (os, tools, languages, frameworks)
+    background.html      # Fixed slide (education + career timeline)
     highlights/*.html    # Slide fragments (ubiquiti, qnap)
     case-studies/*.html  # SAR slides + cheat sheet JS (kernel-upgrade, nas-stability, samba-perf)
     achievements/*.html  # Card fragments with data-id for suppression (innovation, performance)
@@ -54,13 +53,13 @@ cover:
 
 summary:
   tagline: "OS Engineer — Linux Development, Performance & Storage Infrastructure"
-  strengths: [Performance, Reliability, Scalability]
+  strengths: [End-to-End Platform Builder, Full-Stack Performance, Cross-Team Systems Thinker]
 
 highlights: [ubiquiti, qnap]                      # order = slide order
-case-studies: [kernel-upgrade, nas-stability, samba-perf]  # pick 3 from pool
+case-studies: [kernel-upgrade, samba-perf, ai-skill]  # pick 3 from pool
 achievements: [innovation, performance]           # order = display order
 
-suppress: []  # achievement bullet data-ids to remove (case study overlap)
+suppress: []  # manual override: achievement data-ids to hide (auto-suppress handles most cases)
 ```
 
 ### Adding Content to the Pool
@@ -85,23 +84,23 @@ Every fragment file should begin with an HTML comment block containing structure
 | Field | Type | Description |
 |-------|------|-------------|
 | `id` | string | Unique fragment identifier (matches filename without extension) |
-| `type` | enum | One of: `case-study`, `skill`, `achievement`, `highlight` |
+| `type` | enum | One of: `case-study`, `achievement`, `highlight` |
 | `tags` | array | Searchable keywords for JD-driven auto-selection |
 | `domain` | string | Technical domain category (e.g., "System Infrastructure", "Storage Performance") |
 | `metrics` | array | Key quantified outcomes for quick relevance matching |
 | `source` | string | Milestone path where the content originated (e.g., `milestone/ubiquiti.md#section`) |
+| `suppresses` | array | Achievement data-ids to auto-hide when this case study is in the lineup |
 
 The assembler's `readFragment()` strips the frontmatter comment before assembly, so it has zero impact on the rendered presentation. Use `node assemble.js --list-fragments` to output a JSON array of all fragment metadata for tooling integration.
 
-**New skill card**: Create `fragments/skills/<id>.html` as a `<div class="point-card">` (no slide wrapper).
-
-**New achievement card**: Create `fragments/achievements/<id>.html` with `data-id` on each `<li>` for suppression support.
+**New achievement card**: Create `fragments/achievements/<id>.html` using `<div class="achievement-section">` containing `<div class="achievement-grid">` with `<div class="achievement-chip" data-id="...">` chips. Each chip has `<span class="ach-title">` and `<span class="ach-stat">` inside. The assembler wraps these in an `achievements-container`.
 
 ### Overlap Strategy
 
 | Overlap | Strategy |
 |---|---|
-| Case study ↔ achievement | **Suppress** — add achievement `data-id` to profile `suppress` list |
+| Case study ↔ achievement (auto) | **Auto-suppress** — case study frontmatter `suppresses` field lists achievement `data-id`s to hide when that case study is in the lineup. No profile edit needed. |
+| Case study ↔ achievement (manual) | **Manual suppress** — add achievement `data-id` to profile `suppress` list for overrides not covered by auto-suppress. |
 | Case study ↔ highlight metric | **Reinforce** — metric teases, case study explains. No action. |
 | Highlight metric ↔ achievement | **Acceptable** — different granularity. No action. |
 
@@ -110,7 +109,7 @@ Career highlight metrics are **fixed** per role — always shown, never suppress
 ### Fragment Types
 
 - **Slide fragments**: Full `<div class="slide">` with `{{N}} / {{TOTAL}}` slide number
-- **Card fragments**: Inner `<div class="point-card">` only — assembler wraps in slide container
+- **Card fragments**: Inner `<div class="achievement-section">` with `<div class="achievement-grid">` — assembler wraps in `achievements-container` inside a slide
 
 ### Editing Workflow
 
@@ -135,7 +134,7 @@ The interview presentation (`interview-presentation.html`) is a professional, in
 9. **Summary (1min)**: Professional tagline, three key strengths, and quantified metrics
 10. **Q&A (open)**: Interactive discussion with contact information
 
-Career highlight slides show a vertical tech stack (app → kernel → BSP) alongside metrics. Integration layers (owned by other teams) use dashed borders and muted opacity.
+Career highlight slides show a vertical tech stack (app → kernel → BSP) alongside metrics. Integration layers (owned by other teams) use dashed borders and muted opacity. There is no separate skills slide — skills and tech-stack details are shown within each highlight slide's tech stack column.
 
 > For Storage & System Engineering experience-specific content (slide mapping, case study domains, metrics), read `references/storage-engineering.md`.
 > For visual design (unified color palette, typography, layout, SAR treatment — applies to both HTML and PPTX), read `references/visual-design.md`.
@@ -210,7 +209,7 @@ Each major project follows the enhanced visual SAR structure presented in Situat
 - **Story Structure**: Three comprehensive case studies demonstrating different technical domains
 
 ### Visual Design System
-- **Color Scheme**: Unified blue primary color (`var(--primary-color)` #3E6D9C) for all highlights, metrics, and technical terms
+- **Color Scheme**: Unified blue primary color (`var(--primary)` `#4B8BFF`) for all highlights, metrics, and technical terms; accent cyan (`var(--accent)` `#67E8F9`) for metric numbers and technical term highlights
 - **List Styling**: Bold list titles use dark gray (`var(--text-dark)` #1f2937) instead of primary blue for better visual hierarchy
 - **Spacing Standards**: 20px padding, 30px gaps, 25px clearance for proper element spacing
 - **Interactive Elements**:
@@ -251,15 +250,14 @@ A centered, prominent tagline that encapsulates your professional identity:
 ### Three Key Strengths Section
 Horizontal display of core competencies with visual separators:
 - **Layout**: Three strengths displayed in single line with pipe separators (|)
-- **Format**: Emoji + Keyword for each strength
-- **Structure**: Performance | Reliability | Scalability
+- **Format**: Capability phrase for each strength (e.g., "End-to-End Platform Builder", "Full-Stack Performance", "Cross-Team Systems Thinker")
 - **Customization**: Select strengths most relevant to job requirements
 - **Visual Design**: Centered alignment, consistent spacing, accent color
 
-**Common Strength Categories:**
-- **Technical**: Performance, Architecture, Innovation, Automation
-- **Quality**: Reliability, Stability, Security, Testing
-- **Business**: Scalability, Efficiency, Leadership, Impact
+**Common Strength Phrasings:**
+- **Technical**: Full-Stack Performance, Storage Architecture, Automation-First Engineering
+- **Quality**: Platform Reliability, Stability-Driven Development, Validation Engineering
+- **Business**: End-to-End Platform Builder, Cross-Team Systems Thinker, Scale-Ready Design
 
 ### Quantified Metrics Section
 Four key metrics displayed in metric boxes below the strengths:

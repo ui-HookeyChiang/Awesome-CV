@@ -7,23 +7,26 @@ For universal presentation guidelines, see the parent `SKILL.md`.
 
 1. **Cover Slide**: OS Engineer — Linux Development, Performance & Storage Infrastructure | 8+ Years - *Use milestone/summary.md*
 2. **Background**: Education + career timeline (QNAP → Ubiquiti with role descriptions) - *Use milestone/summary.md*
-3. **Ubiquiti Highlights**: Vertical tech stack (Drive → Drive Config → Btrfs/ZFS → Kernel/Debian → BSP) + metrics - *Use milestone/ubiquiti.md*
-4. **QNAP Highlights**: Vertical tech stack (Cloud Syncd → FUSE+libev+SQLite → ext4/VFS → Kernel) + metrics - *Use milestone/qnap.md*
-5. **Case Study 1: NAS Stability Testing**: Cross-team collaboration and platform stability - *Use milestone/ubiquiti.md, no charts (qualitative)*
-6. **Case Study 2: Linux Kernel Upgrade**: System infrastructure modernization (4.19 → 5.10) - *Use milestone/ubiquiti.md, no charts (qualitative)*
-7. **Case Study 3: Samba Performance**: Full-stack performance engineering - *Use milestone/ubiquiti.md, with performance comparison charts*
-8. **Additional Achievements**: Product Innovation & Leadership, Performance Engineering Excellence, Business Impact & Scalability, Technical Architecture & Innovation
+3. **Ubiquiti Highlights**: Vertical tech stack (Drive → Drive Config → Btrfs/ZFS → Kernel/Debian → BSP) + metrics - *Use milestone/ubiquiti.md* — tech stack shown within slide, no separate skills slide
+4. **QNAP Highlights**: Vertical tech stack (Cloud Syncd → FUSE+libev+SQLite → ext4/VFS → Kernel) + metrics - *Use milestone/qnap.md* — tech stack shown within slide, no separate skills slide
+5. **Case Study 1: Linux Kernel Upgrade**: System infrastructure modernization (4.19 → 5.10) - *Use milestone/ubiquiti.md, no charts (qualitative)*
+6. **Case Study 2: Samba Performance**: Full-stack performance engineering - *Use milestone/ubiquiti.md, with performance comparison charts*
+7. **Case Study 3: AI-Aided Skill Assessment**: AI-powered skill evaluation framework - *Use milestone/ubiquiti.md*
+8. **Additional Achievements**: Product Innovation & Leadership, Performance Engineering Excellence
 9. **Summary**: Customizable based on job requirements - *Align with role-specific needs*
 10. **Q&A**: Discussion with contact information
 
 ## Case Study Domains
 
-- **Case Study Domains**: Three technical areas (testing infrastructure, system modernization, performance optimization)
-- **Specific Case Studies**:
-  - **NAS Stability Testing**: Cross-team collaboration and platform stability validation
+- **Case Study Domains**: Three technical areas (system modernization, performance optimization, AI-powered tooling)
+- **Default Case Studies** (general.yaml):
   - **Linux Kernel Upgrade**: System infrastructure modernization (4.19 to 5.10)
   - **Samba Performance**: Full-stack performance engineering optimization
-- **Technical Expertise Areas**: Storage architecture, filesystem engineering, performance optimization, quality assurance
+  - **AI-Aided Skill Assessment**: AI-powered skill evaluation framework
+- **Pool-Only Case Studies** (available for job-targeted profiles):
+  - **NAS Stability Testing**: Cross-team collaboration and platform stability validation
+  - **Btrfs Backend**, **ZFS Backend**, **FUSE Architecture**, **Cloud Performance**, **gRPC Streamer**, **System Performance**
+- **Technical Expertise Areas**: Storage architecture, filesystem engineering, performance optimization, AI-aided tooling
 
 ## Key Metrics Integration
 
@@ -33,9 +36,9 @@ For universal presentation guidelines, see the parent `SKILL.md`.
 
 ## Result Metric Visualizations
 
-- **Case Study 1**: 3-box layout (Multi-issue discovered with clickable list cheat sheet, Multi-day validation, Cross-platform stability)
-- **Case Study 2**: 4-box layout (checksum GB/s improvement, +40% SSD IOPS, Zero regressions, Linux 5.10 Capabilities with clickable list cheat sheet)
-- **Case Study 3**: 3-box layout (Samba read/write MB/s improvements, CPU utilization reduction)
+- **Case Study 1 (Kernel Upgrade)**: 4-box layout (checksum GB/s improvement, +40% SSD IOPS, Zero regressions, Linux 5.10 Capabilities with clickable list cheat sheet)
+- **Case Study 2 (Samba Performance)**: 3-box layout (Samba read/write MB/s improvements, CPU utilization reduction)
+- **Case Study 3 (AI Skill Assessment)**: Layout per fragment — AI-powered evaluation metrics
 
 ## Content Sources
 
@@ -45,12 +48,12 @@ For universal presentation guidelines, see the parent `SKILL.md`.
   - **Content Guidelines**:
     - Use `milestone/summary.md` for high-level expertise and capability descriptions
     - Use specific milestone files (`ubiquiti.md`, `qnap.md`) for detailed achievements, case studies, and quantified results
-- **Technical depth**: Specific case studies from Ubiquiti milestone documentation (Stability Testing, Kernel Upgrade, Performance Optimization)
+- **Technical depth**: Specific case studies from Ubiquiti milestone documentation (Kernel Upgrade, Samba Performance, AI-Aided Skill Assessment)
 - **Quantified metrics**: Business impact numbers (190K+ devices, 5K monthly sales, performance improvements, CI/CD automation results)
 
 ## Additional Achievements Content Guidelines
 
-- **Focus**: Unique achievements not covered in the three main case studies (NAS Stability Testing, Linux Kernel Upgrade, Samba Performance)
+- **Focus**: Unique achievements not covered in the three main case studies (Linux Kernel Upgrade, Samba Performance, AI-Aided Skill Assessment)
 - **Sources**: Highest-impact contributions from both resume and milestone documentation
 - **Exclusions**: Academic achievements and content overlapping with case studies
 - **Metrics**: Include concrete numbers and business impact where available
