@@ -195,10 +195,17 @@ for (const name of profile.highlights) {
 }
 
 // Case study slide fragments (in profile order)
-// Collect cheat sheet data separately
+// Collect cheat sheet data and auto-suppress data-ids from active case studies
 const cheatSheetParts = [];
+const autoSuppress = [];
 let caseNum = 0;
 for (const name of profile['case-studies']) {
+    const rawContent = fs.readFileSync(path.join(FRAGMENTS_DIR, `case-studies/${name}.html`), 'utf8');
+    const meta = parseFrontmatter(rawContent);
+    if (meta && meta.suppresses) {
+        const ids = Array.isArray(meta.suppresses) ? meta.suppresses : [meta.suppresses];
+        autoSuppress.push(...ids);
+    }
     let { html, cheatSheetEntries } = readCaseStudyFragment(`case-studies/${name}.html`);
     caseNum++;
     // Strip any hardcoded slide comment from the fragment
@@ -237,9 +244,10 @@ parts.push(addSlideComment(SLIDE_COMMENTS.qna) + '\n' + readFragment('qna.html')
 
 let assembled = parts.join('\n\n');
 
-// 4. Apply suppressions, then strip data-id attributes
-if (profile.suppress && profile.suppress.length > 0) {
-    for (const id of profile.suppress) {
+// 4. Apply suppressions (profile + auto-suppress from active case studies), then strip data-id
+const allSuppress = [...(profile.suppress || []), ...autoSuppress];
+if (allSuppress.length > 0) {
+    for (const id of allSuppress) {
         const re = new RegExp(`\\s*<li data-id="${id}">.*?</li>`, 'g');
         assembled = assembled.replace(re, '');
     }
