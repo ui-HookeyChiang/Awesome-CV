@@ -23,6 +23,7 @@
             --border: #333350;
             --code-bg: #0a0a16;
             --code-text: #34D399;
+            /* display and body share the same stack now; kept separate for future differentiation */
             --font-display: 'Avenir Next', Calibri, sans-serif;
             --font-body: 'Avenir Next', Calibri, sans-serif;
             --font-mono: 'JetBrains Mono', Consolas, 'Courier New', monospace;
@@ -160,7 +161,7 @@
             width: 200px;
             min-height: 100px;
             background: var(--card-bg);
-            border: 1px solid var(--border);
+            border: 2px solid var(--border);
             border-radius: 8px;
             display: flex;
             flex-direction: column;
@@ -240,7 +241,7 @@
         .sar-text {
             margin: 10px 0;
             font-size: 1rem;
-            line-height: 1.5;
+            line-height: 1.6;
             color: var(--text-secondary);
         }
 
@@ -419,13 +420,6 @@
             color: var(--text-primary);
         }
 
-        .key-points {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 30px;
-            margin: 40px 0;
-        }
-
         .achievements-container {
             display: flex;
             flex-direction: column;
@@ -471,7 +465,7 @@
 
         .point-card {
             background: var(--card-bg);
-            padding: 29px;
+            padding: 28px;
             border-radius: 10px;
             border: 2px solid var(--border);
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -608,22 +602,6 @@
             opacity: 0.55;
         }
 
-        .story-section {
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 10px;
-            margin: 30px 0;
-            border: 1px solid var(--border);
-        }
-
-        .story-header {
-            font-family: var(--font-display);
-            color: var(--primary);
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-
         .sar-format {
             display: grid;
             grid-template-columns: 1fr;
@@ -649,13 +627,14 @@
             border: none;
             border-left: 4px solid var(--alert);
             background: rgba(248,113,113,0.1);
+            margin-top: 0;
         }
 
         .sar-action {
             grid-column: 1 / -1;
             border: none;
             border-left: 4px solid var(--primary);
-            background: #181830;
+            background: rgba(0, 111, 255, 0.05);
             margin-top: 0;
         }
 
@@ -740,20 +719,12 @@
         li {
             margin-bottom: 12px;
             font-size: 1.05rem;
-            line-height: 1.8;
+            line-height: 1.6;
             color: var(--text-secondary);
         }
 
         li strong {
             color: var(--text-primary);
-        }
-
-        /* Prevent single words on lines */
-        .text-flow {
-            text-align: justify;
-            hyphens: none;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
         }
 
         /* SAR header styling */
@@ -839,10 +810,6 @@
                 flex-direction: column;
                 align-items: center;
                 gap: 20px;
-            }
-
-            .key-points {
-                grid-template-columns: 1fr;
             }
 
             .metrics-row {

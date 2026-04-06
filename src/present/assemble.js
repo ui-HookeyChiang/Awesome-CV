@@ -92,7 +92,7 @@ if (outIdx !== -1 && args[outIdx + 1]) {
 // Helpers
 // ---------------------------------------------------------------------------
 
-// Indent depth for card fragments inside the achievements wrapper (8 slide + 8 key-points)
+// Indent depth for card fragments inside the achievements wrapper (8 slide + 8 achievements-container)
 const CARD_INDENT = 16;
 
 /** Read a file relative to BASE_DIR */
