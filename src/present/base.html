@@ -426,6 +426,49 @@
             margin: 40px 0;
         }
 
+        .achievements-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .achievement-section h4 {
+            font-family: var(--font-display);
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px 30px;
+            margin: 20px 0;
+        }
+
+        .achievement-chip {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            padding: 8px 0;
+        }
+
+        .achievement-chip .ach-title {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.95rem;
+            white-space: nowrap;
+        }
+
+        .achievement-chip .ach-stat {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
         .point-card {
             background: var(--card-bg);
             padding: 29px;

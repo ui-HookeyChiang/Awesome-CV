@@ -2,15 +2,17 @@
      tags: [benchmarking, samba, grpc, metadata, memory, latency]
      type: card
 -->
-<div class="point-card">
+<div class="achievement-section">
     <h4>Product Reliability & Performance Engineering</h4>
-    <ul style="margin: 25px 0;">
-        <li data-id="perf-platform"><strong style="color: var(--accent);">NAS Performance Testing Platform</strong> <span style="color: var(--text-muted);">&#8212; Built end-to-end automated benchmarking across 23 devices with 20+ AI skills orchestrating the full test lifecycle</span></li>
-        <li data-id="samba-throughput"><strong style="color: var(--accent);">NAS Performance Engineering</strong> <span style="color: var(--text-muted);">&#8212; CPU affinity framework + network tuning, iperf 1.9&#8594;2.3 Gb/s (+21%)</span></li>
-        <li data-id="grpc-event"><strong style="color: var(--accent);">gRPC Event Streamer</strong> <span style="color: var(--text-muted);">&#8212; Replaced polling CLI with microsecond-latency event streaming, reducing CPU usage by 65%</span></li>
-        <li data-id="metadata-300pct"><strong style="color: var(--accent);">Metadata Performance</strong> <span style="color: var(--text-muted);">&#8212; 300% improvement through multi-layer caching and database optimization</span></li>
-        <li data-id="memory-93pct"><strong style="color: var(--accent);">Memory Optimization</strong> <span style="color: var(--text-muted);">&#8212; 93% socket buffer waste reduction eliminating crashes on 64KB page systems</span></li>
-        <li data-id="latency-22s"><strong style="color: var(--accent);">Latency Optimization</strong> <span style="color: var(--text-muted);">&#8212; Directory deletion from 22s to 1s, download latency reduced by 36%</span></li>
-        <li data-id="nas-stability"><strong style="color: var(--accent);">NAS Stability Testing</strong> <span style="color: var(--text-muted);">&#8212; Co-led cross-team 72h+ I/O stress loops across 6 products, discovered 4 critical bugs</span></li>
-    </ul>
+    <div class="achievement-grid">
+        <div class="achievement-chip" data-id="perf-platform"><span class="ach-title">Perf Testing Platform</span> <span class="ach-stat">23 devices, QA 1wk&#8594;1d</span></div>
+        <div class="achievement-chip" data-id="samba-throughput"><span class="ach-title">Full-Stack Tuning</span> <span class="ach-stat">iperf +21%, Samba 544&#8594;830</span></div>
+        <div class="achievement-chip" data-id="grpc-event"><span class="ach-title">gRPC Streamer</span> <span class="ach-stat">&#8722;65% CPU, 2M+ devices</span></div>
+        <div class="achievement-chip" data-id="metadata-300pct"><span class="ach-title">Metadata Performance</span> <span class="ach-stat">+300% via cache + SQLite</span></div>
+        <div class="achievement-chip" data-id="memory-93pct"><span class="ach-title">Memory Optimization</span> <span class="ach-stat">93% reclaimed, OOM fixed</span></div>
+        <div class="achievement-chip" data-id="latency-22s"><span class="ach-title">Latency Optimization</span> <span class="ach-stat">22s&#8594;1s deletion, &#8722;36% DL</span></div>
+        <div class="achievement-chip" data-id="nas-stability"><span class="ach-title">Stability Testing</span> <span class="ach-stat">72h+ stress, 4 critical bugs</span></div>
+        <div class="achievement-chip" data-id="kernel-upgrade"><span class="ach-title">Kernel Upgrade</span> <span class="ach-stat">4.19&#8594;5.10, +40% SSD IOPS</span></div>
+        <div class="achievement-chip" data-id="system-perf"><span class="ach-title">Resource Management</span> <span class="ach-stat">cgroup V2 QoS, no swap OOM</span></div>
+    </div>
 </div>

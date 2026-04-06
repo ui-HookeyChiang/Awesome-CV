@@ -230,7 +230,7 @@ parts.push(
     `            <div class="slide-number">{{N}} / {{TOTAL}}</div>\n` +
     `            <h1>Additional Achievements Overview</h1>\n` +
     `\n` +
-    `            <div class="key-points">\n` +
+    `            <div class="achievements-container">\n` +
     achievementCards + '\n' +
     `            </div>\n` +
     `        </div>`
@@ -248,7 +248,7 @@ let assembled = parts.join('\n\n');
 const allSuppress = [...(profile.suppress || []), ...autoSuppress];
 if (allSuppress.length > 0) {
     for (const id of allSuppress) {
-        const re = new RegExp(`\\s*<li data-id="${id}">.*?</li>`, 'g');
+        const re = new RegExp(`\\s*<(?:li|div)[^>]* data-id="${id}"[^>]*>.*?</(?:li|div)>`, 'g');
         assembled = assembled.replace(re, '');
     }
 }
