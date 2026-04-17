@@ -32,6 +32,8 @@ SSH_CONFIG = Path.home() / ".ssh" / "config"
 TEST_RESULTS_DIR = Path.home() / "ubiquiti-test-results"
 ZSH_HISTORY = Path.home() / ".zsh_history"
 BASH_HISTORY = Path.home() / ".bash_history"
+JOURNAL_RAW = Path.home() / "Awesome-CV" / "journal" / "raw"
+JOURNAL_INTEGRATED = Path.home() / "Awesome-CV" / "journal" / "integrated"
 
 # Directories to skip when scanning for git repos
 GIT_SCAN_EXCLUDES = {
@@ -195,6 +197,87 @@ def iso_to_date(iso_str):
 def in_range(date_str_val, start, end):
     """Check if a YYYY-MM-DD date string falls within [start, end]."""
     return start <= date_str_val <= end
+
+
+def parse_report_date(date_part):
+    """Parse date from report filename part. Handles YYYY-MM-DD and YYYY-MM formats."""
+    if re.match(r'^\d{4}-\d{2}-\d{2}$', date_part):
+        return datetime.strptime(date_part, "%Y-%m-%d").date()
+    elif re.match(r'^\d{4}-\d{2}$', date_part):
+        return datetime.strptime(date_part, "%Y-%m").date()
+    return None
+
+
+def scan_covered_dates(hostname):
+    """Scan journal dirs for existing work-report date ranges.
+
+    Returns a sorted list of (start_date, end_date) as date objects.
+    """
+    covered = []
+    pattern = re.compile(r'work-report_(.+?)_(.+?)-to-(.+?)\.md$')
+
+    for d in [JOURNAL_RAW, JOURNAL_INTEGRATED]:
+        if not d.exists():
+            continue
+        for f in d.iterdir():
+            m = pattern.match(f.name)
+            if not m:
+                continue
+            host, start_s, end_s = m.groups()
+            # Only match reports from the same host
+            if host != hostname:
+                continue
+            start = parse_report_date(start_s)
+            end = parse_report_date(end_s)
+            if start and end:
+                covered.append((start, end))
+
+    covered.sort()
+    return covered
+
+
+def compute_gaps(start_date_str, end_date_str, covered_ranges):
+    """Compute uncovered date gaps in [start, end] given covered ranges.
+
+    Args:
+        start_date_str: YYYY-MM-DD
+        end_date_str: YYYY-MM-DD
+        covered_ranges: sorted list of (date, date) tuples
+
+    Returns list of (start_str, end_str) for uncovered gaps.
+    """
+    start = datetime.strptime(start_date_str, "%Y-%m-%d").date()
+    end = datetime.strptime(end_date_str, "%Y-%m-%d").date()
+
+    # Build a set of covered days
+    covered_days = set()
+    for cs, ce in covered_ranges:
+        day = max(cs, start)
+        last = min(ce, end)
+        while day <= last:
+            covered_days.add(day)
+            day += timedelta(days=1)
+
+    # Walk the range and find contiguous uncovered spans
+    gaps = []
+    current_gap_start = None
+    day = start
+    while day <= end:
+        if day not in covered_days:
+            if current_gap_start is None:
+                current_gap_start = day
+        else:
+            if current_gap_start is not None:
+                gaps.append((current_gap_start.strftime("%Y-%m-%d"),
+                            (day - timedelta(days=1)).strftime("%Y-%m-%d")))
+                current_gap_start = None
+        day += timedelta(days=1)
+
+    if current_gap_start is not None:
+        gaps.append((current_gap_start.strftime("%Y-%m-%d"),
+                    end.strftime("%Y-%m-%d")))
+
+    return gaps
 
 
 def run_cmd(cmd, timeout=5, cwd=None):
@@ -1182,6 +1265,10 @@ def main():
         "--dry-run", "-n", action="store_true",
         help="Print summary without writing output file",
     )
+    parser.add_argument(
+        "--skip-covered", action="store_true",
+        help="Skip dates already covered by existing work reports in journal/raw/ and journal/integrated/",
+    )
     args = parser.parse_args()
 
     # Setup logging
@@ -1195,6 +1282,50 @@ def main():
     authors = args.author if args.author else get_git_authors()
     start_date = args.start_date
     end_date = args.end_date
+
+    if args.skip_covered:
+        covered = scan_covered_dates(hostname)
+        if covered:
+            log.info("Found %d existing report(s) covering dates for host %s", len(covered), hostname)
+            for cs, ce in covered:
+                log.info("  Covered: %s to %s", cs, ce)
+
+        gaps = compute_gaps(start_date, end_date, covered)
+
+        if not gaps:
+            log.info("Entire range %s to %s is already covered — nothing to collect", start_date, end_date)
+            sys.exit(0)
+
+        if len(gaps) == 1 and gaps[0] == (start_date, end_date):
+            log.info("No existing coverage — collecting full range")
+        else:
+            log.info("Uncovered gaps: %s", gaps)
+            # Run collector for each gap (re-invoke self)
+            filtered_args = []
+            skip_next = False
+            for a in sys.argv[1:]:
+                if skip_next:
+                    skip_next = False
+                    continue
+                if a == "--skip-covered":
+                    continue
+                if a in ("--start-date", "--end-date"):
+                    skip_next = True
+                    continue
+                filtered_args.append(a)
+
+            script = sys.argv[0]
+            for gap_start, gap_end in gaps:
+                log.info("Collecting gap: %s to %s", gap_start, gap_end)
+                cmd = [sys.executable, script] + filtered_args + [
+                    "--start-date", gap_start, "--end-date", gap_end
+                ]
+                subprocess.run(cmd)
+            sys.exit(0)
+
+        # Single gap matches full range — fall through to normal collection
+        start_date = gaps[0][0]
+        end_date = gaps[0][1]
 
     log.info("Host: %s, Authors: %s, Range: %s to %s",
              hostname, authors, start_date, end_date)

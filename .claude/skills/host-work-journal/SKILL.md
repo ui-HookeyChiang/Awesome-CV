@@ -23,6 +23,12 @@ milestone/summary.md  ← resume-ready highlights
 
 `raw/` is an inbox, not an archive. After downstream pipelines consume the data, files move to `journal/integrated/`.
 
+## Date-Range Deduplication
+
+**Always pass `--skip-covered`** — it is the default for all date-range requests. The script scans both `journal/raw/` and `journal/integrated/` for `work-report_*` files matching the current hostname, computes uncovered date gaps, and runs the collector only for those gaps. If the entire range is already covered (even if raw files were moved to `integrated/` after processing), it exits cleanly.
+
+This means reports that were collected, integrated, and moved out of `raw/` are still recognized as covered — no duplicate collection.
+
 ## Quick Start
 
 **Phase 1: Collect data** — run the collector script:
@@ -39,6 +45,10 @@ python3 $SKILL_DIR/scripts/collect-weekly-report.py \
 # With detailed Claude session analysis
 python3 $SKILL_DIR/scripts/collect-weekly-report.py \
   --start-date 2026-02-01 --end-date 2026-02-28 --detailed -v
+
+# Skip dates already covered by existing reports
+python3 $SKILL_DIR/scripts/collect-weekly-report.py \
+  --start-date 2026-01-01 --end-date 2026-04-13 --skip-covered -v
 ```
 
 Output: `~/work-report-data_<host>_<start>-to-<end>.json`
