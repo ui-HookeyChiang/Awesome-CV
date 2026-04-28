@@ -49,3 +49,26 @@ cd src && xelatex resume.tex
 2. Use ← → arrow keys to navigate between slides
 3. Press ESC for fullscreen presentation mode
 4. No automatic slide changes - full manual control for interview safety
+
+---
+
+## Federation Membership
+
+This repo is registered as the `awesome-cv` subordinate wiki of the
+[llm-wiki federation](https://github.com/ui-HookeyChiang/llm-wiki).
+
+| Karpathy layer | Path here |
+|----------------|-----------|
+| raw            | `journal/raw/` |
+| refined        | `journal/refined/` |
+| log            | `journal/integrated/` |
+| concepts       | `milestone/` |
+| schema         | this file |
+
+Cross-wiki references use stable IDs from
+`meta-wiki/cross-index/entities.json` (e.g. `kms://entity:ubiquiti`).
+Frontmatter contracts inherit from
+`meta-wiki/shared-schema/{concept,decision,entity,log-entry}.yml`.
+
+The federation is read-only over this wiki: indexers and cross-index
+generators read content here, but never write back.
