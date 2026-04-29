@@ -37,8 +37,8 @@ SORT file.mtime DESC
 LIMIT 5
 ```
 
-## Federation links
+## Federation context
 
-- [Federation root README](../llm-wiki/README.md)
-  *(if you opened the federation root as the vault)*
-- Or open this directory directly as a single-wiki vault.
+This vault is registered as `awesome-cv` in the llm-wiki federation
+(see `meta-wiki/federation.md` in the federation root). When opened as a
+single-wiki vault, federation cross-links resolve only to local pages.
