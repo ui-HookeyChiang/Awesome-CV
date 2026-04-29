@@ -1,0 +1,11 @@
+{
+  "command-palette:open": [{"modifiers": ["Mod"], "key": "P"}],
+  "switcher:open": [{"modifiers": ["Mod"], "key": "O"}],
+  "global-search:open": [{"modifiers": ["Mod", "Shift"], "key": "F"}],
+  "graph:open": [{"modifiers": ["Mod", "Shift"], "key": "G"}],
+  "backlink:open": [{"modifiers": ["Mod", "Shift"], "key": "B"}],
+  "outline:open": [{"modifiers": ["Mod", "Shift"], "key": "O"}],
+  "editor:toggle-fold": [{"modifiers": ["Mod"], "key": "."}],
+  "app:toggle-left-sidebar": [{"modifiers": ["Mod"], "key": "["}],
+  "app:toggle-right-sidebar": [{"modifiers": ["Mod"], "key": "]"}]
+}

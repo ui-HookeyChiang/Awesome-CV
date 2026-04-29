@@ -1,0 +1,14 @@
+{
+  "alwaysUpdateLinks": true,
+  "useTab": true,
+  "tabSize": 2,
+  "showLineNumber": true,
+  "foldHeading": true,
+  "foldIndent": true,
+  "showFrontmatter": true,
+  "newLinkFormat": "shortest",
+  "useMarkdownLinks": false,
+  "attachmentFolderPath": "raw/attachments",
+  "newFileLocation": "current",
+  "promptDelete": true
+}

@@ -27,3 +27,10 @@
 ## Resume output and job-targeted resumes:
 resumes/
 
+### Obsidian ###
+## Obsidian local workspace state (per-machine, not shareable):
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+.obsidian/plugins/*/data.json
+
