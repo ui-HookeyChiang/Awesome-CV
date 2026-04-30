@@ -23,22 +23,23 @@ Used by `host-work-journal` (categorize git commits), `sar-extraction` (find rel
 
 Each category maps 1:1 to a potential case study. The flow is: **category → achievement → case study**.
 
-| Category | Keywords (match against subject, body, file paths) | Achievement | Case Study |
-|---|---|---|---|
-| `kernel-upgrade` | kernel, btrfs checksum, alpine sdk, driver, phy, pca9575, kconfig, kasan, menuconfig, btf, ebpf | Linux 4.19→5.10 migration + driver modernization | kernel-upgrade.html |
-| `samba-perf` | samba, smb, irq, tcp tuning, network tuning, throughput, async, zero-copy, pause frame, rx-usecs, qdisc, nfsd, sunrpc, cpu affinity | Full-stack Samba/NFS optimization | samba-perf.html |
-| `zfs-backend` | zfs, dataset, zpool, snapshot, quota, refquota, ustgcore, dfree | Full ZFS backend with feature parity | zfs-backend.html |
-| `nas-stability` | stability, stress, xfstest, fio stress, sqa, slab, fio, benchmark, perf test, preflight, iperf | Cross-team stress testing + perf framework | nas-stability.html |
-| `system-perf` | memory, oom, socket buffer, 64kb page, cgroup, memhigh, min_free_kbytes, vm., sk_mem, swap, resource limit, idle.slice | OOM resolution + cgroup resource isolation | system-perf.html |
-| `grpc-streamer` | grpc, protobuf, event stream, poller, ustated, ustate, ustd, gnet, streaming | ustated/ustd event-driven gRPC + optimization | grpc-streamer.html |
-| `btrfs-backend` | btrfs, subvolume, qgroup, ecryptfs, scrub, balance, trashcan, worm, snapshot prun | Btrfs storage architecture | btrfs-backend.html |
-| `cloud-perf` | async gc, deadlock, download state, readdirplus, one-shot delete, readdir, dir listing, metadata, cache invalidat, vfs cache, db optim, sqlite, page fault | Hybridmount performance: +300% metadata ops | Needed |
-| `cloud-cache` | cache pin, predownload, autoupdate, partial download, cache gc, watermark, smart sync, cache entry, cache state, bitmap | Cache layer: pinning, smart sync, partial DL | Needed |
-| `cloud-encrypt` | client.side.encrypt, enc.dir, enc.unlock, encryption | Client-side encryption integration | Needed |
-| `fuse-arch` | fuse, qrpc, libev, socket.handling, daemon, ipc, fuse3, meson, autotools, pjdfstest, filebench | FUSE daemon architecture + build system | Needed |
-| `ai-skill` | claude skill, ai review, pr agent, prompt-hub, ai-assisted, claude session, ai workflow, mcp server, skill framework | AI-powered developer platform | ai-skill.html |
-| `debian-trixie` | trixie, bullseye, porting, pyzfs, migration | Bullseye→Trixie package migration | Possible |
-| `build-system` | debfactory, debbox, deb package, backport, firmware, build, bootstrap, reprepro, package bump | debfactory/debbox packaging infra | Low priority |
+| Category | Keywords (match against subject, body, file paths) | Achievement | Case Study | Entities (`kms://entity:`) |
+|---|---|---|---|---|
+| `kernel-upgrade` | kernel, btrfs checksum, alpine sdk, driver, phy, pca9575, kconfig, kasan, menuconfig, btf, ebpf | Linux 4.19→5.10 migration + driver modernization | kernel-upgrade.html | ubiquiti |
+| `samba-perf` | samba, smb, irq, tcp tuning, network tuning, throughput, async, zero-copy, pause frame, rx-usecs, qdisc, nfsd, sunrpc, cpu affinity | Full-stack Samba/NFS optimization | samba-perf.html | ubiquiti |
+| `zfs-backend` | zfs, dataset, zpool, snapshot, quota, refquota, ustgcore, dfree | Full ZFS backend with feature parity | zfs-backend.html | ubiquiti |
+| `nas-stability` | stability, stress, xfstest, fio stress, sqa, slab, fio, benchmark, perf test, preflight, iperf | Cross-team stress testing + perf framework | nas-stability.html | ubiquiti |
+| `system-perf` | memory, oom, socket buffer, 64kb page, cgroup, memhigh, min_free_kbytes, vm., sk_mem, swap, resource limit, idle.slice | OOM resolution + cgroup resource isolation | system-perf.html | qnap, ubiquiti |
+| `grpc-streamer` | grpc, protobuf, event stream, poller, ustated, ustate, ustd, gnet, streaming | ustated/ustd event-driven gRPC + optimization | grpc-streamer.html | ubiquiti |
+| `btrfs-backend` | btrfs, subvolume, qgroup, ecryptfs, scrub, balance, trashcan, worm, snapshot prun | Btrfs storage architecture | btrfs-backend.html | ubiquiti |
+| `cloud-perf` | async gc, deadlock, download state, readdirplus, one-shot delete, readdir, dir listing, metadata, cache invalidat, vfs cache, db optim, sqlite, page fault | Hybridmount performance: +300% metadata ops | Needed | qnap |
+| `cloud-cache` | cache pin, predownload, autoupdate, partial download, cache gc, watermark, smart sync, cache entry, cache state, bitmap | Cache layer: pinning, smart sync, partial DL | Needed | qnap |
+| `cloud-encrypt` | client.side.encrypt, enc.dir, enc.unlock, encryption | Client-side encryption integration | Needed | qnap, ubiquiti |
+| `fuse-arch` | fuse, qrpc, libev, socket.handling, daemon, ipc, fuse3, meson, autotools, pjdfstest, filebench | FUSE daemon architecture + build system | Needed | qnap, ubiquiti |
+| `ai-skill` | claude skill, ai review, pr agent, prompt-hub, ai-assisted, claude session, ai workflow, mcp server, skill framework | AI-powered developer platform | ai-skill.html | qnap, ubiquiti |
+| `debian-trixie` | trixie, bullseye, porting, pyzfs, migration | Bullseye→Trixie package migration | Possible | ubiquiti |
+| `build-system` | debfactory, debbox, deb package, backport, firmware, build, bootstrap, reprepro, package bump | debfactory/debbox packaging infra | Low priority | qnap, ubiquiti |
+| `other` | (catch-all — no matching keywords) | misc commits | n/a | qnap, ubiquiti |
 
 Commits matching no category go into `other`. When many commits land in `other`, review them for recurring themes and consider adding a new category.
 
