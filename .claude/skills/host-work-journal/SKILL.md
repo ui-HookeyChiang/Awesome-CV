@@ -62,11 +62,22 @@ The JSON contains both regular git stats (`git` key) and SAR-categorized commits
    - **Must start with frontmatter** (see "Frontmatter template" below)
 2. **SAR git data** → `journal/raw/git-sar/<START>-to-<END>/` (per-category files)
    - One file per SAR category + index.md summary
-   - **No frontmatter** — these are transient SAR data, schema churn
-     outweighs benefit (per llm-wiki spec
-     `2026-04-30-awcv-llm-wiki-migration` non-goals)
+   - **Must start with frontmatter** (see "SAR frontmatter template" below)
+   - Each SAR card maps to one or more entities (qnap / ubiquiti) via
+     the `Entities` column in `_shared/categories.md`. Treat that column
+     as the single source of truth — write that exact mapping into the
+     SAR card's frontmatter `entities:` array.
 
-### Frontmatter template (work-report only)
+   **Why this changed (2026-05-01)**: previously SAR was treated as
+   "transient, no frontmatter" (per migration spec non-goal). User
+   feedback after orphan-elimination sweep showed SAR cards in
+   Obsidian Graph view were disconnected from qnap/ubiquiti, defeating
+   their purpose as the bridge between entity ↔ commit history. SAR
+   categories are stable (cloud-cache, btrfs-backend, ...) — schema
+   churn never materialized. Frontmatter is now required at write
+   time so future ingests don't need retroactive backfill.
+
+### Frontmatter template (work-report)
 
 Every new `work-report_<HOST>_<START>-to-<END>.md` is born with valid
 `log-entry` frontmatter (schema:
@@ -179,6 +190,61 @@ journal/raw/git-sar/2018-01-01-to-2026-03-30/
   ...
   other.md              # uncategorized
 ```
+
+### SAR frontmatter template
+
+Every SAR card (per-category file AND `index.md`) is born with `log-entry` frontmatter so it shows up in the federation graph + retrieval immediately. Look up the entity mapping from the **Entities** column of `_shared/categories.md` — that table is the single source of truth.
+
+Per-category file (e.g. `cloud-cache.md`):
+
+```yaml
+---
+date: <END>
+kind: log-entry
+period: adhoc
+title: "SAR — <human title>"
+entities:
+  # From _shared/categories.md "Entities" column for this category
+  - kms://entity:<ent1>
+  - kms://entity:<ent2>   # if category maps to both
+tags: [journal, sar, git-history]
+---
+```
+
+`index.md` (sweep summary):
+
+```yaml
+---
+date: <END>
+kind: meta
+title: "Git SAR Index <START>-<END>"
+entities:
+  - kms://entity:qnap
+  - kms://entity:ubiquiti
+tags: [journal, sar, index]
+---
+```
+
+After writing each card, run the federation graph-mirror generator so Obsidian Graph view picks up the entity edges:
+
+```bash
+python3 <federation-root>/meta-wiki/cross-index/lib/resolver.py \
+  to-wikilinks <sar-card-path>...
+```
+
+(PyYAML must be available; if `python3 -c "import yaml"` fails, run `pip install --user --break-system-packages pyyaml` first — without it, the resolver writes wrong same-wiki paths.)
+
+### Entity mapping table
+
+Sourced from `_shared/categories.md` "Entities" column. Reproduced here for quick reference at write time:
+
+| SAR category | Entities |
+|---|---|
+| `cloud-cache`, `cloud-perf` | qnap |
+| `kernel-upgrade`, `samba-perf`, `zfs-backend`, `nas-stability`, `grpc-streamer`, `btrfs-backend`, `debian-trixie` | ubiquiti |
+| `system-perf`, `cloud-encrypt`, `fuse-arch`, `ai-skill`, `build-system`, `other` | qnap, ubiquiti |
+
+If a new category appears (extending `_shared/categories.md`), pick its entities from the dominant repo: `hybridmount` → qnap; `debbox` / `debfactory` / `unifi-drive-config` / `ustd` / `ustate-exporter` / `unifi-protobufs` / `debbox-base-files` → ubiquiti; mixed → both.
 
 ### index.md sweep metadata
 
