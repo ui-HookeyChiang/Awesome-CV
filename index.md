@@ -13,6 +13,12 @@ tags: [obsidian, navigation, career]
 
 ## Milestones
 
+Static fallback (Dataview-rendered when opened in Obsidian):
+
+- [Career Summary](milestone/summary.md) — cross-employer synthesis
+- [Ubiquiti Experience](milestone/ubiquiti.md) — NAS platform, ustated, storage stack
+- [QNAP Cloud File System](milestone/qnap.md) — FUSE filesystem, encryption, cloud bridging
+
 ```dataview
 TABLE summary
 FROM "milestone"

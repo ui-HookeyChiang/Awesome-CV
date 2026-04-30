@@ -1,3 +1,18 @@
+---
+title: Career Summary
+kind: concept
+last_verified: 2026-04-30
+summary: Cross-employer career synthesis — OS engineering, performance, storage infrastructure across QNAP and Ubiquiti.
+entities:
+  - kms://entity:qnap
+  - kms://entity:ubiquiti
+related_concepts: []
+sources:
+  - milestone/qnap.md
+  - milestone/ubiquiti.md
+tags: [career, summary, overview]
+---
+
 # Career Summary
 
 ## OS Engineer — Linux Development, Performance & Storage Infrastructure
@@ -71,3 +86,8 @@
 - Reduced system resource utilization by 50-65% through optimization and architectural improvements
 - Established testing and validation frameworks ensuring long-term product reliability
 - Created knowledge transfer materials and processes enabling team scalability and reduced support overhead
+
+## Per-employer milestones
+
+- [Ubiquiti Experience](ubiquiti.md) — NAS platform scaling, ustated state daemon, UNAS/UNVR/UDM storage stack
+- [QNAP Cloud File System](qnap.md) — FUSE-based cloud filesystem, selective mounting, client-side encryption
