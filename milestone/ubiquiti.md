@@ -1,3 +1,18 @@
+---
+title: Ubiquiti Experience
+kind: concept
+last_verified: 2026-04-30
+summary: Career milestone — OS engineering at Ubiquiti, leading NAS platform scaling, ustated state-management daemon (16,600 LOC), and storage stack for UNAS/UNVR/UDM products.
+entities:
+  - kms://entity:ubiquiti
+related_concepts:
+  - kms://concept:llm-wiki
+sources:
+  - journal/integrated/work-report_ampere_2025-11-to-2026-02.md
+  - journal/integrated/performance-summary.md
+tags: [career, milestone, storage, infrastructure]
+---
+
 # Ubiquiti Experience
 
 ## Github Metrics
