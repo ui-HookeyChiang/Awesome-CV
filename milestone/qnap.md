@@ -5,7 +5,8 @@ last_verified: 2026-04-30
 summary: Career milestone — built FUSE-based cloud filesystem at QNAP with selective mounting, client-side encryption, and SMB/NFS protocol bridging for local-like cloud access.
 entities:
   - kms://entity:qnap
-related_concepts: []
+related_concepts:
+  - kms://concept:summary
 sources:
   - journal/integrated/annaual_summary_2020-to-2025.md
 tags: [career, milestone, storage, fuse, cloud]

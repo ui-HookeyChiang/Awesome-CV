@@ -9,6 +9,7 @@ entities:
   - kms://entity:unas-pro
 related_concepts:
   - kms://concept:performance-tuning
+  - kms://concept:ubiquiti
 related_skills:
   - host-work-journal
   - journal-integrate-milestones
