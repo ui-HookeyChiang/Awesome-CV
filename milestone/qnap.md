@@ -132,3 +132,11 @@ Federation entity nodes:
 Related concept pages (other milestones):
 
 - kms://concept:summary — `Awesome-CV/milestone/summary.md`
+
+<!-- graph-mirror-start -->
+<details><summary>Graph anchors (auto-generated)</summary>
+
+[[../personal-wiki/entities/qnap]] [[milestone/summary]]
+
+</details>
+<!-- graph-mirror-end -->

@@ -985,3 +985,11 @@ Related concept pages (other milestones):
 
 - kms://concept:summary — `Awesome-CV/milestone/summary.md`
 - kms://concept:performance-summary — `Awesome-CV/milestone/performance-summary.md`
+
+<!-- graph-mirror-start -->
+<details><summary>Graph anchors (auto-generated)</summary>
+
+[[../personal-wiki/entities/ubiquiti]] [[milestone/performance-summary]] [[milestone/summary]]
+
+</details>
+<!-- graph-mirror-end -->

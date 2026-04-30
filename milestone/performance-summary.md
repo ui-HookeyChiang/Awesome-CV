@@ -234,3 +234,11 @@ Related concept pages (other milestones):
 
 - kms://concept:performance-tuning — `personal-wiki/concepts/performance-tuning.md` (de-employed technical reference)
 - kms://concept:ubiquiti — `Awesome-CV/milestone/ubiquiti.md`
+
+<!-- graph-mirror-start -->
+<details><summary>Graph anchors (auto-generated)</summary>
+
+[[../personal-wiki/entities/ubiquiti]] [[../personal-wiki/entities/unas-pro]] [[../personal-wiki/concepts/performance-tuning]] [[milestone/ubiquiti]]
+
+</details>
+<!-- graph-mirror-end -->

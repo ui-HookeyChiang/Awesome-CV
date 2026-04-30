@@ -110,3 +110,11 @@ Related concept pages (other milestones):
 
 - kms://concept:ubiquiti — `Awesome-CV/milestone/ubiquiti.md`
 - kms://concept:qnap — `Awesome-CV/milestone/qnap.md`
+
+<!-- graph-mirror-start -->
+<details><summary>Graph anchors (auto-generated)</summary>
+
+[[../personal-wiki/entities/qnap]] [[../personal-wiki/entities/ubiquiti]] [[milestone/qnap]] [[milestone/ubiquiti]]
+
+</details>
+<!-- graph-mirror-end -->
