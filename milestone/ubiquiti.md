@@ -6,7 +6,8 @@ summary: Career milestone — OS engineering at Ubiquiti, leading NAS platform s
 entities:
   - kms://entity:ubiquiti
 related_concepts:
-  - kms://concept:llm-wiki
+  - kms://concept:summary
+  - kms://concept:performance-summary
 sources:
   - journal/integrated/work-report_ampere_2025-11-to-2026-02.md
   - journal/integrated/performance-summary.md
