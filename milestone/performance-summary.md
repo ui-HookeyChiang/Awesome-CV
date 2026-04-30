@@ -21,7 +21,7 @@ tags: [storage, performance, career, milestone]
 
 # NAS Storage Performance Summary
 
-Career evidence for NAS storage performance work at Ubiquiti (2024–2026):
+Career evidence for NAS storage performance work at [[ubiquiti|Ubiquiti]] (2024–2026):
 end-to-end benchmarking across UNAS-2/4/Pro/Pro-8, full-stack tuning of the
 Samba/NFS/Btrfs/SSD-cache pipeline, and platform-level kernel/network/memory
 configuration shipped to production firmware. Numbers below are measured
@@ -54,7 +54,7 @@ Benchmarked across the full UNAS product line; protocol is Samba unless noted.
 | CPU @ Seq Read | 41% | 69% | 89% | 79% |
 
 - Pro-8 dominates seq read and random I/O when SSD cache is warm.
-- UNAS-Pro leads no-cache seq write (649 MB/s) — simpler RAID5x7 has less overhead.
+- [[unas-pro|UNAS-Pro]] leads no-cache seq write (649 MB/s) — simpler RAID5x7 has less overhead.
 - UNAS-2/UNAS-4 are NIC-limited at 2.5GbE (~280 MB/s ceiling).
 - RAID5x4 → x7 → x8 scaling: diminishing returns for sequential, strong gains for random I/O.
 
@@ -215,3 +215,22 @@ Achieved via I/O-operation reduction + merge-count optimization at the block lay
 - Raw history: `journal/integrated/performance-summary.md`
 - Employer: [Ubiquiti](kms://entity:ubiquiti)
 - Companion milestone: [Ubiquiti Experience](ubiquiti.md) — broader Q-by-Q achievements at Ubiquiti
+
+## Sources
+
+Journal evidence backing this milestone:
+
+- `journal/integrated/performance-summary.md` — refined NAS storage performance dataset across UNAS-2/4/Pro/Pro-8 (Samba, NFS, RAID, SSD-cache benchmarks)
+- `journal/raw/btrfs-drive-performance.csv` — raw fio result CSV across all test configurations (source data)
+
+## Cross-references
+
+Federation entity nodes:
+
+- kms://entity:ubiquiti — `personal-wiki/entities/ubiquiti.md`
+- kms://entity:unas-pro — `personal-wiki/entities/unas-pro.md`
+
+Related concept pages (other milestones):
+
+- kms://concept:performance-tuning — `personal-wiki/concepts/performance-tuning.md` (de-employed technical reference)
+- kms://concept:ubiquiti — `Awesome-CV/milestone/ubiquiti.md`

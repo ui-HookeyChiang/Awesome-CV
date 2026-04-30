@@ -30,7 +30,7 @@ tags: [career, milestone, storage, infrastructure]
 
 ### unifi-drive-config (UDC)
 
-Core storage management daemon and CLI tool for Ubiquiti's UniFi NAS hardware (UNAS/UNAS Pro devices). Manages the full lifecycle of a NAS appliance from filesystem through encryption to network sharing.
+Core storage management daemon and CLI tool for [[ubiquiti|Ubiquiti]]'s UniFi NAS hardware (UNAS/UNAS Pro devices). Manages the full lifecycle of a NAS appliance from filesystem through encryption to network sharing.
 
 #### What It Does
 - **Drive Management**: Creates and manages user storage as Btrfs subvolumes or ZFS datasets with quotas, snapshots, and encryption
@@ -967,3 +967,21 @@ Go, gRPC, Protocol Buffers, Cobra, Logrus, gopsutil, systemd, Debian packaging, 
 - Defined protobuf schemas for communication between system components and the UniFi app
 - Developed and configured udc (Unified Device Config) daemon as a secure system proxy, supporting privileged command execution and streaming asynchronous communication with reduced permission scope for the UD service
 - Designed and implemented the Bluetooth pairing flow, supporting secure and user-friendly device onboarding
+
+## Sources
+
+Journal evidence backing this milestone:
+
+- `journal/integrated/work-report_ampere_2025-11-to-2026-02.md` — ampere host activity report (538 commits, 51 PRs, 132 firmware deployments) covering NAS performance, kernel work, and UDC/ZFS development
+- `journal/integrated/performance-summary.md` — refined NAS storage performance dataset across UNAS-2/4/Pro/Pro-8 (Samba, NFS, RAID, SSD-cache benchmarks)
+
+## Cross-references
+
+Federation entity nodes:
+
+- kms://entity:ubiquiti — `personal-wiki/entities/ubiquiti.md`
+
+Related concept pages (other milestones):
+
+- kms://concept:summary — `Awesome-CV/milestone/summary.md`
+- kms://concept:performance-summary — `Awesome-CV/milestone/performance-summary.md`

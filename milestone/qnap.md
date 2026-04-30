@@ -14,6 +14,8 @@ tags: [career, milestone, storage, fuse, cloud]
 
 # QNAP Cloud File System
 
+Career milestone built at [[qnap|QNAP]] — a FUSE-based cloud filesystem with selective mounting, client-side encryption, and SMB/NFS protocol bridging for local-like cloud access, deployed across 190K+ QNAP NAS devices.
+
 ## 🔧 Feature Highlights
 
 - **Local-like cloud access**: Delivered a local-like experience for accessing cloud files by enabling caching and mounting as a local filesystem, with support for NFS and SMB protocols
@@ -114,3 +116,19 @@ tags: [career, milestone, storage, fuse, cloud]
 - Studied SplitFS architecture (metadata/data operations split across ext4 DAX and FUSE); compared with NOVA achieving nearly **2x performance**
 - Implemented key features in dedup FS: writeback cache and chunk defragmentation
 - Refactored read/write operations: **-50% codebase**, fixing data assembly issues at chunk edges
+
+## Sources
+
+Journal evidence backing this milestone:
+
+- `journal/integrated/annaual_summary_2020-to-2025.md` — annual summary (2020–2025) covering QNAP cloud filesystem development across versions v1.0–v1.5
+
+## Cross-references
+
+Federation entity nodes:
+
+- kms://entity:qnap — `personal-wiki/entities/qnap.md`
+
+Related concept pages (other milestones):
+
+- kms://concept:summary — `Awesome-CV/milestone/summary.md`
