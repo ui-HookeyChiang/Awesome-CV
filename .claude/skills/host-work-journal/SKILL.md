@@ -59,8 +59,75 @@ The JSON contains both regular git stats (`git` key) and SAR-categorized commits
 
 1. **Work report** → `journal/raw/work-report_<HOST>_<START>-to-<END>.md`
    - Activity overview, git stats by repo, Claude usage, test sessions, key work streams
+   - **Must start with frontmatter** (see "Frontmatter template" below)
 2. **SAR git data** → `journal/raw/git-sar/<START>-to-<END>/` (per-category files)
    - One file per SAR category + index.md summary
+   - **No frontmatter** — these are transient SAR data, schema churn
+     outweighs benefit (per llm-wiki spec
+     `2026-04-30-awcv-llm-wiki-migration` non-goals)
+
+### Frontmatter template (work-report only)
+
+Every new `work-report_<HOST>_<START>-to-<END>.md` is born with valid
+`log-entry` frontmatter (schema:
+`https://github.com/ui-HookeyChiang/llm-wiki/blob/main/meta-wiki/shared-schema/log-entry.yml`).
+This means downstream pipelines never need retroactive backfill.
+
+Prepend this block before the `# Work Report` H1:
+
+```yaml
+---
+date: <END>
+kind: log-entry
+period: <weekly|monthly|quarterly|adhoc>   # auto-classify, see thresholds below
+title: "Work Report — <host> (<START> to <END>)"
+entities:
+  - kms://entity:<host>            # e.g. ampere, c1153-macbook-pro
+  - kms://entity:<inferred-employer>  # e.g. ubiquiti, qnap
+sources: []
+tags: [journal, work-report, auto-generated]
+---
+```
+
+#### Period auto-classification
+
+| Range length (END − START in days) | period |
+|---|---|
+| ≤ 14 | `weekly` |
+| ≤ 45 | `monthly` |
+| ≤ 100 | `quarterly` |
+| > 100 | `annual` if a calendar year, else `adhoc` |
+
+#### Host → employer-era mapping
+
+Each host belongs to a career era. Look up the host in this table; if
+the host is not listed, ASK the user before composing — guessing the
+era poisons cross-index resolution downstream.
+
+| Host | Era / Employer |
+|---|---|
+| `ampere` | ubiquiti |
+| `c1153-macbook-pro` | qnap |
+| _(extend as needed when new hosts appear)_ | _(declare here)_ |
+
+#### Title quoting
+
+ALWAYS double-quote the `title:` value. Work-report titles contain `:`,
+`(`, `—`, and parentheses, all of which break unquoted YAML. This is
+the same lesson logged after `awcv-migrate task-1` had to backfill 14
+existing files — quoting at write time costs nothing and prevents
+re-doing the work later.
+
+#### Verifier
+
+Right after writing the file, run:
+
+```bash
+python3 -c "import re,yaml; t=open('<path>').read(); m=re.match(r'^---\n(.*?)\n---\n',t,re.DOTALL); fm=yaml.safe_load(m.group(1)); assert fm['kind']=='log-entry' and fm.get('date') and fm.get('title')"
+```
+
+Exit 0 means the file is born friendly. Non-zero means fix before
+proceeding to Phase 3.
 
 ## Data Sources
 

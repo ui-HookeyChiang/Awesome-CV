@@ -62,6 +62,13 @@ For each `weekly-report_*.md` in `raw/`:
 2. **Standardize formatting**: consistent headings, bullet points, date headers
 3. **Clean up** abbreviations, add context where unclear
 4. **Preserve** all technical detail and metrics
+5. **Preserve frontmatter unchanged** when copying raw → refined.
+   If a raw file lacks frontmatter (legacy pre-2026-04-30 file),
+   generate one per
+   `meta-wiki/shared-schema/log-entry.yml` of the llm-wiki federation.
+   Refined files MUST start with valid `kind: log-entry` frontmatter
+   so downstream pipelines (Step 3 milestone enrichment) can read
+   `entities:` and accumulate cross-references.
 
 Move refined files from `raw/` to `refined/`.
 
@@ -76,6 +83,11 @@ Read the target company milestone file to understand:
 - Chronological structure (sections by year and quarter)
 - Last quarter covered
 - Writing style and formatting conventions
+- **Frontmatter `entities:` field** — accumulate
+  `kms://entity:*` references from each raw file's frontmatter into
+  the target milestone file's `entities:` (deduplicate). This keeps
+  cross-index resolution working as new weekly reports land. Bump
+  `last_verified:` to today after each integration.
 
 ### SAR Gap Detection (if git-sar data exists)
 
@@ -161,6 +173,43 @@ Promote achievements that have: quantified metrics (throughput, latency, percent
    - `integrated/` contains processed weekly reports
    - Milestone file has new quarter sections
    - Summary file has new highlights
+   - **`milestone/performance-summary.md` exists, has `kind: concept`**
+     (NOT `log-entry`), and `last_verified:` is within 90 days. If any
+     pipeline step accidentally regressed it to `log-entry` schema or
+     moved it under `journal/integrated/`, treat as a regression and
+     revert. (See Step 6 for the in-place rule.)
+
+## Step 6 — Performance-summary in-place rule
+
+The file `milestone/performance-summary.md` is a `concept`-schema
+**career-evidence** page (created by awcv-migrate 2026-04-30, decision
+Q4=D / Q-extra=C). It does NOT follow the normal raw → refined →
+integrated cycle; it is updated **in place** as new performance data
+lands.
+
+When integrating a raw file that contains performance-tuning content
+(detect via category tags from `_shared/categories.md` matching
+`network-stack` / `tcp` / `storage-io` / `memory` / `filesystem` /
+`service`):
+
+1. Read the existing `milestone/performance-summary.md`.
+2. Append/update the relevant before→after metric tables (preserve
+   frontmatter; bump `last_verified:` to today).
+3. Add the source raw file path to frontmatter `sources:`.
+4. Do NOT move or copy the raw file's perf content into a separate
+   refined file — the raw history stays as a journal log-entry
+   (`journal/integrated/performance-summary.md`), the career evidence
+   distillation goes here in `milestone/performance-summary.md`.
+
+**De-employed knowledge** (parameter reference, generic principles)
+goes in `personal-wiki/concepts/performance-tuning.md` instead — that
+page is governed by the `wiki-curate` skill (separate workflow), not
+this one. Cross-link via `kms://concept:performance-tuning`.
+
+**Verifier** (also in Step 5):
+`milestone/performance-summary.md` must remain `kind: concept`, never
+`log-entry`. If any pipeline step accidentally regresses this file's
+schema, treat as a regression and revert.
 
 ## Performance Tuning Reference
 
