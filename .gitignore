@@ -27,6 +27,14 @@
 ## Resume output and job-targeted resumes:
 resumes/
 
+### Node ###
+## src/present/ assembler + pptx generator deps (installed by install.sh):
+node_modules/
+
+### Worktrees ###
+## stacking-dev worktrees:
+.worktrees/
+
 ### Obsidian ###
 ## Obsidian local workspace state (per-machine, not shareable):
 .obsidian/workspace.json

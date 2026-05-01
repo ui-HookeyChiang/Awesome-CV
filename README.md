@@ -35,6 +35,25 @@
 **Awesome CV** is LaTeX template for a **CV(Curriculum Vitae)**, **Résumé** or **Cover Letter** inspired by [Fancy CV](https://www.sharelatex.com/templates/cv-or-resume/fancy-cv). It is easy to customize your own template, especially since it is really written by a clean, semantic markup.
 
 
+## Claude Code Skills (this fork)
+
+This fork ships a suite of [Claude Code](https://docs.claude.com/en/docs/claude-code) skills under `.claude/skills/` that automate the resume/CV workflow: tailoring resumes to job descriptions (`tailor-resume`, `job-analysis`), building and validating PDFs (`resume-pdf-check`, `resume-content-rules`), generating interview presentations and speech scripts (`interview-presentation`, `interview-speech`), and integrating journal/milestone data into career documentation (`host-work-journal`, `journal-integrate`, `journal-integrate-milestones`, `sar-extraction`).
+
+### Setup
+
+After cloning, run the installer:
+
+```bash
+./install.sh
+```
+
+The script is idempotent — re-run it after `git pull` to pick up newly added skills or refresh Node deps. It performs three steps:
+
+1. **Verifies required binaries** — `xelatex` (TeX Live, for resume PDF builds), `pdfinfo` (poppler, for page-count validation), `node` and `npm` (for the slide assembler and PPTX generator). Missing binaries print platform-specific install hints (`brew` on macOS, `apt-get` on Linux) and the script exits.
+2. **Runs `npm install`** in `src/present/` so `assemble.js` and `generate-pptx.js` can run.
+3. **Symlinks skills** into `~/.claude/skills/`. It refuses to overwrite existing non-symlink entries, so unrelated skills in `~/.claude/skills/` are safe.
+
+
 ## Donate
 
 Please help keep this project alive! Donations are welcome and will go towards further development of this project.
