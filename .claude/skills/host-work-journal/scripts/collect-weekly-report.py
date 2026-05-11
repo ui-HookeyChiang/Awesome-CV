@@ -194,9 +194,91 @@ def iso_to_date(iso_str):
     return iso_str[:10]
 
 
+def iso_to_datetime(iso_str):
+    """Convert ISO 8601 string to timezone-aware UTC datetime, second precision.
+
+    Accepts the formats Claude session files emit, e.g.
+    '2026-02-26T05:54:18.845Z' or '2026-02-26T05:54:18+00:00'. Sub-second
+    fractions are preserved by fromisoformat where possible; callers that
+    need second-only comparison can `.replace(microsecond=0)`.
+    Returns None when the input is empty or unparseable.
+    """
+    if not iso_str:
+        return None
+    s = str(iso_str).strip()
+    if not s:
+        return None
+    # Python <3.11 fromisoformat doesn't accept trailing 'Z'
+    if s.endswith("Z"):
+        s = s[:-1] + "+00:00"
+    try:
+        dt = datetime.fromisoformat(s)
+    except ValueError:
+        # Last-chance fallback: try date-only
+        try:
+            dt = datetime.strptime(s[:10], "%Y-%m-%d")
+        except ValueError:
+            return None
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    else:
+        dt = dt.astimezone(timezone.utc)
+    return dt
+
+
+def datetime_to_iso(dt):
+    """Format a datetime as ISO 8601 (UTC, second precision)."""
+    if dt is None:
+        return None
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    else:
+        dt = dt.astimezone(timezone.utc)
+    return dt.replace(microsecond=0).isoformat()
+
+
 def in_range(date_str_val, start, end):
     """Check if a YYYY-MM-DD date string falls within [start, end]."""
     return start <= date_str_val <= end
+
+
+def in_range_dt(dt, start_dt, end_dt):
+    """Check if a timezone-aware datetime falls within [start_dt, end_dt].
+
+    Boundaries are inclusive. None datetimes are treated as out-of-range.
+    """
+    if dt is None or start_dt is None or end_dt is None:
+        return False
+    return start_dt <= dt <= end_dt
+
+
+def parse_range_bounds(start_str, end_str):
+    """Parse CLI --start-date/--end-date into (start_dt, end_dt) UTC datetimes.
+
+    Accepts:
+      - YYYY-MM-DD (date-only): expands start to 00:00:00, end to 23:59:59.999999
+      - ISO 8601 with time: used as-is, assumes UTC if no tz
+
+    Returns (start_dt, end_dt). Both are timezone-aware UTC datetimes.
+    Raises ValueError on unparseable input.
+    """
+    def _parse(s, is_end):
+        if not s:
+            raise ValueError("empty date string")
+        s = s.strip()
+        # Date-only: YYYY-MM-DD with nothing else
+        if re.fullmatch(r"\d{4}-\d{2}-\d{2}", s):
+            base = datetime.strptime(s, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+            if is_end:
+                return base.replace(hour=23, minute=59, second=59, microsecond=999999)
+            return base
+        # Otherwise treat as ISO 8601 (with time component)
+        dt = iso_to_datetime(s)
+        if dt is None:
+            raise ValueError(f"unparseable date/time: {s!r}")
+        return dt
+
+    return _parse(start_str, is_end=False), _parse(end_str, is_end=True)
 
 
 def parse_report_date(date_part):
@@ -455,7 +537,12 @@ def collect_infrastructure():
 
 
 def collect_shell_history(start_date, end_date):
-    """Parse shell history for command usage within date range."""
+    """Parse shell history for command usage within date range.
+
+    Filtering is done at second precision: zsh timestamps are unix epoch
+    integers, compared against the parsed range bounds (CLI may pass either
+    date-only or full ISO 8601).
+    """
     log.info("Collecting shell history...")
     result = {
         "total_commands": 0,
@@ -464,6 +551,8 @@ def collect_shell_history(start_date, end_date):
         "scp_transfers": 0,
         "top_commands": [],
     }
+
+    start_dt, end_dt = parse_range_bounds(start_date, end_date)
 
     commands = []  # (date_str, full_command)
     zsh_re = re.compile(r"^: (\d+):\d+;(.+)")
@@ -492,8 +581,9 @@ def collect_shell_history(start_date, end_date):
                 if m:
                     ts = int(m.group(1))
                     cmd = m.group(2)
-                    cmd_date = datetime.fromtimestamp(ts, tz=timezone.utc).strftime("%Y-%m-%d")
-                    if in_range(cmd_date, start_date, end_date):
+                    cmd_dt = datetime.fromtimestamp(ts, tz=timezone.utc)
+                    if in_range_dt(cmd_dt, start_dt, end_dt):
+                        cmd_date = cmd_dt.strftime("%Y-%m-%d")
                         if cmd.endswith("\\"):
                             cont_date = cmd_date
                             cont_cmd = cmd[:-1]
@@ -926,6 +1016,7 @@ def collect_claude_sessions(start_date, end_date, detailed=False):
     Detailed mode: additionally parses per-session .jsonl files
     """
     log.info("Collecting Claude sessions (detailed=%s)...", detailed)
+    start_dt, end_dt = parse_range_bounds(start_date, end_date)
     result = {
         "total_prompts": 0,
         "total_sessions": 0,
@@ -935,6 +1026,8 @@ def collect_claude_sessions(start_date, end_date, detailed=False):
         "by_topic": [],
         "by_day": [],
         "session_summaries": [],
+        "first_prompt_timestamp": None,
+        "last_prompt_timestamp": None,
     }
 
     # ── 1. stats-cache.json for aggregate daily counts ───────────────────
@@ -1003,9 +1096,18 @@ def collect_claude_sessions(start_date, end_date, detailed=False):
                     if not ts:
                         continue
 
-                    entry_date = ts_ms_to_date(ts)
-                    if not in_range(entry_date, start_date, end_date):
+                    entry_dt = ts_ms_to_datetime(ts)
+                    if not in_range_dt(entry_dt, start_dt, end_dt):
                         continue
+
+                    entry_date = entry_dt.strftime("%Y-%m-%d")
+                    # Track sub-day range bounds at second precision
+                    if (result["first_prompt_timestamp"] is None
+                            or entry_dt < iso_to_datetime(result["first_prompt_timestamp"])):
+                        result["first_prompt_timestamp"] = datetime_to_iso(entry_dt)
+                    if (result["last_prompt_timestamp"] is None
+                            or entry_dt > iso_to_datetime(result["last_prompt_timestamp"])):
+                        result["last_prompt_timestamp"] = datetime_to_iso(entry_dt)
 
                     prompt_count += 1
                     prompts_by_day[entry_date] = prompts_by_day.get(entry_date, 0) + 1
@@ -1117,8 +1219,8 @@ def collect_claude_sessions(start_date, end_date, detailed=False):
 
                             msg_ts = msg.get("timestamp", "")
                             if msg_ts and "T" in str(msg_ts):
-                                msg_date = iso_to_date(msg_ts)
-                                if in_range(msg_date, start_date, end_date):
+                                msg_dt = iso_to_datetime(msg_ts)
+                                if in_range_dt(msg_dt, start_dt, end_dt):
                                     session_in_range = True
 
                             if not session_in_range:
@@ -1234,12 +1336,14 @@ def main():
     parser.add_argument(
         "--start-date", type=str,
         default=date_str(datetime.now(timezone.utc) - timedelta(days=7)),
-        help="Start date YYYY-MM-DD (default: 7 days ago)",
+        help=("Start date YYYY-MM-DD or ISO 8601 with time (default: 7 days ago). "
+              "Date-only expands to 00:00:00 UTC."),
     )
     parser.add_argument(
         "--end-date", type=str,
         default=date_str(datetime.now(timezone.utc)),
-        help="End date YYYY-MM-DD (default: today)",
+        help=("End date YYYY-MM-DD or ISO 8601 with time (default: today). "
+              "Date-only expands to 23:59:59.999999 UTC."),
     )
     parser.add_argument(
         "--output", type=str, default=None,
@@ -1330,12 +1434,23 @@ def main():
     log.info("Host: %s, Authors: %s, Range: %s to %s",
              hostname, authors, start_date, end_date)
 
+    # Resolve range to second-precision UTC datetimes (date-only inputs
+    # expand to [00:00:00, 23:59:59.999999]). The string fields remain in
+    # the output for backward compat with downstream skills.
+    try:
+        start_dt, end_dt = parse_range_bounds(start_date, end_date)
+    except ValueError as e:
+        log.error("Invalid --start-date / --end-date: %s", e)
+        sys.exit(2)
+
     # Run all collectors (each handles its own errors)
     data = {
         "meta": {
             "hostname": hostname,
             "start_date": start_date,
             "end_date": end_date,
+            "start_timestamp": datetime_to_iso(start_dt),
+            "end_timestamp": datetime_to_iso(end_dt),
             "generated": datetime.now(timezone.utc).isoformat(),
             "git_authors": authors,
             "detailed": args.detailed,
