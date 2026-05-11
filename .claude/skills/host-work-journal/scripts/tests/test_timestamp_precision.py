@@ -213,6 +213,50 @@ def test_legacy_iso_to_date_unchanged():
     assert collector.iso_to_date("2026-02-26T05:54:18.845Z") == "2026-02-26"
 
 
+# ── cap_end_to_yesterday ───────────────────────────────────────────────────
+
+
+def test_cap_end_to_yesterday_caps_today():
+    """End covering today gets capped to yesterday 23:59:59.999999."""
+    now = datetime(2026, 5, 11, 13, 0, 0, tzinfo=timezone.utc)
+    # Caller asked for "today" — parse_range_bounds expanded it to end-of-day
+    end_dt = datetime(2026, 5, 11, 23, 59, 59, 999_999, tzinfo=timezone.utc)
+    capped = collector.cap_end_to_yesterday(end_dt, now=now)
+    assert capped == datetime(2026, 5, 10, 23, 59, 59, 999_999, tzinfo=timezone.utc)
+
+
+def test_cap_end_to_yesterday_caps_future():
+    """Future end-date also gets capped to yesterday."""
+    now = datetime(2026, 5, 11, 9, 0, 0, tzinfo=timezone.utc)
+    end_dt = datetime(2026, 6, 1, 23, 59, 59, 999_999, tzinfo=timezone.utc)
+    capped = collector.cap_end_to_yesterday(end_dt, now=now)
+    assert capped == datetime(2026, 5, 10, 23, 59, 59, 999_999, tzinfo=timezone.utc)
+
+
+def test_cap_end_to_yesterday_passthrough_past():
+    """Past end-date is returned unchanged."""
+    now = datetime(2026, 5, 11, 13, 0, 0, tzinfo=timezone.utc)
+    end_dt = datetime(2026, 4, 30, 23, 59, 59, 999_999, tzinfo=timezone.utc)
+    capped = collector.cap_end_to_yesterday(end_dt, now=now)
+    assert capped == end_dt
+
+
+def test_cap_end_to_yesterday_boundary_yesterday_end():
+    """End at yesterday 23:59:59.999999 is exactly the boundary — keep as-is."""
+    now = datetime(2026, 5, 11, 0, 0, 5, tzinfo=timezone.utc)
+    end_dt = datetime(2026, 5, 10, 23, 59, 59, 999_999, tzinfo=timezone.utc)
+    capped = collector.cap_end_to_yesterday(end_dt, now=now)
+    assert capped == end_dt
+
+
+def test_cap_end_to_yesterday_run_just_after_midnight():
+    """Running at 00:00:05 UTC on day D: end=D 23:59:59 caps to D-1 23:59:59."""
+    now = datetime(2026, 5, 11, 0, 0, 5, tzinfo=timezone.utc)
+    end_dt = datetime(2026, 5, 11, 23, 59, 59, 999_999, tzinfo=timezone.utc)
+    capped = collector.cap_end_to_yesterday(end_dt, now=now)
+    assert capped == datetime(2026, 5, 10, 23, 59, 59, 999_999, tzinfo=timezone.utc)
+
+
 # ── Output structure: meta retains date strings + adds timestamps ──────────
 
 

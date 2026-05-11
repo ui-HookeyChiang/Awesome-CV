@@ -281,6 +281,28 @@ def parse_range_bounds(start_str, end_str):
     return _parse(start_str, is_end=False), _parse(end_str, is_end=True)
 
 
+def cap_end_to_yesterday(end_dt, now=None):
+    """Cap end_dt to end-of-yesterday if it covers today or the future.
+
+    Why: collector runs that include "today" produce reports claiming the
+    full day is covered. Re-running tomorrow with --skip-covered would
+    then skip today entirely, losing every event after the original run
+    time. Aligning with the day-granular dedup model, we instead trim
+    the report so it ends at yesterday 23:59:59.999999 UTC, leaving
+    today free for a future run.
+
+    Returns the (possibly trimmed) end_dt. If the original end_dt was
+    strictly before today (UTC), it is returned unchanged.
+    """
+    if now is None:
+        now = datetime.now(timezone.utc)
+    today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    if end_dt < today_start:
+        return end_dt
+    yesterday_end = today_start - timedelta(microseconds=1)
+    return yesterday_end
+
+
 def parse_report_date(date_part):
     """Parse date from report filename part. Handles YYYY-MM-DD and YYYY-MM formats."""
     if re.match(r'^\d{4}-\d{2}-\d{2}$', date_part):
@@ -1442,6 +1464,22 @@ def main():
     except ValueError as e:
         log.error("Invalid --start-date / --end-date: %s", e)
         sys.exit(2)
+
+    # Cap end to yesterday: a same-day run sees only partial data, but
+    # produces a report that --skip-covered treats as "today fully done".
+    # Trimming end to yesterday 23:59:59.999999 lets tomorrow's run pick
+    # today up cleanly. See cap_end_to_yesterday() docstring.
+    capped_end_dt = cap_end_to_yesterday(end_dt)
+    if capped_end_dt < end_dt:
+        log.info("end-date covers today/future; capping to yesterday (%s)",
+                 datetime_to_iso(capped_end_dt))
+        end_dt = capped_end_dt
+        end_date = end_dt.strftime("%Y-%m-%d")
+
+    if start_dt > end_dt:
+        log.warning("Nothing to collect: start (%s) is after capped end (%s). "
+                    "Try again tomorrow.", start_date, end_date)
+        sys.exit(0)
 
     # Run all collectors (each handles its own errors)
     data = {
