@@ -36,7 +36,7 @@ Each category maps 1:1 to a potential case study. The flow is: **category → ac
 | `cloud-cache` | cache pin, predownload, autoupdate, partial download, cache gc, watermark, smart sync, cache entry, cache state, bitmap | Cache layer: pinning, smart sync, partial DL | Needed | qnap |
 | `cloud-encrypt` | client.side.encrypt, enc.dir, enc.unlock, encryption | Client-side encryption integration | Needed | qnap, ubiquiti |
 | `fuse-arch` | fuse, qrpc, libev, socket.handling, daemon, ipc, fuse3, meson, autotools, pjdfstest, filebench | FUSE daemon architecture + build system | Needed | qnap, ubiquiti |
-| `ai-skill` | claude skill, ai review, pr agent, prompt-hub, ai-assisted, claude session, ai workflow, mcp server, skill framework | AI-powered developer platform | ai-skill.html | qnap, ubiquiti |
+| `ai-skill` | claude skill, ai review, pr agent, prompt-hub, ai-assisted, claude session, ai workflow, mcp server, skill framework, stacking-dev, verify-skill, skill-writer, skill-audit, skill-semantic-audit, skill-syntax-audit, prose-concise, docs-lifecycle, subagent, worktree, spec lifecycle, darwin, claude-pr-review, slash command | AI-powered developer platform | ai-skill.html | qnap, ubiquiti |
 | `debian-trixie` | trixie, bullseye, porting, pyzfs, migration | Bullseye→Trixie package migration | Possible | ubiquiti |
 | `build-system` | debfactory, debbox, deb package, backport, firmware, build, bootstrap, reprepro, package bump | debfactory/debbox packaging infra | Low priority | qnap, ubiquiti |
 | `other` | (catch-all — no matching keywords) | misc commits | n/a | qnap, ubiquiti |
