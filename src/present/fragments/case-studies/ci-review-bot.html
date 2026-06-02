@@ -1,0 +1,233 @@
+<!-- fragment:
+  id: ci-review-bot
+  type: case-study
+  tags: [ai, ci-cd, code-review, security, automation, devops, platform]
+  domain: CI/CD Platform Engineering
+  metrics: [16 repos, 22 hardening rounds, 5wk rollout, 6x bait-test verified]
+  source: milestone/ubiquiti.md#claude-pr-review-ci-bot-org-wide-rollout-uof-4504
+-->
+        <div class="slide">
+            <div class="slide-number">{{N}} / {{TOTAL}}</div>
+            <h1>Case Study {{CASE_NUM}}: AI PR-Review CI Bot [UOF-4504]</h1>
+
+            <div class="sar-format">
+                <!-- ===== SITUATION ===== -->
+                <div class="sar-item sar-situation">
+                    <h3 class="sar-header-situation">Situation</h3>
+                    <p style="margin: 10px 0; font-size: 1rem; line-height: 1.5; color: var(--text-secondary);">
+                        Replaced the CodiumAI pr-agent with a <span style="color: var(--accent); font-weight: 700;">Claude-based automated PR review</span> workflow across <span style="color: var(--accent); font-weight: 700;">16 repositories</span> &mdash; on a write-access CI surface that demanded phased rollout hardened against <span style="color: var(--accent); font-weight: 700;">prompt-injection and token-leak</span> vectors.
+                    </p>
+                </div>
+
+                <!-- ===== ACTION ===== -->
+                <div class="sar-item sar-action">
+                    <h3 class="sar-header-action">Action</h3>
+
+                    <div style="margin-top: 20px;">
+
+                        <!-- Preparation Step (1 box) -->
+                        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 25px;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="ci-review-bot-pilot" style="width: 220px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Pilot &amp; Supply-Chain</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">Pin actions to SHA</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">single-repo workflow + deploy key</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Down Arrow -->
+                        <div style="display: flex; justify-content: center; margin-bottom: 25px;">
+                            <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
+                        </div>
+
+                        <!-- Top Row: 3 boxes -->
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="ci-review-bot-harden" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Security Hardening</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">22 rounds</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">injection / token-leak / bypass</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="ci-review-bot-layerc" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Layer C Verification</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">self-mutating gate</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">unified A/B/C/D dedup</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="ci-review-bot-approve" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Formal APPROVE</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">replace LGTM comment</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">6&times; bait-test verified</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Down Arrow -->
+                        <div style="display: flex; justify-content: center; margin-bottom: 30px;">
+                            <div style="font-size: 1.6rem; color: var(--primary); font-weight: 700;">&#8595;</div>
+                        </div>
+
+                        <!-- Bottom Row: 3 boxes -->
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="ci-review-bot-apptoken" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Scoped App Token</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">UOS_FW_PR_ASSISTANT</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">per-repo scope</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="ci-review-bot-chaingate" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">Chain-Author Gate</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">fail-close</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">ghost-author / pagination cap</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 1.6rem; color: var(--text-muted); margin: 0 5px;">&#8594;</div>
+                            <div style="text-align: center;">
+                                <div class="flow-box" tabindex="0" role="button" data-cheat="ci-review-bot-fanout" style="width: 200px; min-height: 100px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-primary); font-size: 0.8rem; font-weight: 600; line-height: 1.3; box-shadow: none; padding: 8px;">
+                                    <div style="font-size: 0.85rem; margin-bottom: 4px; font-weight: 600;">16-Repo Fan-Out</div>
+                                    <div style="font-size: 0.85rem; margin-bottom: 2px; font-weight: 600;">workflow_call reuse</div>
+                                    <div style="font-size: 0.7rem; color: var(--text-muted);">single rebased wave</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Flow Description -->
+                        <div style="text-align: center; margin-top: 20px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
+                            CI Platform: Pilot &amp; Harden &rarr; Verify &amp; Approve &rarr; Authenticate &amp; Fan-Out
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== RESULT ===== -->
+                <div class="sar-item sar-result">
+                    <h3 class="sar-header-result">Result</h3>
+                    <div class="metrics-row" style="margin-top: 20px; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                        <div class="metric-box" style="flex: 1;">
+                            <span class="metric-number">16</span>
+                            <span class="metric-label">Repos Migrated</span>
+                        </div>
+                        <div class="metric-box" style="flex: 1;">
+                            <span class="metric-number">22</span>
+                            <span class="metric-label">Hardening Rounds</span>
+                        </div>
+                        <div class="metric-box" style="flex: 1;">
+                            <span class="metric-number">5wk</span>
+                            <span class="metric-label">Phased Rollout</span>
+                        </div>
+                        <div class="metric-box" style="flex: 1;">
+                            <span class="metric-number">6&times;</span>
+                            <span class="metric-label">Bait-Tests Passed</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<script>
+Object.assign(window.cheatSheets = window.cheatSheets || {}, {
+    'ci-review-bot-pilot': {
+        title: 'Pilot & Supply-Chain Hardening',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Single-repo pilot:</strong>
+                        <p>Stood up <code>claude-pr-review.yml</code> on unifi-drive-config first, with an SSH deploy key + PAT fallback for prompt-hub access, before any fan-out.</p>
+                        <code class="cheat-sheet-command"># label-triggered review job on the pilot repo</code>
+                        <code class="cheat-sheet-command">on: { pull_request: { types: [labeled] } }</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Pin third-party actions to full SHA:</strong>
+                        <p>Supply-chain defense — no floating tags on a workflow that runs with write access.</p>
+                        <code class="cheat-sheet-command">uses: anthropics/claude-code-action@&lt;full-40-char-sha&gt;</code>
+                    </div>`
+    },
+    'ci-review-bot-harden': {
+        title: 'Security Hardening — 22 Rounds',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Close injection / leak / bypass vectors:</strong>
+                        <p>Gated <code>@claude /review-pr</code> on author_association; scrubbed Claude state between runs on self-hosted runners; dropped all git-diff from allowedTools to deny exfiltration paths.</p>
+                        <code class="cheat-sheet-command">if: github.event.comment.author_association == 'MEMBER'</code>
+                        <code class="cheat-sheet-command">rm -rf .claude .claude.json .claude-pr</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Live-traffic iteration:</strong>
+                        <p>22 successive fix rounds under real PR traffic — LGTM stale-rerun guard, <code>continue-on-error</code>, <code>inherit_errexit</code>.</p>
+                        <code class="cheat-sheet-command">shopt -s inherit_errexit</code>
+                    </div>`
+    },
+    'ci-review-bot-layerc': {
+        title: 'Layer C Verification-Mutation',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Self-mutating verification gate:</strong>
+                        <p>Wired the Claude App token for Layer C mutations so the bot can auto-resolve outdated review threads, and unified the nested-invocation dedup gates (A/B/C/D) so one PR event can't trigger overlapping runs.</p>
+                        <code class="cheat-sheet-command"># Layer C: auto-resolve stale review threads on re-review</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Two-agent spec-advisory:</strong>
+                        <p>Dispatched spec advisory with a two-agent composition for independent cross-checking.</p>
+                    </div>`
+    },
+    'ci-review-bot-approve': {
+        title: 'Formal APPROVE Review',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Replace LGTM comment with a real APPROVE:</strong>
+                        <p>Swapped the informal "LGTM" comment for a formal GitHub <code>APPROVE</code> review event so a clean bot review actually satisfies branch protection.</p>
+                        <code class="cheat-sheet-command">gh pr review --approve</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>6&times; bait-test verification:</strong>
+                        <p>Ran 6 adversarial bait cycles to confirm the bot fires APPROVE only on genuinely clean diffs (with retries past API 529s).</p>
+                    </div>`
+    },
+    'ci-review-bot-apptoken': {
+        title: 'Scoped GitHub App Token',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>UOS_FW_PR_ASSISTANT App token:</strong>
+                        <p>Migrated off the broad PAT to a GitHub App token scoped to the current repo only — least-privilege auth for a bot that mutates review state.</p>
+                        <code class="cheat-sheet-command">token: \${{ steps.app-token.outputs.token }}</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Per-repo scoping:</strong>
+                        <p>Token scope narrowed so a compromised run in one repo cannot touch another.</p>
+                    </div>`
+    },
+    'ci-review-bot-chaingate': {
+        title: 'Chain-Author Defensive Gate',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>Fail-close on deleted / ghost author:</strong>
+                        <p>The chain-author allowlist gate now denies by default when the commit author is a deleted or ghost account, and null-checks the author before evaluating the association allowlist.</p>
+                        <code class="cheat-sheet-command">jq -e '.author // empty' || exit 1   # fail-close</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Pagination cap:</strong>
+                        <p>Capped the chain-pagination inner loop at 50 pages to bound API cost and prevent runaway loops on huge chains.</p>
+                    </div>`
+    },
+    'ci-review-bot-fanout': {
+        title: '16-Repo Fan-Out',
+        content: `
+                    <div class="cheat-sheet-item">
+                        <strong>workflow_call for cross-repo reuse:</strong>
+                        <p>Factored the review job behind a <code>workflow_call</code> trigger so every repo reuses one hardened definition instead of drifting copies.</p>
+                        <code class="cheat-sheet-command">on: { workflow_call: {} }</code>
+                    </div>
+                    <div class="cheat-sheet-item">
+                        <strong>Single rebased wave:</strong>
+                        <p>Folded rounds 35+36+A1 across 11 source repos in one rebased commit; total reach 16 repos (ubios-udapi-server, unifi-drive-config + mirror, ustd, debbox-base-files, libubntnas, ubnd, ubnt-sfp-handler, ustate-exporter, ustoragecore, uof-updater, debbox, debfactory, libubnt, kmod-debbox-modules, ubntnas).</p>
+                    </div>`
+    }
+});
+</script>

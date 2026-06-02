@@ -1,16 +1,25 @@
 ---
 title: Ubiquiti Experience
 kind: concept
-last_verified: 2026-04-30
+last_verified: 2026-06-01
 summary: Career milestone — OS engineering at Ubiquiti, leading NAS platform scaling, ustated state-management daemon (16,600 LOC), and storage stack for UNAS/UNVR/UDM products.
 entities:
   - kms://entity:ubiquiti
+  - kms://entity:ampere
 related_concepts:
   - kms://concept:summary
   - kms://concept:performance-summary
 sources:
   - journal/integrated/work-report_ampere_2025-11-to-2026-02.md
   - journal/integrated/performance-summary.md
+  - journal/integrated/work-report_ampere_2026-03-30-to-2026-04-06.md
+  - journal/integrated/work-report_ampere_2026-04-07-to-2026-04-13.md
+  - journal/integrated/work-report_ampere_2026-04-14-to-2026-04-17.md
+  - journal/integrated/work-report_ampere_2026-04-18-to-2026-04-30.md
+  - journal/integrated/work-report_ampere_2026-05-01-to-2026-05-10.md
+  - journal/integrated/work-report_ampere_2026-05-11-to-2026-05-18.md
+  - journal/integrated/work-report_ampere_2026-05-19-to-2026-05-24.md
+  - journal/integrated/work-report_ampere_2026-05-25-to-2026-05-31.md
 tags: [career, milestone, storage, infrastructure]
 ---
 
@@ -123,6 +132,124 @@ Go, gRPC, Protocol Buffers, Cobra, Logrus, gopsutil, systemd, Debian packaging, 
 ---
 
 ## 2026
+
+### Q2 Achievements
+
+#### Claude PR Review CI Bot — Org-Wide Rollout [UOF-4504]
+
+> **Presentation fragment**: `fragments/case-studies/ci-review-bot.html` — extracted as SAR case study
+
+##### Situation
+- Replaced the CodiumAI pr-agent with a Claude-based automated PR review workflow across 17+ Ubiquiti repositories
+- Required a 5-week phased rollout: pilot on a single repo (unifi-drive-config) → security hardening → verification-mutation → formal approvals → App-token authentication → conversation-reply threading
+- Live-traffic iteration on a security-sensitive CI surface (runs with repo write access on self-hosted runners)
+
+##### Action
+**Pilot & supply-chain hardening (Apr 28–29):**
+- Implemented `claude-pr-review.yml` with SSH deploy key + PAT fallback for prompt-hub access; pinned all third-party actions to full SHA
+
+**Security hardening — 22 rounds (Apr 29 – May 22):**
+- Closed prompt-injection, token-leak, and `issue_comment` bypass vectors; gated `@claude /review-pr` on `author_association`
+- Added `workflow_call` trigger for cross-repo reuse; scrubbed `.claude/.claude.json/.claude-pr/` on self-hosted runners between runs; dropped all git-diff from `allowedTools`
+- LGTM stale-rerun guard + `continue-on-error` + `inherit_errexit` (rounds 18–22, May 11–18)
+
+**Layer C verification-mutation + formal APPROVE (May 21–22):**
+- Wired Claude App token for Layer C mutations; unified nested-invocation dedup gates (A/B/C/D)
+- Replaced LGTM comment with a formal `APPROVE` review; verified via 6× bait-test cycles; folded rounds 35+36+A1 across 11 source repos in one rebased wave
+
+**v9 conversation job + chain-author gate (May 29):**
+- Post conversation reply inside the inline thread (not as a top-level comment); harvested `/describe` output from the SDK stream instead of `OUT_FILE`
+- Chain-author gate hardening: fail-close on deleted/ghost author, null-check before assoc-allowlist, 50-page pagination cap; switched to `UOS_FW_PR_ASSISTANT` scoped App token
+
+##### Result
+- Replaced pr-agent across **17+ repos** (ubios-udapi-server, unifi-drive-config + mirror, ustd, debbox-base-files, libubntnas, ubnd, ubnt-sfp-handler, ustate-exporter, ustoragecore, uof-updater, debbox, debfactory, libubnt, kmod-debbox-modules, ubntnas) in a coordinated 5-week rollout
+- Eliminated prompt-injection, token-leak, and stale-LGTM rerun race conditions; enabled formal bot-driven approvals with Layer C self-mutating verification
+- Architecture now supports Layer C verification mutations, formal APPROVE, App-token scoping, conversation-reply threading, and defensive chain-author gates
+
+#### Cross-Stack Btrfs Storage Fixes [UOF-4414][UOF-4485][UOF-4597]
+
+##### Situation
+- **UOF-4414**: btrfs delayed-refs memory throttling under slab pressure on ARM64 UNAS devices, risking OOM under metadata-heavy workloads
+- **UOF-4485**: NFS/Samba `df` reported phantom free space when btrfs qgroup overcommitted the pool — writes failed `ENOSPC` despite "available" space
+- **UOF-4597**: a `wait_current_trans()` deadlock (ignored transaction type) present identically across three NAS kernel branches serving different products
+
+##### Action
+**UOF-4414 slab-aware throttling (Apr 7–17, kernel +84/-47):**
+- `btrfs: add slab-aware memory throttling for delayed refs` — backs off when kmalloc slab is tight
+- Switched to `si_mem_available()` for reclaimable slab/page-cache accounting; skipped extent_op allocation under skinny-metadata; added return-value checks on `btrfs_run_delayed_refs` in the throttle path
+- Landed on `ui-5.10.y` (`373df4b`) + `ui-5.10.y-5.1` (`ccb348e`); debbox #9635, #9636
+
+**UOF-4485 qgroup statfs (May 5–13, cross-stack):**
+- Kernel prep: dropped redundant `dentry`/`kstatfs` forward decls (`1e1401fe`, `844e4273`)
+- Userland: btrfs `df` now reflects qgroup limits (unifi-drive-config #290); over-correction reverted and gated behind explicit `WithEffectiveView` option (UD-8522); `ReconcileEffective` extracted as single source of truth; symmetric ZFS fix; v2.22.1 release + debfactory #8460
+
+**UOF-4597 deadlock — 3-branch synchronized fix (May 20):**
+- Cherry-picked upstream stable `5037b342825d` to alpine 5.10.216 (#9948, #9950), cn10k 5.15.72 (#9960), rtd1619 6.6.35 (#9960); completing the May-18 alpine-only fix across the whole platform
+
+##### Result
+- Slab-aware throttling bounds delayed-refs memory pressure; phantom free-space `ENOSPC` resolved (opt-in via `WithEffectiveView`); `wait_current_trans` deadlock cleared across all three NAS kernel branches
+- Integrated stack each time: kernel patch → unifi-drive-config fix → debfactory package bump → deploy
+- **~108 btrfs-backend SAR commits** across Apr–May (50 in Apr, 31 + 27 in May)
+
+#### Btrfs ENOSPC Reproducer Harness (Phase 3 Verification)
+
+##### Situation
+- Btrfs `ENOSPC` on `rm` was unpredictable; needed a repeatable reproducer to test mainline fixes and validate the evict-path-ENOSPC hypothesis
+
+##### Action
+- Built `scripts/btrfs-enospc-test/` (linux repo, worktree-isolated): loop-fs builder (512 MiB, nodesize 65536, `enospc_debug`, 64K-page-aware), Level A metadata-pressure + Level B global-rsv workloads, 1 Hz `fi usage`/meminfo CSV sampler, classification report + orchestrator with fixture unit tests
+- Phase 3 iterations (May 20–21): v4 Level D LTP `fs_fill`-style evict-path reproducer; P0 hypothesis verification (effect inverted → reframed); v5b switched the injector from kretprobe to entry kprobe (trampoline couldn't land `-ENOSPC` at the right point); Level E workload + orchestration
+
+##### Result
+- Reproducible harness with 5 phases (A–E) covering metadata, global-rsv, and evict-path scenarios
+- Phase 3 produced two negative results that reshaped the hypothesis; final verdict: the `rm` rc-ENOSPC path is **effectively unreachable in real workloads**
+
+#### NFS Slice Memory Tiering [UOF-4741]
+
+##### Situation
+- NFS/Samba workloads under memory pressure on resource-constrained NAS hardware needed per-hardware-class `MemoryMax` ceilings to prevent OOM and guarantee performance isolation
+
+##### Action
+- Capped `app-drive-nfs.slice` `MemoryMax` at 90% in `common-resource-control` (debbox-base-files #2022), then **tiered the cap per hardware class** (#2025) — UNAS Pro / ENAS / UNAS variants each get a distinct ceiling
+- Coordinated with UOF-4688 dpkg-cache tracking
+
+##### Result
+- Per-SKU memory caps in place; NFS slice bounded at hardware-class limits, eliminating cross-workload memory contention
+
+#### Samba macOS Performance Tuning [UD-8283]
+
+##### Situation
+- macOS clients suffered slow directory browsing; Samba AAPL attributes + per-file metadata lookups dominated directory-listing latency
+
+##### Action
+- `fruit:metadata = stream` — store macOS metadata in xattr streams instead of `.AppleDouble` files
+- `readdir_attr:aapl_max_access = no` — skip expensive ACL permission checks during directory enumeration
+- Refactored the `ConfigFile` class with a backwards-compatible v2.20.0 migration path (unifi-drive-config #285–287, debfactory #8164, #8165)
+
+##### Result
+| Metric | Before | After | Improvement |
+|--------|--------|-------|-------------|
+| macOS directory listing | 56.1 s | 17.1 s | **−70%** |
+
+- Shipped in Samba v2.20.0 as the permanent fix for AAPL attribute overhead; recommended for all macOS users
+
+#### Package & Cache Lifecycle [UOF-4688][UD-8652][UD-6105]
+
+- **[UOF-4688]** `ubnt-dpkg-cache` now tracks unifi-drive-config package state for cache invalidation, with a detection flag set when the fix is present (debbox-base-files #2015)
+- **[UD-8652]** skip pre-downgrade migration when incoming FW already carries the UOF-4688 fix (unifi-drive-config #318); debfactory repoint to v2.22.4 (#8566, #8567)
+- **[UD-6105]** udc v2.22.5 bumps across master + release branches (debfactory #8601, #8602, #8609, #8610)
+
+#### Test Infrastructure Expansion
+
+##### ENAS ZFS / L2ARC Testing (Apr 9–11)
+- Added L2ARC cold/warm test states (`zpool remove`/`add`, verify `l2_size`), 4 multi-vdev pool layouts (2× raidz2, 2× raidz1, 4× raidz1, 8× mirror), and ZFS dataset setup — bringing ENAS to test parity with UNAS dm-cache writethrough/writeback
+
+##### ubiquiti-fstest v2 (Apr 9–11)
+- Complete xfstests automation skill (setup/run/cleanup/results Lua, ~1,400 LOC) covering UNAS (btrfs), UNVR (ext4), ENAS (ZFS) with quick/btrfs/ext4/generic/full/custom profiles; 11 merged PRs
+
+##### ubiquiti-kernel-investigate + DAC Link Auto-Detection (Apr 10–11)
+- Standardized 6-phase kernel-bug workflow (triage → reproduce → upstream-first → implement → A/B build-test → report)
+- `setup-dac-links.sh` (682 LOC) auto-discovers 10G/25G DAC-connected interfaces, assigns static IPs, and detects link-speed negotiation (10GBASE-CR / 25GBASE-CR); integrates with device-reserve
 
 ### Q1 Achievements
 
