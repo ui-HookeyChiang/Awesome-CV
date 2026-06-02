@@ -1,7 +1,7 @@
 ---
 title: Career Summary
 kind: concept
-last_verified: 2026-04-30
+last_verified: 2026-06-01
 summary: Cross-employer career synthesis — OS engineering, performance, storage infrastructure across QNAP and Ubiquiti.
 entities:
   - kms://entity:qnap
@@ -54,13 +54,16 @@ tags: [career, summary, overview]
 - **NAS Performance Engineering**: Designed CPU affinity framework (smbd/nfsd/IRQ pinning), network tuning (qdisc fq, TCP buffers, rx-usecs), improving iperf throughput from 1.9 to 2.3 Gb/s
 - **SSD Cache Benchmark Framework**: Created 4-scenario test methodology (basic/empty/full/warm) with I/O migration tuning, enabling systematic cache performance validation
 - **ZFS Filesystem Support**: Implemented full ZFS backend (245 commits, 8 PRs) with dataset management, snapshot system, quota enforcement via Samba dfree, and 2-step deletion workflow achieving complete feature parity with Btrfs
-=======
 - **Kernel Development**: Authored sunrpc sysfs CPU affinity patch for runtime NFS thread pinning, implemented eCryptfs nanosecond timestamps and fallocate support, enabled BTF/eBPF for filesystem event auditing, added CFS bandwidth control
 - **NAS Performance Testing Platform**: Built end-to-end automated benchmarking infrastructure (3,787 lines of scripts, 11 AI skills) completing 11 test sessions with 47 runs across 19 managed devices
 - **RAID Level Comparison**: Conducted 3-way raid10/raid5/raid6 benchmarking across 4 device tiers, delivering data-driven RAID recommendations — RAID10 leads seq read (751 MB/s), RAID5 best overall write throughput (344 MB/s), RAID6 impractical on 4-disk configs
 - **Support at Scale**: Analyzed 180 support bundles across 60+ unique issues (63 GB diagnostic data) spanning storage, Samba, NFS, performance, and network categories
 - **unifi-drive-config (UDC)**: Built core NAS management daemon in Go — dual Btrfs/ZFS filesystem abstraction, Samba/NFS exports, encryption, snapshots, user management, and version-aware migrations deployed on all UNAS hardware
 - **ustate-exporter (ustated)**: Designed core architecture and V1 API (6 endpoints) for the central gRPC state daemon (16,600 LOC, 151 files, 20 releases) — sole state export layer across all Ubiquiti console and NAS products
+- **AI-Powered PR Review Platform**: Rolled out a Claude-based automated PR-review CI bot across 17+ Ubiquiti repos (UOF-4504) in a 5-week phased deployment — security-hardened against prompt-injection/token-leak vectors, with Layer C self-mutating verification, formal bot-driven APPROVE, and scoped App-token authentication
+- **Cross-Stack Btrfs Storage Fixes**: Resolved three production btrfs issues spanning kernel→userland→package — slab-aware delayed-refs memory throttling (UOF-4414), qgroup-aware statfs eliminating phantom-free-space ENOSPC (UOF-4485), and a `wait_current_trans` deadlock fixed across all three NAS kernel branches in one synchronized wave (UOF-4597)
+- **Samba macOS Performance**: Cut macOS directory-listing latency 70% (56.1s → 17.1s) via `fruit:metadata=stream` + `readdir_attr:aapl_max_access=no`, shipped as the permanent AAPL-overhead fix in Samba v2.20.0
+- **Per-SKU Memory Isolation**: Tiered `app-drive-nfs.slice` MemoryMax per hardware class (UOF-4741), bounding NFS/Samba memory and eliminating cross-workload OOM contention on resource-constrained NAS SKUs
 
 #### **QNAP (Cloud File System) - Lead Performance Engineer**
 - **Product Success**: Delivered cloud filesystem deployed on 190K+ QNAP NAS devices, establishing it as a core platform service
