@@ -149,6 +149,7 @@ The collector gathers from all sources in parallel:
 | Git repos | Commits, PRs, line stats (all repos) + detailed SAR commits (9 target repos) |
 | Shell history | Command frequency, SSH targets, SCP transfers |
 | Claude Code | Sessions, prompts by project/topic, token usage |
+| OpenCode | Sessions, prompts by project/topic, cost, tool usage (from `~/.local/share/opencode/opencode.db`) |
 | Test artifacts | fio sessions, device configs, result counts |
 | Infrastructure | Managed devices from SSH config |
 
@@ -156,9 +157,10 @@ The collector gathers from all sources in parallel:
 
 Save to `journal/raw/work-report_<HOST>_<START>-to-<END>.md`. Include:
 
-- **Activity Overview** — aggregate metrics (repos, commits, PRs, Claude prompts, devices, tests)
+- **Activity Overview** — aggregate metrics (repos, commits, PRs, Claude prompts, OpenCode sessions, devices, tests)
 - **Git Activity** — table by repo with commit count and key work summary
 - **Claude Code Usage** — by topic with prompt counts
+- **OpenCode Usage** — sessions by project with cost/token breakdown (if data present)
 - **Test Sessions** — if applicable
 - **Key Work Streams** — grouped by theme, tagged for milestone integration
 
