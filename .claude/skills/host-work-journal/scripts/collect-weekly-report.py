@@ -2,7 +2,8 @@
 """Collect work activity data from a host into structured JSON.
 
 Gathers data from git repos, shell history, Claude Code sessions,
-test artifacts, and SSH config. Outputs JSON for report composition.
+OpenCode sessions, test artifacts, and SSH config. Outputs JSON for
+report composition.
 
 Usage:
     python3 collect-weekly-report.py [OPTIONS]
@@ -28,6 +29,7 @@ CLAUDE_DIR = Path.home() / ".claude"
 HISTORY_JSONL = CLAUDE_DIR / "history.jsonl"
 STATS_CACHE = CLAUDE_DIR / "stats-cache.json"
 PROJECTS_DIR = CLAUDE_DIR / "projects"
+OPENCODE_DB = Path.home() / ".local" / "share" / "opencode" / "opencode.db"
 SSH_CONFIG = Path.home() / ".ssh" / "config"
 TEST_RESULTS_DIR = Path.home() / "ubiquiti-test-results"
 ZSH_HISTORY = Path.home() / ".zsh_history"
@@ -1296,6 +1298,236 @@ def collect_claude_sessions(start_date, end_date, detailed=False):
     return result
 
 
+def collect_opencode_sessions(start_date, end_date, detailed=False):
+    """Collect OpenCode session data from its SQLite database.
+
+    Mirrors the shape of collect_claude_sessions output so downstream
+    report composition can treat both identically.
+
+    OpenCode stores everything in ~/.local/share/opencode/opencode.db:
+      - session: one row per conversation (has cost, tokens, model, title)
+      - project: worktree path (like CC's project dir)
+      - message: per-turn messages with role in JSON `data` column
+      - part:    sub-message parts (text, tool calls) with JSON `data`
+
+    Timestamps are Unix milliseconds (same convention as CC history.jsonl).
+    """
+    log.info("Collecting OpenCode sessions (detailed=%s)...", detailed)
+    start_dt, end_dt = parse_range_bounds(start_date, end_date)
+
+    result = {
+        "total_prompts": 0,
+        "total_sessions": 0,
+        "total_messages": 0,
+        "total_cost": 0.0,
+        "by_project": [],
+        "by_topic": [],
+        "by_day": [],
+        "session_summaries": [],
+        "first_prompt_timestamp": None,
+        "last_prompt_timestamp": None,
+    }
+
+    if not OPENCODE_DB.exists():
+        log.info("OpenCode DB not found: %s — skipping", OPENCODE_DB)
+        return result
+
+    import sqlite3
+    import shutil
+    import tempfile
+
+    # Copy DB+WAL to a temp location to avoid locking a running OpenCode
+    tmp_dir = tempfile.mkdtemp(prefix="oc_journal_")
+    tmp_db = Path(tmp_dir) / "opencode.db"
+    try:
+        shutil.copy2(OPENCODE_DB, tmp_db)
+        wal = OPENCODE_DB.with_suffix(".db-wal")
+        shm = OPENCODE_DB.with_suffix(".db-shm")
+        if wal.exists():
+            shutil.copy2(wal, tmp_db.with_suffix(".db-wal"))
+        if shm.exists():
+            shutil.copy2(shm, tmp_db.with_suffix(".db-shm"))
+    except OSError as e:
+        log.warning("Failed to copy OpenCode DB: %s", e)
+        return result
+
+    try:
+        conn = sqlite3.connect(str(tmp_db))
+        conn.row_factory = sqlite3.Row
+        cur = conn.cursor()
+
+        start_ms = int(start_dt.timestamp() * 1000)
+        end_ms = int(end_dt.timestamp() * 1000)
+
+        # ── 1. Session-level aggregates ──────────────────────────────────
+        cur.execute("""
+            SELECT s.id, s.title, s.model, s.cost,
+                   s.tokens_input, s.tokens_output,
+                   s.tokens_cache_read, s.tokens_cache_write,
+                   s.tokens_reasoning,
+                   s.time_created, s.time_updated,
+                   s.directory, s.agent,
+                   p.worktree AS project_worktree
+            FROM session s
+            LEFT JOIN project p ON s.project_id = p.id
+            WHERE s.time_created >= ? AND s.time_created <= ?
+            ORDER BY s.time_created
+        """, (start_ms, end_ms))
+
+        sessions = cur.fetchall()
+        result["total_sessions"] = len(sessions)
+
+        project_counts = {}   # project_path -> prompt_count (estimated from messages)
+        topic_counts = {}
+        day_agg = {}          # date -> {sessions, cost, tokens_in, tokens_out, ...}
+        total_cost = 0.0
+        total_tokens_in = 0
+        total_tokens_out = 0
+        total_cache_read = 0
+        total_cache_write = 0
+        total_reasoning = 0
+
+        for s in sessions:
+            s_id = s["id"]
+            created_dt = ts_ms_to_datetime(s["time_created"])
+            day_key = created_dt.strftime("%Y-%m-%d")
+
+            # Track first/last prompt timestamp
+            iso_ts = datetime_to_iso(created_dt)
+            if (result["first_prompt_timestamp"] is None
+                    or created_dt < iso_to_datetime(result["first_prompt_timestamp"])):
+                result["first_prompt_timestamp"] = iso_ts
+            if (result["last_prompt_timestamp"] is None
+                    or created_dt > iso_to_datetime(result["last_prompt_timestamp"])):
+                result["last_prompt_timestamp"] = iso_ts
+
+            cost = s["cost"] or 0.0
+            total_cost += cost
+            total_tokens_in += s["tokens_input"] or 0
+            total_tokens_out += s["tokens_output"] or 0
+            total_cache_read += s["tokens_cache_read"] or 0
+            total_cache_write += s["tokens_cache_write"] or 0
+            total_reasoning += s["tokens_reasoning"] or 0
+
+            # Project breakdown — use worktree, fall back to directory
+            project = s["project_worktree"] or s["directory"] or "unknown"
+            home_str = str(Path.home())
+            if project.startswith(home_str):
+                project = project[len(home_str):].lstrip("/")
+            project_counts[project] = project_counts.get(project, 0) + 1
+
+            # Topic classification from title
+            title = s["title"] or ""
+            topic = classify_topic(title)
+            topic_counts[topic] = topic_counts.get(topic, 0) + 1
+
+            # Per-day aggregation
+            if day_key not in day_agg:
+                day_agg[day_key] = {
+                    "date": day_key,
+                    "sessions": 0,
+                    "cost": 0.0,
+                    "tokens_in": 0,
+                    "tokens_out": 0,
+                }
+            day_agg[day_key]["sessions"] += 1
+            day_agg[day_key]["cost"] += cost
+            day_agg[day_key]["tokens_in"] += s["tokens_input"] or 0
+            day_agg[day_key]["tokens_out"] += s["tokens_output"] or 0
+
+            # Session summary
+            # Parse model JSON to extract model name
+            model_str = s["model"] or ""
+            try:
+                model_info = json.loads(model_str)
+                model_name = model_info.get("id", model_str)
+            except (json.JSONDecodeError, TypeError):
+                model_name = model_str
+
+            result["session_summaries"].append({
+                "session_id": s_id[:12],
+                "project": project,
+                "summary": title,
+                "model": model_name,
+                "agent": s["agent"],
+                "cost": round(cost, 4),
+                "date": day_key,
+            })
+
+        # ── 2. Count user messages as "prompts" ─────────────────────────
+        cur.execute("""
+            SELECT m.id, m.session_id, m.time_created
+            FROM message m
+            WHERE m.time_created >= ? AND m.time_created <= ?
+              AND m.data LIKE '%"role":"user"%'
+        """, (start_ms, end_ms))
+        user_messages = cur.fetchall()
+        result["total_prompts"] = len(user_messages)
+        result["total_messages"] = len(user_messages)  # user messages count
+
+        # Also count total messages (user + assistant)
+        cur.execute("""
+            SELECT COUNT(*) FROM message
+            WHERE time_created >= ? AND time_created <= ?
+        """, (start_ms, end_ms))
+        result["total_messages"] = cur.fetchone()[0]
+
+        result["total_cost"] = round(total_cost, 4)
+        result["by_project"] = [
+            {"project": p, "prompts": c}
+            for p, c in sorted(project_counts.items(), key=lambda x: -x[1])
+        ]
+        result["by_topic"] = [
+            {"topic": t, "prompts": c}
+            for t, c in sorted(topic_counts.items(), key=lambda x: -x[1])
+        ]
+        result["by_day"] = [
+            day_agg[d] for d in sorted(day_agg)
+        ]
+
+        # ── 3. Detailed mode: tool usage from part table ─────────────────
+        if detailed:
+            detail = {}
+            tool_usage = {}
+
+            cur.execute("""
+                SELECT p.data
+                FROM part p
+                WHERE p.time_created >= ? AND p.time_created <= ?
+                  AND p.data LIKE '%"type":"tool"%'
+            """, (start_ms, end_ms))
+            for row in cur.fetchall():
+                try:
+                    pdata = json.loads(row[0])
+                except (json.JSONDecodeError, TypeError):
+                    continue
+                if pdata.get("type") == "tool":
+                    tool_name = pdata.get("tool", "unknown")
+                    tool_usage[tool_name] = tool_usage.get(tool_name, 0) + 1
+
+            detail["tool_usage"] = dict(sorted(tool_usage.items(), key=lambda x: -x[1]))
+            detail["total_tokens"] = {
+                "input": total_tokens_in,
+                "output": total_tokens_out,
+                "cache_read": total_cache_read,
+                "cache_write": total_cache_write,
+                "reasoning": total_reasoning,
+            }
+            result["detailed"] = detail
+
+        conn.close()
+    except Exception as e:
+        log.warning("Failed to query OpenCode DB: %s", e)
+    finally:
+        # Clean up temp copy
+        shutil.rmtree(tmp_dir, ignore_errors=True)
+
+    log.info("OpenCode: %d sessions, %d prompts, $%.4f cost across %d projects",
+             result["total_sessions"], result["total_prompts"],
+             result.get("total_cost", 0), len(result["by_project"]))
+    return result
+
+
 # ── Summary & Output ─────────────────────────────────────────────────────────
 
 
@@ -1344,6 +1576,20 @@ def print_summary(data):
             print(f"  Top tools: {tools_str}", file=sys.stderr)
         if d.get("files_edited"):
             print(f"  Files edited: {len(d['files_edited'])}", file=sys.stderr)
+
+    oc = data.get("opencode_sessions", {})
+    if oc.get("total_sessions", 0) > 0:
+        print(f"\nOpenCode Sessions: {oc.get('total_prompts', 0)} prompts, "
+              f"{oc.get('total_sessions', 0)} sessions, "
+              f"{oc.get('total_messages', 0)} messages, "
+              f"${oc.get('total_cost', 0):.4f} cost", file=sys.stderr)
+        if oc.get("by_project"):
+            for p in oc["by_project"][:5]:
+                print(f"  {p['project']}: {p['prompts']} sessions", file=sys.stderr)
+        if oc.get("detailed", {}).get("tool_usage"):
+            top_tools = list(oc["detailed"]["tool_usage"].items())[:5]
+            tools_str = ", ".join(f"{t}={c}" for t, c in top_tools)
+            print(f"  Top tools: {tools_str}", file=sys.stderr)
 
     print(f"\n{'=' * 60}\n", file=sys.stderr)
 
@@ -1501,6 +1747,9 @@ def main():
     data["git_sar"] = collect_git_sar(start_date, end_date, authors)
     data["test_artifacts"] = collect_test_artifacts(start_date, end_date)
     data["claude_sessions"] = collect_claude_sessions(
+        start_date, end_date, detailed=args.detailed
+    )
+    data["opencode_sessions"] = collect_opencode_sessions(
         start_date, end_date, detailed=args.detailed
     )
 
