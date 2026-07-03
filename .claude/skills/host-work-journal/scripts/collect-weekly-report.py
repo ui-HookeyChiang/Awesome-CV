@@ -180,20 +180,9 @@ def date_str(dt):
     return dt.strftime("%Y-%m-%d")
 
 
-def ts_ms_to_date(ts_ms):
-    """Convert unix-millisecond timestamp to date string."""
-    return datetime.fromtimestamp(ts_ms / 1000, tz=timezone.utc).strftime("%Y-%m-%d")
-
-
 def ts_ms_to_datetime(ts_ms):
     """Convert unix-millisecond timestamp to datetime."""
     return datetime.fromtimestamp(ts_ms / 1000, tz=timezone.utc)
-
-
-def iso_to_date(iso_str):
-    """Convert ISO 8601 string to date string."""
-    # Handle both 2026-02-26T05:54:18.845Z and 2026-02-26
-    return iso_str[:10]
 
 
 def iso_to_datetime(iso_str):
