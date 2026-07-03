@@ -1,5 +1,6 @@
 ---
 name: sar-extraction
+landing-group: resume
 description: Extract SAR case studies from milestone/journal data and produce ready-to-use HTML fragments for the interview presentation pool. Use when asked to create a new case study, add a topic to the presentation, or expand the SAR pool. Also use when reviewing milestones for presentation-worthy achievements.
 ---
 
@@ -124,42 +125,7 @@ Write the HTML fragment to `src/present/fragments/case-studies/<id>.html`.
 <span style="color: var(--accent); font-weight: 700;">term</span>
 ```
 
-**Preview the fragment** after filling the template:
-
-```bash
-# Create a throwaway test profile that includes the new fragment
-cat > src/present/profiles/preview.yaml << 'EOF'
-name: Preview
-description: Preview new case study fragment
-derived_from: general
-
-cover:
-  tagline: "Preview"
-summary:
-  tagline: "Preview"
-  strengths: [A, B, C]
-
-highlights: [ubiquiti, qnap]
-case-studies: [NEW_FRAGMENT_ID, kernel-upgrade, nas-stability]
-achievements: [innovation, performance]
-suppress: []
-EOF
-
-# Assemble and open
-cd src/present
-node assemble.js preview --output ~/Downloads/preview.html
-open ~/Downloads/preview.html
-
-# Clean up after review
-rm src/present/profiles/preview.yaml
-```
-
-Replace `NEW_FRAGMENT_ID` with the actual fragment ID. The new case study appears as slide 6 (first case study position) for easy review. Check:
-- Situation text renders with highlighted terms
-- Chart displays correctly (if included)
-- All 7 flow boxes are clickable and open cheat sheets
-- Result metrics display properly
-- No layout overflow or broken styles
+**Preview the fragment** after filling the template — see `references/preview-fragment.md` for the script and verification checklist.
 
 ## Step 5: Suppress
 

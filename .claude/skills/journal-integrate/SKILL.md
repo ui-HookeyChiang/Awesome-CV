@@ -1,5 +1,6 @@
 ---
 name: journal-integrate
+landing-group: workflow
 description: Top-level orchestrator for the full journal pipeline. Runs journal-integrate-milestones (enrich milestone docs from journal/git-sar data), then sar-extraction (extract SAR case studies from enriched milestones), then moves consumed git-sar dirs to integrated/. Use when the user says "integrate journals", "run the journal pipeline", "process journals and extract SARs", or invokes /journal-integrate. Also use when git-sar data exists in raw/ and both milestones and case studies need updating.
 argument-hint: "[topics for sar-extraction, e.g. 'grpc-streamer system-perf']"
 ---

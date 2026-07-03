@@ -1,5 +1,6 @@
 ---
 name: interview-presentation
+landing-group: resume
 description: Structure, styling, and content guidelines for the interactive HTML interview presentation (interview-presentation.html). Use when creating, editing, or customizing the interview slideshow. Also use when generating presentations for job applications, updating case studies, modifying slide content, or when the tailor-resume skill needs presentation rules. Covers SAR framework, visual design, and slide structure.
 ---
 
