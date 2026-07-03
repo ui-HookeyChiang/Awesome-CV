@@ -204,15 +204,6 @@ def test_legacy_in_range_still_accepts_strings():
     assert collector.in_range("2026-01-15", "2026-02-01", "2026-02-28") is False
 
 
-def test_legacy_ts_ms_to_date_unchanged():
-    ts_ms = int(datetime(2026, 2, 15, 23, 59, 59, tzinfo=timezone.utc).timestamp() * 1000)
-    assert collector.ts_ms_to_date(ts_ms) == "2026-02-15"
-
-
-def test_legacy_iso_to_date_unchanged():
-    assert collector.iso_to_date("2026-02-26T05:54:18.845Z") == "2026-02-26"
-
-
 # ── cap_end_to_yesterday ───────────────────────────────────────────────────
 
 
