@@ -1,5 +1,6 @@
 ---
 name: resume-content-rules
+landing-group: resume
 description: Rules for editing LaTeX resume files in src/resume/. Ensures proper formatting, character limits, and prevents hyphenated word breaks. Use whenever editing ANY .tex file under src/resume/ or resumes/*/resume/ — this includes summary.tex, experience.tex, scholar.tex, education.tex, and leadership.tex. Critical for maintaining the 2-page limit. If you are about to write or modify resume LaTeX content, read this skill first.
 ---
 

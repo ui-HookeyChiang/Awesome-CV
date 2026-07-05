@@ -1,5 +1,6 @@
 ---
 name: host-work-journal
+landing-group: workflow
 description: Collect host activity (git, shell, Claude, test artifacts) into journal/raw/ for the Awesome-CV milestone pipeline. Also collects SAR-focused categorized git commit data for sar-extraction. Use when the user asks for a work report, activity summary, journal entry, weekly report, SAR git data, or wants to review what was done over a date range.
 ---
 
@@ -33,7 +34,7 @@ This means reports that were collected, integrated, and moved out of `raw/` are 
 
 **Phase 1: Collect data** — run the collector script:
 ```bash
-SKILL_DIR=~/Awesome-CV/.claude/skills/host-work-journal
+SKILL_DIR=~/.claude/skills/host-work-journal
 
 # Default: last 7 days
 python3 $SKILL_DIR/scripts/collect-weekly-report.py -v
@@ -48,7 +49,8 @@ python3 $SKILL_DIR/scripts/collect-weekly-report.py \
 
 # Skip dates already covered by existing reports
 python3 $SKILL_DIR/scripts/collect-weekly-report.py \
-  --start-date 2026-01-01 --end-date 2026-04-13 --skip-covered -v
+  --start-date 2026-01-01 --end-date 2026-04-13 \
+  --journal-root ~/Awesome-CV/journal --skip-covered -v
 ```
 
 Output: `~/work-report-data_<host>_<start>-to-<end>.json`
