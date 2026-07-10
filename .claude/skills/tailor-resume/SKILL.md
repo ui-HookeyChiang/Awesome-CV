@@ -108,9 +108,7 @@ mkdir -p resumes/<company-name>/resume
 6. **Create summary** → `resumes/<company-name>/resume/summary.tex`
    - Emphasize job-matching skills, include ATS keywords
    - Include 1 breadth signal (e.g., product sense, team building, process improvement)
-   - **Must use exactly 4 lines with `\\`** matching GP structure (3-line summaries cause overflow)
-   - `\\` only between sentences — never between clauses of the same sentence
-   - Follow **resume-content-rules**
+   - Follow **resume-content-rules** (4-line `\\` structure, sentence-boundary breaks only)
 7. **Create experience** → `resumes/<company-name>/resume/experience.tex`
    - **Start from GP text** — copy `src/resume/experience.tex` as base
    - **Reorder top-level bullet groups** for job relevance — but always build-verify after (reordering can change rendered line counts)
@@ -196,7 +194,7 @@ When the GP resume is updated (quality fixes, milestone refreshes), **all job-ta
 2. **Start from latest GP** `src/resume/experience.tex` as base
 3. **Re-apply job-specific bullet reordering** — but build-verify after (reordering can change rendered lines)
 4. **Re-apply any sub-bullet rewrites** that were job-specific, incrementally with build checks
-5. **Update summary** — match GP's 4-line `\\` structure, customize line 2 for JD focus
+5. **Update summary** — customize line 2 for JD focus, following **resume-content-rules**
 6. **Rebuild and verify** 2 pages for each
 
 Do NOT try to patch old job-targeted text — always re-derive from current GP to pick up all quality fixes.
