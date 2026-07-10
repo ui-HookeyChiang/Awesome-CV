@@ -59,14 +59,7 @@ After both pipelines have run, move consumed `git-sar/<date>/` directories from 
 mv journal/raw/git-sar/<date>/ journal/integrated/git-sar/<date>/
 ```
 
-**Pre-move checklist**:
-1. Verify Step 1 completed (milestone sections updated for this date range)
-2. Verify Step 2 completed (case studies extracted, or user explicitly skipped)
-3. Check `journal/raw/git-sar/<date>/other.md` — if it has >5 commits with recurring themes, suggest a new category to `_shared/categories.md` before moving
-
-**Do NOT move if**:
-- Step 1 or Step 2 was skipped or failed
-- User asked to keep files in `raw/` for further review
+See journal-integrate-milestones Step 5 for the full dual-consumption checklist (both milestone integration and sar-extraction must confirm consumption before a `git-sar/<date>/` directory moves to `integrated/`).
 
 ## Partial Runs
 
