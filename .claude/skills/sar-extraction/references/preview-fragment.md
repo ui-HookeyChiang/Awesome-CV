@@ -1,3 +1,9 @@
+---
+name: references
+description: Throwaway test-profile script for previewing a new SAR case-study fragment in the interview presentation before committing it.
+landing-group: resume
+---
+
 # Preview Fragment Script
 
 Create a throwaway test profile that includes the new fragment, assemble, and open:

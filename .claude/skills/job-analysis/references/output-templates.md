@@ -1,3 +1,9 @@
+---
+name: references
+description: Markdown output templates for job-analysis deliverables (tech-stack report and related files written to resumes/<company-name>/).
+landing-group: resume
+---
+
 # Output Templates
 
 ## Tech Stack Report Template

@@ -1,3 +1,9 @@
+---
+name: references
+description: Slide content mapping for storage/systems-engineering experience track (QNAP/Ubiquiti) — cover, background, highlights, and case study slides with milestone source files.
+landing-group: resume
+---
+
 # Storage & System Engineering Experience Implementation
 
 This file contains experience-specific content for the interview presentation skill.
