@@ -1,3 +1,9 @@
+---
+name: references
+description: Shared color palette, typography, and visual language spec for the interview presentation across HTML and PPTX formats.
+landing-group: resume
+---
+
 # Visual Design Spec
 
 Unified design guide for the interview presentation across both HTML and PPTX formats. Both formats share the same color palette, typography, and visual language.
