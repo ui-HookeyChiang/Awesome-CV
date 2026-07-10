@@ -43,6 +43,14 @@ Domain-to-skillset pair (`\cvskill`). Rendered as category label plus comma-sepa
 A structured `.md` file capturing an achievement or project outcome. Primary source data for resume refresh and tailoring.
 _Avoid_: Achievement file, update
 
+**Journal Pipeline**:
+Single raw → refined → integrated stage sequence for work-report data. `journal-integrate` moves refined entries to integrated; `journal-integrate-milestones` consumes integrated entries to update Milestones. Both guard the same invariant — a stage only advances once all downstream consumers have processed it — which is why their completion checklists overlap; that overlap is the same invariant stated twice, not two pipelines.
+_Avoid_: Dual pipeline, two pipelines
+
+**Rule Skill**:
+A skill whose body is format/content constraints checked at every decision point (e.g. `resume-content-rules`), not a procedure. Referenced from other skills as a plain-text pointer ("see resume-content-rules §N") for the reader to consult — never as an "Invoke Skill" call, since re-checking a rule doesn't warrant a fresh agent turn.
+_Avoid_: Procedure skill (that's an "Invoke Skill" delegation target, not a rule)
+
 **Tailor**:
 The process of adapting CV/Résumé content to a specific job description. Produces a job-targeted output folder: matched resume, interview presentation, and interview script.
 _Avoid_: Customize, adapt, personalize
