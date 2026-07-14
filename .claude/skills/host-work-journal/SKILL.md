@@ -168,6 +168,57 @@ Save to `journal/raw/work-report_<HOST>_<START>-to-<END>.md`. Include:
 
 Tag work streams with milestone categories for faster processing by `journal-integrate-milestones`. See `_shared/categories.md` for the full milestone tags table.
 
+## Report Generation Prompt
+
+After collecting JSON, use this prompt template to generate a knowledge-density weekly report:
+
+### Phase 1: Initiative Discovery
+
+1. Read `initiatives.cross_repo` from the JSON first — pre-grouped and authoritative.
+2. If absent, fall back to scanning all commits across repos and grouping by subject similarity (Jaccard on tokenized subjects; threshold ~0.5).
+3. Deduplicate commits sharing identical SHAs across repos (worktree branches).
+4. Group related commits/PRs into **topic-initiatives** (e.g. "Linux Kernel: btrfs ENVR Backport", "Org-wide CI Modernization"). One initiative may span multiple repos. Standalone items that don't cluster remain as single entries.
+
+### Phase 2: Knowledge Density Scoring
+
+Score every topic-initiative (KD = highest item in group):
+
+| KD | Meaning |
+|----|---------|
+| 1 | Mechanical: version bump, config tweak, alias change |
+| 2 | Applied a known pattern to a new context |
+| 3 | Non-trivial investigation or debugging |
+| 4 | Produced a reusable artifact: skill, tool, framework, ADR, org-wide template |
+| 5 | Novel insight that changed approach or architecture |
+
+Justify KD 4-5 with one concrete reason from commit/session data.
+
+### Phase 3: Report
+
+Sort by topic-initiative, KD descending within. Each initiative gets a header with `[KD{n}]` tag. List constituent items as bullets under the header. Traditional Chinese prose, English technical terms.
+
+```
+### {Topic}: {Initiative Name} [KD{n}]
+- item 1
+- item 2
+```
+
+### Phase 4: Ticket Appendix
+
+Extract Jira ticket references from PR titles (regex `[A-Z]+-\d+` on `[UOF-1234]` prefix pattern). No Jira API needed — PR titles from GitHub are sufficient.
+
+| Ticket | Summary | fixVersion | PRs |
+|--------|---------|------------|-----|
+
+fixVersion: infer from debbox `conf/arch/version` PRODUCT_VERSION if PRs merged to debbox/debbox-kernel. Otherwise "pending".
+
+### Appendix
+
+- **Average KD** (mean, one decimal, by initiative count)
+- **Histogram**: count per KD level (1-5)
+- **SAR candidates**: KD ≥ 4
+- **Week-over-week trend**: if prior week data available, compare average KD, item count, SAR count
+
 ## SAR Git Output
 
 The collector's `git_sar` JSON key contains commits from target repos (see `_shared/categories.md`), categorized by topic keywords. See `_shared/categories.md` for the full category → achievement → case study mapping.
