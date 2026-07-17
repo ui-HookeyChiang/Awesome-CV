@@ -1,7 +1,7 @@
 ---
 title: Ubiquiti Experience
 kind: concept
-last_verified: 2026-06-01
+last_verified: 2026-07-16
 summary: Career milestone — OS engineering at Ubiquiti, leading NAS platform scaling, ustated state-management daemon (16,600 LOC), and storage stack for UNAS/UNVR/UDM products.
 entities:
   - kms://entity:ubiquiti
@@ -250,6 +250,108 @@ Go, gRPC, Protocol Buffers, Cobra, Logrus, gopsutil, systemd, Debian packaging, 
 ##### ubiquiti-kernel-investigate + DAC Link Auto-Detection (Apr 10–11)
 - Standardized 6-phase kernel-bug workflow (triage → reproduce → upstream-first → implement → A/B build-test → report)
 - `setup-dac-links.sh` (682 LOC) auto-discovers 10G/25G DAC-connected interfaces, assigns static IPs, and detects link-speed negotiation (10GBASE-CR / 25GBASE-CR); integrates with device-reserve
+
+#### Btrfs Stable Backport — Three-Platform Kernel Catch-Up [UOF-4969][UOF-4968][UOF-4970]
+
+##### Situation
+- Three NAS kernel branches (UNAS Pro 5.10, UNAS 6.6, ENVR 5.15) had drifted hundreds of upstream stable btrfs commits behind, accumulating unpatched data-integrity and stability fixes
+- A high-priority field deadlock ([UOF-4935], `btrfs-transacti` stuck in `wait_current_trans` for 7+ hours on a customer UNAS Pro) traced directly to missing stable fixes, making the catch-up a reliability requirement rather than hygiene
+
+##### Action
+**Three parallel backport campaigns delivered as stacked PR series:**
+- **[UOF-4969]** UNAS 5.10 catch-up — 171 commits across 8 stacked PRs (#1547–#1554), A/B tested, ready to merge
+- **[UOF-4968]** UNAS 6.6 catch-up — 228 commits across 9 stacked PRs (#1555–#1563)
+- **[UOF-4970]** ENVR 5.15 backport — 234 cherry-picks across 7 stacked PRs (#1571–#1577)
+- Fixed build errors surfaced by the backport (`minmax`/`sectorsize_bits`); reverted problematic delalloc patches after A/B testing exposed a performance regression
+
+##### Result
+- **24 stacked PRs, 633 commits across 3 kernel branches** — closing the stable-btrfs gap on every NAS product line
+- A/B testing gated the merge decision, catching a delalloc regression before it reached production
+
+#### Btrfs Backport A/B Performance Validation
+
+##### Situation
+- Backporting 600+ btrfs commits risked silent performance regressions; the merge decision needed empirical before/after data on real hardware, not review confidence alone
+
+##### Action
+- Ran 4 A/B test sessions (Jun 25 – Jul 2) on UNAS-Pro-8 and raid5x7/raid5x8 configurations: `btrfs-backport-A-baseline` (2 runs), `btrfs-backport-B-task8` (1 run), `btrfs-backport-AB-raid5x8-cache` (5 runs), `btrfs-backport-A-raid5x8-cache` (1 run)
+- Compared baseline vs. backported kernel under RAID5 + SSD-cache workloads using the existing fio benchmark platform
+
+##### Result
+- A/B data identified a delalloc-patch performance regression, which was reverted before merge — turning a speculative risk into a measured, gated decision
+
+#### btrfs ENVR Stable Backport (envr-core) [UOF-5010][UOF-4414]
+
+##### Situation
+- The ENVR-core btrfs kernel lagged the full 5.10 stable series, missing NULL-deref and deadlock fixes needed for the 6.0.0 firmware release
+
+##### Action
+- Backported the btrfs 5.10 stable catch-up for envr-core — **79 commits, 5.10.1 → 5.10.259** (debbox-kernel #1594, debbox #10412)
+- Fixed a NULL pointer deref in `btrfs_rm_device()`; resolved envr-core build errors (`namei.h`, `inode_set_ctime_current`, root declaration)
+- Cherry-picked the [UOF-4414] `wait_current_trans()` deadlock fix; added qgroup memory-pressure relief (lazy `old_roots` + forced commit)
+- `mm: disable watermark_boost_factor on ARM64 64K-page` — removes a boost path that misbehaves under 64K-page memory accounting
+
+##### Result
+- ENVR-core btrfs brought current to 5.10.259, shipped in fixVersion **6.0.0**, closing the deadlock and NULL-deref gaps
+
+#### RAID5 List Corruption + dm-cache OOM Diagnosis [DUAI-750]
+
+##### Situation
+- A UNAS Pro exhibited two coupled kernel failures: raid5 `sh->lru` list corruption, and a dm-cache migration-path OOM during RAID resync — both hard to reproduce and capture
+
+##### Action
+**raid5 list-corruption instrumentation:**
+- Added `printk`/`trace_printk` instrumentation to capture the reentrant-flush path; `WARN` on non-empty `sh->lru` in `release_stripe_plug`; aligned `DEFAULT_STRIPE_SIZE` to `PAGE_SIZE` as a corruption-rate mitigation
+
+**dm-cache OOM root-cause (24h event reconstruction):**
+- Traced the full failure timeline: slot-2 disk hot-swap → md3 RAID5 background reconstruction → dm-cache writeback attaches → dirty blocks accumulate faster than the busy HDDs can drain → SLUB `vmap_area` exhaustion (`GFP_NOWAIT` alloc fails) → `check_migrations` page-allocation failure → migration stalls → new I/O blocks
+- **Root cause**: RAID resync competing with user data traffic causes SSD-cache dirty accumulation the HDD drain can't keep up with, driving the dm-cache migration path into OOM
+
+##### Result
+- Reproducible instrumentation for the raid5 corruption path and a complete causal chain for the dm-cache OOM, establishing the resync-vs-drain contention as the root cause
+
+#### VFS Audit eBPF POC [UOF-4943]
+
+##### Situation
+- UNAS needed a low-overhead, full-path file-access audit facility spanning kernel and userland, without patching every VFS entry point
+
+##### Action
+- Implemented **12 VFS audit call sites** for both the 5.10 and mainline kernels
+- Built a Go + `cilium/ebpf` (bpf2go) loader with a CO-RE design over fentry; extended `btf_allowlist_d_path` with `vfs_open`/`vfs_write`/`chmod_common`/`chown_common` across 5.10, rtd1619 6.6, and cn10k/ENAS 6.6
+- Enabled the BPF prerequisites in debbox kconfig: `CONFIG_FUNCTION_TRACER` (fentry attach) + `CONFIG_DEBUG_INFO_BTF` (CO-RE)
+- Shipped an eBPF fentry full-path file-open monitor (phase 1) in unifi-drive-config, attaching the first-successful program only
+
+##### Result
+- Working cross-repo VFS-audit POC (linux + debbox + unifi-drive-config) with CO-RE portability across five kernel/platform variants
+
+#### xfstest FW6.0 / 64K-Page Adaptation
+
+##### Situation
+- The xfstest suite broke on 64K-page platforms and against the FW6.0 trixie userland (newer liburing, util-linux, cgroup-v2)
+
+##### Action
+- Forced `-s 65536 -n 65536` (sectorsize=64k) for btrfs compatibility on 64K-page platforms
+- Added FW6.0 trixie golden adaptation: liburing ABI-mismatch detection (stale bullseye testtools vs. liburing 0.x), cgroup-v2 and util-linux 2.41 handling
+- Fixed generic/371 + generic/511 filesystem-size assumptions; updated exclude lists
+
+##### Result
+- xfstest suite runs cleanly on 64K-page hardware and the FW6.0 trixie userland, keeping the filesystem regression gate valid across the platform migration
+
+#### Org-Wide CI Modernization [UOF-4504]
+
+##### Situation
+- The Claude PR-review CI infrastructure and workflow definitions had drifted across the org's repositories, and the conversation-reply workflow still posted top-level comments and had gaps in its author-authorization gate
+
+##### Action
+**Workflow sync + conversation job v9 (fanned out across ~15 repos):**
+- Synced workflows and switched to label-only triggers across **13 repos (23 commits)**: debbox, debbox-kernel, debfactory, ubnt-sfp-handler, unifi-drive-config primary, plus 8 more for the code-review skill bump (74ab19ce)
+- **v9 conversation job**: post the reply inside the inline thread instead of as a top-level comment
+- **Chain-author gate hardening**: fail-close on deleted/ghost authors, null-check before the assoc-allowlist, 50-page pagination cap; switched to the scoped `UOS_FW_PR_ASSISTANT` App token
+- Hardened the updater package-install path: [UOF-4862] validate package names/versions before `sh -c` (command-injection fix), [UOF-4865] remove dead trixie-migration `apt --allow-unauthenticated` footgun
+
+##### Result
+- Unified CI workflows and label-only triggers across 13 repos; conversation replies now thread inline with a fail-closed author gate and scoped App-token auth
+- Eliminated a command-injection vector and an unsigned-package install footgun in the firmware updater
 
 ### Q1 Achievements
 
