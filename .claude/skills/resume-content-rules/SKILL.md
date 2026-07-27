@@ -6,6 +6,8 @@ description: Rules for editing LaTeX resume files in src/resume/. Ensures proper
 
 # Resume Content Rules
 
+> **Milestone input contract**: When sourcing content from milestone files, see `_shared/milestone-schema.md` for the data schema.
+
 Use this skill when editing LaTeX resume files in `src/resume/` directory. These rules ensure proper formatting and prevent hyphenated word breaks.
 
 ## Line Length Reference

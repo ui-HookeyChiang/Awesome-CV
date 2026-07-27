@@ -6,13 +6,15 @@ description: Extract SAR case studies from milestone/journal data and produce re
 
 # SAR Case Study Extraction
 
+> **Input contract**: See `_shared/milestone-schema.md` for the milestone data contract (frontmatter fields, section structure, achievement format).
+
 > **Orchestrator available**: For the full journal→milestone→SAR→cleanup pipeline, use `/journal-integrate` instead of calling this skill directly. Run `/journal-integrate-milestones` first for best results — enriched milestones produce richer case studies.
 
 Extract SAR (Situation-Action-Result) case studies from milestone and journal data, producing ready-to-assemble HTML fragments for the interview presentation.
 
 ## Inputs
 
-- `milestone/ubiquiti.md`, `milestone/qnap.md`, `milestone/summary.md` — primary SAR content
+- Milestone files (per `_shared/milestone-schema.md`) — primary SAR content
 - `src/present/fragments/achievements/*.html` — check for overlap/suppression
 - `journal/raw/git-sar/<date>/<category>.md` — categorized git commits (from host-work-journal SAR collection)
 - `journal/` — other supplementary detail (work reports, weekly reports)
