@@ -52,6 +52,45 @@ resumes/
     └── interview-speech.md
 ```
 
+## Output Manifest
+
+The orchestrator MUST own directory creation and manifest generation:
+
+1. **Create output directory** — `mkdir -p resumes/<company>/` (or `resumes/general/`) before dispatching any sub-skill.
+2. **Pass output paths to sub-skills** — each sub-skill receives its target path from the orchestrator rather than computing it independently. Example dispatch arguments:
+   - `resume-pdf-check` → `output: resumes/<company>/resume.pdf`
+   - `interview-presentation` → `output: resumes/<company>/interview-presentation.html`
+   - `interview-speech` → `output: resumes/<company>/interview-speech.md`
+3. **Write manifest** — after ALL generation completes, write `resumes/<company>/manifest.json`:
+
+```json
+{
+  "jd_source": "<path-or-url>",
+  "generated_at": "<ISO8601>",
+  "files": ["resume.pdf", "interview-presentation.html", "interview-speech.md"],
+  "validation": {"pages": 2, "passed": true}
+}
+```
+
+- `jd_source`: path to local JD file or original URL; `null` for GP mode.
+- `generated_at`: UTC ISO 8601 timestamp of manifest write.
+- `files`: list of generated filenames relative to the output directory.
+- `validation`: result from the Validation Gate (see below).
+
+## Validation Gate
+
+After all artifacts are generated, the orchestrator runs validation before writing the manifest:
+
+1. **Run `resume-pdf-check`** on the generated PDF — must be exactly 2 pages with no overfull warnings.
+2. **Record result** in `manifest.validation`:
+   - `{"pages": <int>, "passed": true|false}`
+3. **On failure** — invoke the shrink procedure defined by `resume-pdf-check` (scholar auto-shrink, then sub-bullet shortening). Retry validation up to 2 times.
+4. **If still failing after retries** — write manifest with `"passed": false` and report failure to the user. Do NOT silently produce a 3-page resume.
+
+The manifest is the single source of truth for whether a generation run succeeded.
+
+---
+
 ## Source Files
 
 | File | Purpose |
@@ -80,11 +119,13 @@ resumes/
    - Follow **resume-pdf-check** (validate 2 pages, no overfull/underfull warnings)
    - Always generate the PDF after any .tex change — the PDF is the deliverable
    - `resumes/general/resume.pdf` is a symlink to `src/resume.pdf` — no copy needed
-5. **Generate presentation** → `resumes/general/interview-presentation.html`
-   - Use the fragment assembler: `cd src/present && node assemble.js general --output ../../resumes/general/interview-presentation.html`
+5. **Generate presentation** — orchestrator passes output path to sub-skill:
+   - `cd src/present && node assemble.js general --output ../../resumes/general/interview-presentation.html`
    - Follow **interview-presentation** skill for content guidelines
-6. **Generate speech** → `resumes/general/interview-speech.md`
+6. **Generate speech** — orchestrator passes output path to sub-skill:
+   - Output: `resumes/general/interview-speech.md`
    - Follow **interview-speech** skill, derive from presentation
+7. **Validate & write manifest** — run Validation Gate, write `resumes/general/manifest.json`
 
 ---
 
@@ -118,14 +159,16 @@ mkdir -p resumes/<company-name>/resume
    - Follow **resume-content-rules**, do NOT change titles/dates
 8. **Build PDF** → `resumes/<company-name>/resume.pdf`
    - Follow **resume-pdf-check** (backup, build, restore, validate 2 pages)
-9. **Generate presentation** → `resumes/<company-name>/interview-presentation.html`
+9. **Generate presentation** — orchestrator passes output path to sub-skill:
    - Use the profile from job-analysis Step 4: `resumes/<company-name>/presentation-profile.yaml`
    - Copy profile to assembler: `cp resumes/<company-name>/presentation-profile.yaml src/present/profiles/<company-name>.yaml`
    - Assemble: `cd src/present && node assemble.js <company-name> --output ../../resumes/<company-name>/interview-presentation.html`
    - Review the generated profile before assembling — adjust selections if needed
    - Follow **interview-presentation** skill for content guidelines
-10. **Generate speech** → `resumes/<company-name>/interview-speech.md`
-   - Follow **interview-speech** skill, emphasize job-relevant stories
+10. **Generate speech** — orchestrator passes output path to sub-skill:
+    - Output: `resumes/<company-name>/interview-speech.md`
+    - Follow **interview-speech** skill, emphasize job-relevant stories
+11. **Validate & write manifest** — run Validation Gate, write `resumes/<company-name>/manifest.json`
 
 ---
 
