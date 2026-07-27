@@ -1,4 +1,4 @@
-.PHONY: examples
+.PHONY: examples resume check deps clean
 
 CC = lualatex
 EXAMPLES_DIR = examples
@@ -18,5 +18,19 @@ cv.pdf: $(EXAMPLES_DIR)/cv.tex $(CV_SRCS)
 coverletter.pdf: $(EXAMPLES_DIR)/coverletter.tex
 	$(CC) -output-directory=$(EXAMPLES_DIR) $<
 
+resume:
+	cd src && xelatex resume.tex
+
+check: resume
+	@pages=$$(pdfinfo src/resume.pdf | grep -oP 'Pages:\s+\K\d+'); \
+	if [ "$$pages" != "2" ]; then \
+		echo "ERROR: resume is $$pages page(s), expected 2"; \
+		exit 1; \
+	fi; \
+	echo "OK: resume is 2 pages"
+
+deps:
+	./install.sh
+
 clean:
-	rm -rf $(EXAMPLES_DIR)/*.pdf
+	rm -rf $(EXAMPLES_DIR)/*.pdf src/*.pdf src/*.aux src/*.log src/*.out
