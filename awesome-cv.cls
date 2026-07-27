@@ -81,36 +81,24 @@
 \defaultfontfeatures{
   Renderer=HarfBuzz,
 }
-% Use Source Sans Pro from TeX Live (static fonts with proper weights)
-\setmainfont{SourceSansPro}[
-  Path = /usr/local/texlive/2025/texmf-dist/fonts/opentype/adobe/sourcesanspro/,
-  Extension = .otf,
-  UprightFont = *-Regular,
-  BoldFont = *-Bold,
-  ItalicFont = *-RegularIt,
-  BoldItalicFont = *-BoldIt,
+% Use Source Sans Pro via system fontconfig (portable across machines)
+\setmainfont{Source Sans Pro}[
+  BoldFont = {Source Sans Pro Bold},
+  ItalicFont = {Source Sans Pro Italic},
+  BoldItalicFont = {Source Sans Pro Bold Italic},
 ]
-\setsansfont{SourceSansPro}[
-  Path = /usr/local/texlive/2025/texmf-dist/fonts/opentype/adobe/sourcesanspro/,
-  Extension = .otf,
-  UprightFont = *-Regular,
-  BoldFont = *-Bold,
-  ItalicFont = *-RegularIt,
-  BoldItalicFont = *-BoldIt,
+\setsansfont{Source Sans Pro}[
+  BoldFont = {Source Sans Pro Bold},
+  ItalicFont = {Source Sans Pro Italic},
+  BoldItalicFont = {Source Sans Pro Bold Italic},
 ]
-\newfontfamily\roboto{SourceSansPro}[
-  Path = /usr/local/texlive/2025/texmf-dist/fonts/opentype/adobe/sourcesanspro/,
-  Extension = .otf,
-  UprightFont = *-Regular,
-  BoldFont = *-Bold,
-  ItalicFont = *-RegularIt,
-  BoldItalicFont = *-BoldIt,
+\newfontfamily\roboto{Source Sans Pro}[
+  BoldFont = {Source Sans Pro Bold},
+  ItalicFont = {Source Sans Pro Italic},
+  BoldItalicFont = {Source Sans Pro Bold Italic},
 ]
-\newfontfamily\robotolight{SourceSansPro}[
-  Path = /usr/local/texlive/2025/texmf-dist/fonts/opentype/adobe/sourcesanspro/,
-  Extension = .otf,
-  UprightFont = *-Light,
-  ItalicFont = *-LightIt,
+\newfontfamily\robotolight{Source Sans Pro Light}[
+  ItalicFont = {Source Sans Pro Light Italic},
 ]
 % Needed for the photo ID
 \RequirePackage[skins]{tcolorbox}
