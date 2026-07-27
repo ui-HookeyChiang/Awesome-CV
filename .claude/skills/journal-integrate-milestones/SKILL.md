@@ -6,6 +6,8 @@ description: Process journals, integrate weekly reports into milestones, refine 
 
 # Integrating Journal into Milestones
 
+> **Output contract**: Milestone files produced by this skill conform to [`_shared/milestone-schema.md`](../_shared/milestone-schema.md).
+
 > **Orchestrator available**: For the full journal→milestone→SAR→cleanup pipeline, use `/journal-integrate` instead of calling this skill directly.
 
 Use this skill when the user asks to process journals, integrate weekly reports into milestones, refine work logs, or update career documentation from raw reports.
