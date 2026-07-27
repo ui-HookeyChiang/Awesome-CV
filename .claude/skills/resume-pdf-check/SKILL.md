@@ -35,8 +35,10 @@ Use this skill to build a resume PDF and validate it. Covers two scenarios:
 Edit GP files directly in `src/resume/` (canonical), then build:
 
 ```bash
-cd src && xelatex resume.tex
+make resume
 ```
+
+Under the hood: runs `cd src && xelatex resume.tex`.
 
 `resumes/general/resume.pdf` is a symlink to `../../src/resume.pdf` — no copy needed.
 
@@ -70,8 +72,10 @@ rm -rf resume && mv resume.bak resume
 ### 1. Verify Page Count
 
 ```bash
-pdfinfo src/resume.pdf | grep Pages
+make check
 ```
+
+Under the hood: builds the PDF via `make resume`, then runs `pdfinfo src/resume.pdf | grep Pages` and fails if not exactly 2 pages.
 
 - **Expected**: `Pages: 2`
 - If pages > 2: content has overflowed and must be trimmed
@@ -127,5 +131,5 @@ grep -E 'Overfull|Underfull' src/resume.log
 ## Quick One-Liner
 
 ```bash
-cd src && xelatex resume.tex && echo "---" && pdfinfo resume.pdf | grep Pages && grep -E 'Overfull|Underfull' resume.log || echo "No box warnings"
+make check && grep -E 'Overfull|Underfull' src/resume.log || echo "No box warnings"
 ```
