@@ -1,0 +1,21 @@
+meta:
+  title: Test Deck
+  lang: zh-Hant
+  acts:
+    1: "Opening"
+    2: "Main"
+
+approved: false
+slides:
+  - id: slide-1
+    act: 1
+    claim: "First slide"
+    bridge: "Opening"
+    anchor: true
+    facts: []
+  - id: slide-2
+    act: 2
+    claim: "Second slide"
+    bridge: "Moving forward"
+    anchor: false
+    facts: []
