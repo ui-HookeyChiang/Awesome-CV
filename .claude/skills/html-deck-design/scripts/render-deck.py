@@ -120,8 +120,10 @@ def load_template() -> str:
     return TEMPLATE_PATH.read_text(encoding='utf-8')
 
 
-def html_escape(text: str) -> str:
+def html_escape(text: Optional[str]) -> str:
     """Escape HTML special characters."""
+    if text is None:
+        return ''
     return (text
             .replace('&', '&amp;')
             .replace('<', '&lt;')
