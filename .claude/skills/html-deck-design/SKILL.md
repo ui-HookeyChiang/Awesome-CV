@@ -99,3 +99,18 @@ Deck YAML schemas render via `scripts/render-deck.py` — see `presentation-desi
 - **NOT chart palettes or internals**: color-by-series, legends, axes, diverging palettes → dataviz skill
 - **NOT slide content or narrative**: keyword-card layout, SAR selection, speaker-script details → presentation-design skill
 - **NOT docs/README/demo scripts/talks**: markdown/prose structure → prose-guidelines; conference talks → interview-presentation wrapper
+
+## Deck verification (mandatory after every render or migration)
+
+Run `scripts/verify-deck.py <deck.html> [--reference <original.html>]` — four
+mechanical layers, each added after a real shipped failure:
+
+| Layer | Checks | Failure it prevents |
+|---|---|---|
+| Structure | slide count, cover count, div balance, uniform wrapper depth | lost cover pages; nested slides collapsing the layout |
+| Class coverage | every class used in body is defined in CSS | escape-hatch content rendering unstyled |
+| JS wiring | unique ids, getElementById targets exist, exactly 1 modal, ≤2 keydown listeners | duplicate modal/nav JS double-firing keyboard nav |
+| Text parity | per-slide difflib ratio vs reference (`--reference`, `--min-ratio`) | silently dropped ledes, act banners, takeaways |
+
+Never sign off a deck on slide count + notes count alone — every layer above
+shipped broken at least once while those two passed.

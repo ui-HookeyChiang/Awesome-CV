@@ -14,7 +14,10 @@ Lint (both modes):
 
 import sys
 import json
-import yaml
+try:
+    import yaml
+except ImportError:
+    sys.exit("render-deck.py requires PyYAML: pip install pyyaml")
 import argparse
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
