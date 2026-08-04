@@ -215,8 +215,8 @@ def test_template_placeholder_removal():
 
 
 def test_custom_css_injection():
-    """Render test: custom_css should be injected into HTML output."""
-    result = TestResult("custom-css injection into <style> block")
+    """Render test: custom_css should be injected, and type:html claims skipped."""
+    result = TestResult("custom-css injection + html claim suppression")
     yaml_path = FIXTURES_DIR / 'custom-css-with-html.yaml'
 
     if not yaml_path.exists():
@@ -233,10 +233,21 @@ def test_custom_css_injection():
         with open(output_path) as f:
             html = f.read()
         # Check that custom CSS classes are defined
-        if '.flow-box' in html and '.big-statement' in html and '.cheat-sheet-modal' in html:
+        css_ok = '.flow-box' in html and '.big-statement' in html and '.cheat-sheet-modal' in html
+
+        # Extract intro slide (type:html) and verify claim "Custom CSS Test" NOT in h1
+        intro_match = re.search(r'id="intro"[^>]*>(.*?)</div>\s*</div>', html, re.DOTALL)
+        claim_suppressed = True
+        if intro_match:
+            intro_html = intro_match.group(1)
+            # Check that <h1>Custom CSS Test</h1> is NOT present in intro slide
+            if '<h1>Custom CSS Test</h1>' in intro_html:
+                claim_suppressed = False
+
+        if css_ok and claim_suppressed:
             result.passed = True
         else:
-            result.error = f"Custom CSS classes not found in output"
+            result.error = f"CSS ok={css_ok}, claim_suppressed={claim_suppressed}"
     else:
         result.error = f"Render failed: {stderr[:200]}"
 

@@ -147,11 +147,14 @@ def render_slide_html(slide: Dict[str, Any], slide_index: int) -> str:
     notes = slide.get('notes', '').strip()
 
     html_parts = [f'        <div class="slide" id="{html_escape(slide_id)}" data-slide-index="{slide_index}">']
-    html_parts.append(f'            <h1>{claim}</h1>')
 
     # Render element based on type
     if isinstance(element, dict):
         elem_type = element.get('type', 'statement')
+
+        # For element.type: html, skip claim <h1> — HTML body owns its headings
+        if elem_type != 'html':
+            html_parts.append(f'            <h1>{claim}</h1>')
 
         if elem_type == 'statement':
             text = element.get('data', {}).get('text', '')
@@ -216,6 +219,9 @@ def render_slide_html(slide: Dict[str, Any], slide_index: int) -> str:
                 comp_type = comp.get('type', 'statement')
                 if comp_type == 'statement':
                     html_parts.append(f'            <p>{html_escape(comp.get("text", ""))}</p>')
+    else:
+        # Fallback: element is not a dict, still emit claim
+        html_parts.append(f'            <h1>{claim}</h1>')
 
     # Add speaker notes if present (data-cheat trigger)
     if notes:
