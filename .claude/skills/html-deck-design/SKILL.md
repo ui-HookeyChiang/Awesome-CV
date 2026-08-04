@@ -94,9 +94,54 @@ Deck YAML schemas render via `scripts/render-deck.py` — see `presentation-desi
 - `references/template.html` — skeleton (tokens + slide card + nav JS + modal + print) — ready to fill with content slides
 - `references/pptx-helpers.md` — mined pptxgenjs helpers (addCard, addPill, addFlowNodes, addTableStyled, addCodeBox) for when generating pptx from the same deck spec
 
+## Data Visualization in Slides (→ dataviz handoff)
+
+When a slide contains a **data chart** (bar, line, area, heatmap, stat tile,
+meter), the chart's color and mark decisions belong to the `dataviz` skill.
+The deck skill owns everything around and outside the chart; `dataviz` owns
+everything inside it.
+
+### Boundary
+
+| Concern | Owner |
+|---------|-------|
+| Chart surface color | **deck** — use `--card-bg` or `--slide-bg` |
+| Series / categorical palette | **dataviz** — 8-slot fixed-order, validated |
+| Sequential / diverging ramps | **dataviz** — one-hue light→dark; two-pole + gray midpoint |
+| Status colors inside chart | **dataviz** — good/warning/serious/critical, reserved |
+| Mark specs (bar thickness, line width, spacers) | **dataviz** |
+| Axis, gridline, label styling | **dataviz** — hairline recessive, ink tokens |
+| Tooltip / hover layer | **dataviz** — crosshair + per-mark, ≥24px hit area |
+| Chart container card (border, radius, shadow) | **deck** — card-bg + 1px border + radius 10px |
+| Slide layout around chart | **deck** — grid/flex, h1, subtitle |
+| Deck semantic tokens (SAR borders, text tiers) | **deck** — NOT used inside charts |
+
+### Workflow
+
+1. Build slide layout per deck grammar (card container, heading, subtitle).
+2. Inside the chart container, invoke `dataviz` — follow its 7-step procedure
+   (form → color → validate → marks → hover → a11y → eyeball).
+3. Feed deck surface to the validator:
+   `node validate_palette.js "<series-hexes>" --mode dark --surface "#25253A"`
+   (use `--surface` matching whichever deck token the chart sits on).
+4. Deck tokens (`--primary`, `--success`, `--alert`) are **not** chart series
+   colors. Never repurpose SAR colors as chart series; use the dataviz
+   categorical palette instead.
+
+### Deck palette validation status (2026-08-04)
+
+Deck tokens pass all checks relevant to their usage (semantic emphasis, not
+categorical series):
+
+- SAR three-color adjacent CVD ΔE 28.1 — excellent
+- Normal-vision floor ΔE 19.0+ — clear
+- All semantic colors ≥3:1 contrast on slide-bg
+- Text: primary 17.1:1, secondary 15.0:1, muted 4.9:1 (AA for metadata)
+- Lightness band FAIL is expected — deck tokens are not categorical chart series
+
 ## NOT Clauses
 
-- **NOT chart palettes or internals**: color-by-series, legends, axes, diverging palettes → dataviz skill
+- **NOT chart palettes or internals**: color-by-series, legends, axes, diverging palettes → dataviz skill (see handoff above)
 - **NOT slide content or narrative**: keyword-card layout, SAR selection, speaker-script details → presentation-design skill
 - **NOT docs/README/demo scripts/talks**: markdown/prose structure → prose-guidelines; conference talks → interview-presentation wrapper
 
