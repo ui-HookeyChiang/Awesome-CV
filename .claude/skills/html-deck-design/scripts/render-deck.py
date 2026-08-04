@@ -304,6 +304,15 @@ def render_full_html(deck: Dict[str, Any]) -> str:
               file=sys.stderr)
         html = re.sub(r'<div id="cheatSheetModal" class="cheat-sheet-modal">.*?</script>',
                       '', html, flags=re.DOTALL, count=1)
+        if custom_css:
+            # Legacy deck carries its full stylesheet: REPLACE template CSS
+            # instead of appending — leftover template rules for shared
+            # selectors (e.g. .navigation-hint transform/bottom) otherwise
+            # merge into broken hybrids.
+            html = re.sub(r'<style>.*?</style>',
+                          f'<style>\n{custom_css}\n    </style>',
+                          html, flags=re.DOTALL, count=1)
+            custom_css_block = ''
     else:
         cheat_js = json.dumps(cheat_sheets, ensure_ascii=False, indent=12)
         html = re.sub(r'const cheatSheets = \{.*?\n        \};',
