@@ -53,6 +53,8 @@ def lint_deck(deck: Dict[str, Any]) -> Tuple[List[str], List[str]]:
     warnings = []
     slides = deck.get('slides', [])
     act_anchors = {}
+    has_html_escape = False
+    has_custom_css = bool(deck.get('meta', {}).get('custom_css', '').strip())
 
     for i, slide in enumerate(slides):
         slide_id = slide.get('id', f'slide-{i}')
@@ -79,6 +81,7 @@ def lint_deck(deck: Dict[str, Any]) -> Tuple[List[str], List[str]]:
         # WARN: element.type: html
         element = slide.get('element', {})
         if isinstance(element, dict) and element.get('type') == 'html':
+            has_html_escape = True
             warnings.append(f"Slide {i} ({slide_id}): uses escape hatch element.type: html")
 
         # Track anchors per act for later warning
@@ -88,6 +91,10 @@ def lint_deck(deck: Dict[str, Any]) -> Tuple[List[str], List[str]]:
                 act_anchors[act] = []
             if slide.get('anchor'):
                 act_anchors[act].append(slide_id)
+
+    # WARN: element.type: html without custom_css
+    if has_html_escape and not has_custom_css:
+        warnings.append("Deck uses element.type: html but meta.custom_css is absent — custom classes will be unstyled")
 
     # WARN: act without anchor slides
     for act, anchors in act_anchors.items():
@@ -250,6 +257,12 @@ def render_full_html(deck: Dict[str, Any]) -> str:
     title = meta.get('title', 'Slide Deck')
     lang = meta.get('lang', 'zh-Hant')
 
+    # Inject custom CSS if present
+    custom_css = meta.get('custom_css', '').strip()
+    custom_css_block = ''
+    if custom_css:
+        custom_css_block = f'\n    <style>\n{custom_css}\n    </style>'
+
     # Replace example slides block (comment + 2 example divs) with actual slides
     template_slides_pattern = r'<!-- Example slide structure: fill with your content -->.*?<!-- Example SAR slide -->.*?</div>\s*</div>'
     html = re.sub(
@@ -266,6 +279,10 @@ def render_full_html(deck: Dict[str, Any]) -> str:
         'const cheatSheets = {\n            example: {',
         f'const cheatSheets = {{\n            {cheat_sheets_js};'
     )
+
+    # Inject custom CSS after template styles (find </style> tag and insert after it)
+    if custom_css_block:
+        html = html.replace('    </style>', f'    </style>{custom_css_block}')
 
     return html
 

@@ -214,6 +214,59 @@ def test_template_placeholder_removal():
     return result
 
 
+def test_custom_css_injection():
+    """Render test: custom_css should be injected into HTML output."""
+    result = TestResult("custom-css injection into <style> block")
+    yaml_path = FIXTURES_DIR / 'custom-css-with-html.yaml'
+
+    if not yaml_path.exists():
+        result.error = f"Fixture not found: {yaml_path}"
+        return result
+
+    import tempfile
+    import re
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.html', delete=False) as f:
+        output_path = f.name
+
+    exit_code, stdout, stderr = run_renderer(yaml_path, '-o', output_path)
+    if exit_code == 0:
+        with open(output_path) as f:
+            html = f.read()
+        # Check that custom CSS classes are defined
+        if '.flow-box' in html and '.big-statement' in html and '.cheat-sheet-modal' in html:
+            result.passed = True
+        else:
+            result.error = f"Custom CSS classes not found in output"
+    else:
+        result.error = f"Render failed: {stderr[:200]}"
+
+    import os
+    try:
+        os.unlink(output_path)
+    except:
+        pass
+
+    return result
+
+
+def test_html_without_custom_css_warn():
+    """Lint rule: element.type: html without meta.custom_css should warn."""
+    result = TestResult("html-escape without custom_css WARN")
+    yaml_path = FIXTURES_DIR / 'html-without-custom-css.yaml'
+
+    if not yaml_path.exists():
+        result.error = f"Fixture not found: {yaml_path}"
+        return result
+
+    exit_code, stdout, stderr = run_renderer(yaml_path)
+    if exit_code == 0 and 'WARN:' in stderr and 'custom_css is absent' in stderr:
+        result.passed = True
+    else:
+        result.error = f"Expected exit 0 with specific WARN, got exit {exit_code}\nstderr: {stderr[:200]}"
+
+    return result
+
+
 def main():
     print("Testing render-deck.py lint and mode rules\n")
 
@@ -227,6 +280,8 @@ def main():
         test_clean_deck_storyboard,
         test_clean_deck_draft_mode,
         test_template_placeholder_removal,
+        test_custom_css_injection,
+        test_html_without_custom_css_warn,
     ]
 
     results = [t() for t in tests]

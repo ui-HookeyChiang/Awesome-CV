@@ -1,0 +1,15 @@
+meta:
+  title: HTML without CSS
+  lang: zh-Hant
+
+approved: true
+slides:
+  - id: slide-1
+    act: 1
+    claim: "Unstyled HTML"
+    bridge: "Using custom classes without CSS"
+    element:
+      type: html
+      data:
+        html: "<div class='custom-box'>Missing styles</div>"
+    facts: []
