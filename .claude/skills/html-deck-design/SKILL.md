@@ -22,11 +22,25 @@ Extract defaults from `references/template.html` lines 9–24 (`--page-bg` throu
 3. **CSS path**: edit `:root { --var-name: #hexcode; }` block at the top of `<style>`. One variable per color role; never inline hex into component styles.
 4. **Test**: open in browser, verify text contrast (WCAG AA), print preview (light theme readability).
 
+## Text-Role Mapping
+
+Every text element maps to a semantic role with a corresponding token. Use these rules to ensure presenter-read text is always legible and metadata remains visually distinct.
+
+| Element | Token | Rationale |
+|---|---|---|
+| h1, card h3, big-statement | `--text-primary` | structure — dominant, always readable |
+| subtitle / big-sub / section lede | `--text-secondary` | supporting header — must read at a glance |
+| body, td, flow labels | `--text-secondary` | content — primary reading tier |
+| captions, footers, slide counter, flow `small`, stat labels | `--text-muted` | true metadata only — viewer may skip |
+
+**Rule**: `--text-muted` is reserved for metadata a viewer may skip; anything a presenter reads aloud gets `--text-secondary` or better. Contrast floor for muted on any surface it's allowed on: ≥4.5:1 (keep #888899; it stays legal for metadata).
+
 ## Visual Grammar Reference
 
 ### Slide structure
 - `.slide`: rounded 14px, 1px border, dark background, min-height 80vh
 - `.slide h1`: 35%-width primary-color underline (3px), Avenir Next 2.2rem
+- `.subtitle`-equivalent: `--text-secondary`, supporting header under h1
 - Semantic cards (SAR): grid layout, 4px left border + 6%-alpha tint per role
 
 ### Card / Surface stack (nested)
