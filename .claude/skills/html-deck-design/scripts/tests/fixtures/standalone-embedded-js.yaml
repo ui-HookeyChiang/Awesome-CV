@@ -1,0 +1,28 @@
+meta:
+  title: Standalone Deck
+  custom_css: |
+    .cover h1 { font-size: 3rem; }
+approved: true
+slides:
+  - id: cover-open
+    act: 1
+    class: cover
+    claim: Opening cover
+    bridge: 開場
+    element:
+      type: html
+      data:
+        html: '<h1>My Deck</h1><button data-cheat="s1">notes</button>'
+    notes: 'cover notes'
+    facts: []
+  - id: body-slide
+    act: 1
+    anchor: true
+    claim: Body
+    bridge: 接著看內容
+    element:
+      type: html
+      data:
+        html: '<p>content</p><script>const cheatSheets={s1:{title:"t",content:"c"}};<\/script>'
+    notes: ''
+    facts: []

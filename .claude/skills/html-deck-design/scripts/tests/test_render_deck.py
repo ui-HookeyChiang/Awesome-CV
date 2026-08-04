@@ -293,6 +293,9 @@ def main():
         test_template_placeholder_removal,
         test_custom_css_injection,
         test_html_without_custom_css_warn,
+    
+        test_standalone_embedded_js,
+        test_cheatsheets_valid_js,
     ]
 
     results = [t() for t in tests]
@@ -307,6 +310,58 @@ def main():
     print(f"\n{passed}/{total} tests passed")
 
     return 0 if passed == total else 1
+
+
+
+
+def test_standalone_embedded_js():
+    """Deck embedding its own <script>: template modal/JS stripped, wrapper class honored, no auto-trigger duplication."""
+    result = TestResult("standalone-embedded-js strip + cover class")
+    yaml_path = FIXTURES_DIR / 'standalone-embedded-js.yaml'
+    with tempfile.NamedTemporaryFile(suffix='.html', delete=False) as f:
+        out = f.name
+    code, stdout, stderr = run_renderer(yaml_path, '-o', out)
+    html = Path(out).read_text()
+    checks = [
+        (code == 0, f"exit {code}"),
+        ('stripping template modal/nav/JS' in stderr, 'no strip warning'),
+        (html.count('<script') == 1, f"{html.count('<script')} script blocks"),
+        (html.count('id="cheatSheetModal"') == 0, 'template modal not stripped'),
+        ('class="slide cover"' in html, 'cover wrapper class missing'),
+        (html.count('data-cheat') == 1, f"{html.count('data-cheat')} data-cheat occurrences (expected 1: cover's own trigger only — auto-trigger must be skipped)"),
+    ]
+    failed = [msg for ok, msg in checks if not ok]
+    if failed:
+        result.error = '; '.join(failed)
+    else:
+        result.passed = True
+    return result
+
+
+def test_cheatsheets_valid_js():
+    """Non-standalone deck: generated cheatSheets must be valid JSON-shaped JS."""
+    result = TestResult("cheatSheets injection is valid JS")
+    yaml_path = FIXTURES_DIR / 'template-placeholder-removal.yaml'
+    with tempfile.NamedTemporaryFile(suffix='.html', delete=False) as f:
+        out = f.name
+    code, stdout, stderr = run_renderer(yaml_path, '-o', out)
+    html = Path(out).read_text()
+    import re as _re, json as _json
+    m = _re.search(r'const cheatSheets = (\{.*?\});', html, _re.DOTALL)
+    if code != 0:
+        result.error = f"exit {code}: {stderr[:200]}"
+    elif not m:
+        result.error = 'cheatSheets object not found'
+    else:
+        try:
+            _json.loads(m.group(1))
+            if 'example:' in html:
+                result.error = 'template example notes not replaced'
+            else:
+                result.passed = True
+        except ValueError as e:
+            result.error = f'invalid JSON in cheatSheets: {e}'
+    return result
 
 
 if __name__ == '__main__':

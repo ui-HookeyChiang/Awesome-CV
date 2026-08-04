@@ -13,6 +13,7 @@ Lint (both modes):
 """
 
 import sys
+import json
 import yaml
 import argparse
 from pathlib import Path
@@ -145,8 +146,13 @@ def render_slide_html(slide: Dict[str, Any], slide_index: int) -> str:
     claim = html_escape(slide.get('claim', ''))
     element = slide.get('element', {})
     notes = slide.get('notes', '').strip()
+    extra_class = str(slide.get('class', '')).strip()
+    classes = 'slide' + (f' {html_escape(extra_class)}' if extra_class else '')
+    embedded_html = ''
+    if isinstance(element, dict) and element.get('type') == 'html':
+        embedded_html = element.get('data', {}).get('html', '')
 
-    html_parts = [f'        <div class="slide" id="{html_escape(slide_id)}" data-slide-index="{slide_index}">']
+    html_parts = [f'        <div class="{classes}" id="{html_escape(slide_id)}" data-slide-index="{slide_index}">']
 
     # Render element based on type
     if isinstance(element, dict):
@@ -223,8 +229,9 @@ def render_slide_html(slide: Dict[str, Any], slide_index: int) -> str:
         # Fallback: element is not a dict, still emit claim
         html_parts.append(f'            <h1>{claim}</h1>')
 
-    # Add speaker notes if present (data-cheat trigger)
-    if notes:
+    # Add speaker notes if present (data-cheat trigger); skip when the
+    # escape-hatch HTML already provides its own trigger
+    if notes and 'data-cheat' not in embedded_html:
         slide_key = slide_id.replace('-', '_')
         html_parts.append(f'            <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--text-muted); cursor: pointer;" data-cheat="{html_escape(slide_key)}">📌 Notes available</p>')
 
@@ -251,13 +258,17 @@ def render_full_html(deck: Dict[str, Any]) -> str:
             slide_key = slide.get('id', f'slide-{i}').replace('-', '_')
             cheat_sheets[slide_key] = {
                 'title': f"Notes: {slide.get('claim', 'Slide')[:40]}",
-                'content': html_escape(notes)
+                'content': notes
             }
 
     slides_content = '\n'.join(slides_html)
 
-    # Build cheat sheet JS
-    cheat_sheets_js = 'const cheatSheets = ' + str(cheat_sheets).replace("'", '"') + ';'
+    # Standalone mode: deck embeds its own <script> (e.g. migrated legacy deck)
+    embeds_js = any(
+        isinstance(sl.get('element'), dict) and sl['element'].get('type') == 'html'
+        and '<script' in sl['element'].get('data', {}).get('html', '')
+        for sl in slides
+    )
 
     # Replace placeholder in template
     title = meta.get('title', 'Slide Deck')
@@ -281,10 +292,20 @@ def render_full_html(deck: Dict[str, Any]) -> str:
     html = html.replace(
         '<title>Slide Deck Template</title>',
         f'<title>{html_escape(title)}</title>'
-    ).replace(
-        'const cheatSheets = {\n            example: {',
-        f'const cheatSheets = {{\n            {cheat_sheets_js};'
     )
+
+    if embeds_js:
+        # Deck ships its own modal/nav/notes JS — strip the template's to
+        # avoid duplicate ids and double-bound key handlers.
+        print('WARN: deck embeds its own <script>; stripping template modal/nav/JS',
+              file=sys.stderr)
+        html = re.sub(r'<div id="cheatSheetModal" class="cheat-sheet-modal">.*?</script>',
+                      '', html, flags=re.DOTALL, count=1)
+    else:
+        cheat_js = json.dumps(cheat_sheets, ensure_ascii=False, indent=12)
+        html = re.sub(r'const cheatSheets = \{.*?\n        \};',
+                      f'const cheatSheets = {cheat_js};',
+                      html, flags=re.DOTALL, count=1)
 
     # Inject custom CSS after template styles (find </style> tag and insert after it)
     if custom_css_block:
