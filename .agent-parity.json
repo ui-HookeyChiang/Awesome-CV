@@ -1,0 +1,7 @@
+{
+  "accepted_gaps": {
+    "skills": [
+      {"item": "_shared", "reason": "shared assets directory, not a skill (no SKILL.md); skills reference it relatively", "review_by": "2027-02-03"}
+    ]
+  }
+}
