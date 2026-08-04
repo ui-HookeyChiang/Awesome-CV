@@ -99,3 +99,30 @@ Deck YAML schemas render via `scripts/render-deck.py` — see `presentation-desi
 - **NOT chart palettes or internals**: color-by-series, legends, axes, diverging palettes → dataviz skill
 - **NOT slide content or narrative**: keyword-card layout, SAR selection, speaker-script details → presentation-design skill
 - **NOT docs/README/demo scripts/talks**: markdown/prose structure → prose-guidelines; conference talks → interview-presentation wrapper
+
+## Deck verification (mandatory after every render or migration)
+
+Run `scripts/verify-deck.py <deck.html> [--reference <original.html>]` — four
+mechanical layers, each added after a real shipped failure:
+
+| Layer | Checks | Failure it prevents |
+|---|---|---|
+| Structure | slide count, cover count, div balance, uniform wrapper depth | lost cover pages; nested slides collapsing the layout |
+| Class coverage | every class used in body is defined in CSS | escape-hatch content rendering unstyled |
+| JS wiring | unique ids, getElementById targets exist, exactly 1 modal, ≤2 keydown listeners | duplicate modal/nav JS double-firing keyboard nav |
+| Text parity | per-slide difflib ratio vs reference (`--reference`, `--min-ratio`) | silently dropped ledes, act banners, takeaways |
+
+Never sign off a deck on slide count + notes count alone — every layer above
+shipped broken at least once while those two passed.
+
+### Standalone (migrated legacy) decks
+
+When any slide's escape-hatch HTML embeds a `<script>`, the renderer enters
+standalone mode: the template's modal/nav/JS are stripped and the template
+stylesheet is REPLACED by `meta.custom_css`. Contract: `custom_css` must be a
+complete stylesheet (typically the legacy deck's full `<style>` content) and
+the embedded HTML must carry its own notes modal + nav elements — the renderer
+hard-fails listing any class the output uses but `custom_css` leaves
+undefined. A correct standalone render passes all four verify-deck layers
+unchanged; a verify FAIL on a standalone deck is a real defect, never
+expected noise.

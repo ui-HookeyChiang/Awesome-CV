@@ -13,7 +13,11 @@ Lint (both modes):
 """
 
 import sys
-import yaml
+import json
+try:
+    import yaml
+except ImportError:
+    sys.exit("render-deck.py requires PyYAML: pip install pyyaml")
 import argparse
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
@@ -53,6 +57,8 @@ def lint_deck(deck: Dict[str, Any]) -> Tuple[List[str], List[str]]:
     warnings = []
     slides = deck.get('slides', [])
     act_anchors = {}
+    has_html_escape = False
+    has_custom_css = bool(deck.get('meta', {}).get('custom_css', '').strip())
 
     for i, slide in enumerate(slides):
         slide_id = slide.get('id', f'slide-{i}')
@@ -79,6 +85,7 @@ def lint_deck(deck: Dict[str, Any]) -> Tuple[List[str], List[str]]:
         # WARN: element.type: html
         element = slide.get('element', {})
         if isinstance(element, dict) and element.get('type') == 'html':
+            has_html_escape = True
             warnings.append(f"Slide {i} ({slide_id}): uses escape hatch element.type: html")
 
         # Track anchors per act for later warning
@@ -88,6 +95,10 @@ def lint_deck(deck: Dict[str, Any]) -> Tuple[List[str], List[str]]:
                 act_anchors[act] = []
             if slide.get('anchor'):
                 act_anchors[act].append(slide_id)
+
+    # WARN: element.type: html without custom_css
+    if has_html_escape and not has_custom_css:
+        warnings.append("Deck uses element.type: html but meta.custom_css is absent — custom classes will be unstyled")
 
     # WARN: act without anchor slides
     for act, anchors in act_anchors.items():
@@ -138,13 +149,21 @@ def render_slide_html(slide: Dict[str, Any], slide_index: int) -> str:
     claim = html_escape(slide.get('claim', ''))
     element = slide.get('element', {})
     notes = slide.get('notes', '').strip()
+    extra_class = str(slide.get('class', '')).strip()
+    classes = 'slide' + (f' {html_escape(extra_class)}' if extra_class else '')
+    embedded_html = ''
+    if isinstance(element, dict) and element.get('type') == 'html':
+        embedded_html = element.get('data', {}).get('html', '')
 
-    html_parts = [f'        <div class="slide" id="{html_escape(slide_id)}" data-slide-index="{slide_index}">']
-    html_parts.append(f'            <h1>{claim}</h1>')
+    html_parts = [f'        <div class="{classes}" id="{html_escape(slide_id)}" data-slide-index="{slide_index}">']
 
     # Render element based on type
     if isinstance(element, dict):
         elem_type = element.get('type', 'statement')
+
+        # For element.type: html, skip claim <h1> — HTML body owns its headings
+        if elem_type != 'html':
+            html_parts.append(f'            <h1>{claim}</h1>')
 
         if elem_type == 'statement':
             text = element.get('data', {}).get('text', '')
@@ -209,9 +228,13 @@ def render_slide_html(slide: Dict[str, Any], slide_index: int) -> str:
                 comp_type = comp.get('type', 'statement')
                 if comp_type == 'statement':
                     html_parts.append(f'            <p>{html_escape(comp.get("text", ""))}</p>')
+    else:
+        # Fallback: element is not a dict, still emit claim
+        html_parts.append(f'            <h1>{claim}</h1>')
 
-    # Add speaker notes if present (data-cheat trigger)
-    if notes:
+    # Add speaker notes if present (data-cheat trigger); skip when the
+    # escape-hatch HTML already provides its own trigger
+    if notes and 'data-cheat' not in embedded_html:
         slide_key = slide_id.replace('-', '_')
         html_parts.append(f'            <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--text-muted); cursor: pointer;" data-cheat="{html_escape(slide_key)}">📌 Notes available</p>')
 
@@ -238,17 +261,30 @@ def render_full_html(deck: Dict[str, Any]) -> str:
             slide_key = slide.get('id', f'slide-{i}').replace('-', '_')
             cheat_sheets[slide_key] = {
                 'title': f"Notes: {slide.get('claim', 'Slide')[:40]}",
-                'content': html_escape(notes)
+                'content': notes
             }
 
     slides_content = '\n'.join(slides_html)
 
-    # Build cheat sheet JS
-    cheat_sheets_js = 'const cheatSheets = ' + str(cheat_sheets).replace("'", '"') + ';'
+    # Standalone mode: deck embeds its own <script> (e.g. migrated legacy deck)
+    embeds_js = any(
+        isinstance(sl.get('element'), dict) and sl['element'].get('type') == 'html'
+        and '<script' in sl['element'].get('data', {}).get('html', '')
+        for sl in slides
+    )
 
     # Replace placeholder in template
     title = meta.get('title', 'Slide Deck')
     lang = meta.get('lang', 'zh-Hant')
+
+    # Inject custom CSS if present
+    custom_css = meta.get('custom_css', '').strip()
+    # A literal '</style>' inside custom CSS would terminate the style block
+    # early and leak CSS into the body; '<\\/style' is equivalent in CSS strings.
+    safe_css = custom_css.replace('</style', '<\\/style')
+    custom_css_block = ''
+    if custom_css:
+        custom_css_block = f'\n    <style>\n{safe_css}\n    </style>'
 
     # Replace example slides block (comment + 2 example divs) with actual slides
     template_slides_pattern = r'<!-- Example slide structure: fill with your content -->.*?<!-- Example SAR slide -->.*?</div>\s*</div>'
@@ -262,10 +298,51 @@ def render_full_html(deck: Dict[str, Any]) -> str:
     html = html.replace(
         '<title>Slide Deck Template</title>',
         f'<title>{html_escape(title)}</title>'
-    ).replace(
-        'const cheatSheets = {\n            example: {',
-        f'const cheatSheets = {{\n            {cheat_sheets_js};'
     )
+
+    if embeds_js:
+        # Deck ships its own modal/nav/notes JS — strip the template's to
+        # avoid duplicate ids and double-bound key handlers.
+        print('WARN: deck embeds its own <script>; stripping template modal/nav/JS',
+              file=sys.stderr)
+        html = re.sub(r'<div id="cheatSheetModal" class="cheat-sheet-modal">.*?</script>',
+                      '', html, flags=re.DOTALL, count=1)
+        if custom_css:
+            # Legacy deck carries its full stylesheet: REPLACE template CSS
+            # instead of appending — leftover template rules for shared
+            # selectors (e.g. .navigation-hint transform/bottom) otherwise
+            # merge into broken hybrids. Contract: standalone custom_css must
+            # be a COMPLETE stylesheet (the post-render coverage check below
+            # fails the build if template base classes go undefined).
+            # Splice by index, not re.sub — custom_css may contain regex
+            # backreferences or the literal '</style>'.
+            start = html.find('<style>')
+            end = html.find('</style>', start)
+            if start != -1 and end != -1:
+                html = (html[:start] + '<style>\n' + safe_css
+                        + '\n    </style>' + html[end + len('</style>'):])
+            custom_css_block = ''
+    else:
+        cheat_js = json.dumps(cheat_sheets, ensure_ascii=False, indent=12)
+        html = re.sub(r'const cheatSheets = \{.*?\n        \};',
+                      f'const cheatSheets = {cheat_js};',
+                      html, flags=re.DOTALL, count=1)
+
+    # Inject custom CSS after template styles (find </style> tag and insert after it)
+    if custom_css_block:
+        html = html.replace('    </style>', f'    </style>{custom_css_block}')
+
+    if embeds_js:
+        # Standalone contract check: custom_css must cover every class the
+        # output uses — the template stylesheet was replaced above.
+        body = html.split('<body', 1)[1] if '<body' in html else html
+        used = {c for cls in re.findall(r'class="([^"]+)"', body) for c in cls.split()}
+        css_all = ' '.join(re.findall(r'<style[^>]*>(.*?)</style>', html, re.DOTALL))
+        defined = set(re.findall(r'\.([a-zA-Z][\w-]*)', css_all))
+        missing = sorted(used - defined)
+        if missing:
+            sys.exit(f'FAIL: standalone deck classes undefined in custom_css: {missing} '
+                     f'— standalone custom_css must be a complete stylesheet')
 
     return html
 

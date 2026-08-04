@@ -214,6 +214,70 @@ def test_template_placeholder_removal():
     return result
 
 
+def test_custom_css_injection():
+    """Render test: custom_css should be injected, and type:html claims skipped."""
+    result = TestResult("custom-css injection + html claim suppression")
+    yaml_path = FIXTURES_DIR / 'custom-css-with-html.yaml'
+
+    if not yaml_path.exists():
+        result.error = f"Fixture not found: {yaml_path}"
+        return result
+
+    import tempfile
+    import re
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.html', delete=False) as f:
+        output_path = f.name
+
+    exit_code, stdout, stderr = run_renderer(yaml_path, '-o', output_path)
+    if exit_code == 0:
+        with open(output_path) as f:
+            html = f.read()
+        # Check that custom CSS classes are defined
+        css_ok = '.flow-box' in html and '.big-statement' in html and '.cheat-sheet-modal' in html
+
+        # Extract intro slide (type:html) and verify claim "Custom CSS Test" NOT in h1
+        intro_match = re.search(r'id="intro"[^>]*>(.*?)</div>\s*</div>', html, re.DOTALL)
+        claim_suppressed = True
+        if intro_match:
+            intro_html = intro_match.group(1)
+            # Check that <h1>Custom CSS Test</h1> is NOT present in intro slide
+            if '<h1>Custom CSS Test</h1>' in intro_html:
+                claim_suppressed = False
+
+        if css_ok and claim_suppressed:
+            result.passed = True
+        else:
+            result.error = f"CSS ok={css_ok}, claim_suppressed={claim_suppressed}"
+    else:
+        result.error = f"Render failed: {stderr[:200]}"
+
+    import os
+    try:
+        os.unlink(output_path)
+    except:
+        pass
+
+    return result
+
+
+def test_html_without_custom_css_warn():
+    """Lint rule: element.type: html without meta.custom_css should warn."""
+    result = TestResult("html-escape without custom_css WARN")
+    yaml_path = FIXTURES_DIR / 'html-without-custom-css.yaml'
+
+    if not yaml_path.exists():
+        result.error = f"Fixture not found: {yaml_path}"
+        return result
+
+    exit_code, stdout, stderr = run_renderer(yaml_path)
+    if exit_code == 0 and 'WARN:' in stderr and 'custom_css is absent' in stderr:
+        result.passed = True
+    else:
+        result.error = f"Expected exit 0 with specific WARN, got exit {exit_code}\nstderr: {stderr[:200]}"
+
+    return result
+
+
 def main():
     print("Testing render-deck.py lint and mode rules\n")
 
@@ -227,6 +291,14 @@ def main():
         test_clean_deck_storyboard,
         test_clean_deck_draft_mode,
         test_template_placeholder_removal,
+        test_custom_css_injection,
+        test_html_without_custom_css_warn,
+    
+        test_standalone_embedded_js,
+        test_cheatsheets_valid_js,
+        test_standalone_verify_e2e,
+        test_custom_css_closing_style_tag,
+        test_verify_deck_reference_parity,
     ]
 
     results = [t() for t in tests]
@@ -241,6 +313,128 @@ def main():
     print(f"\n{passed}/{total} tests passed")
 
     return 0 if passed == total else 1
+
+
+
+
+def test_standalone_embedded_js():
+    """Deck embedding its own <script>: template modal/JS stripped, wrapper class honored, no auto-trigger duplication."""
+    result = TestResult("standalone-embedded-js strip + cover class")
+    yaml_path = FIXTURES_DIR / 'standalone-embedded-js.yaml'
+    with tempfile.NamedTemporaryFile(suffix='.html', delete=False) as f:
+        out = f.name
+    code, stdout, stderr = run_renderer(yaml_path, '-o', out)
+    html = Path(out).read_text()
+    checks = [
+        (code == 0, f"exit {code}"),
+        ('stripping template modal/nav/JS' in stderr, 'no strip warning'),
+        (html.count('<script') == 1, f"{html.count('<script')} script blocks"),
+        (html.count('id="cheatSheetModal"') == 1, 'expected exactly the embedded modal (template stripped)'),
+        ('class="slide cover"' in html, 'cover wrapper class missing'),
+        (html.count('data-cheat') == 1, f"{html.count('data-cheat')} data-cheat occurrences (expected 1: cover's own trigger only — auto-trigger must be skipped)"),
+    ]
+    failed = [msg for ok, msg in checks if not ok]
+    if failed:
+        result.error = '; '.join(failed)
+    else:
+        result.passed = True
+    return result
+
+
+def test_cheatsheets_valid_js():
+    """Non-standalone deck: generated cheatSheets must be valid JSON-shaped JS."""
+    result = TestResult("cheatSheets injection is valid JS")
+    yaml_path = FIXTURES_DIR / 'template-placeholder-removal.yaml'
+    with tempfile.NamedTemporaryFile(suffix='.html', delete=False) as f:
+        out = f.name
+    code, stdout, stderr = run_renderer(yaml_path, '-o', out)
+    html = Path(out).read_text()
+    import re as _re, json as _json
+    m = _re.search(r'const cheatSheets = (\{.*?\});', html, _re.DOTALL)
+    if code != 0:
+        result.error = f"exit {code}: {stderr[:200]}"
+    elif not m:
+        result.error = 'cheatSheets object not found'
+    else:
+        try:
+            _json.loads(m.group(1))
+            if 'example:' in html:
+                result.error = 'template example notes not replaced'
+            else:
+                result.passed = True
+        except ValueError as e:
+            result.error = f'invalid JSON in cheatSheets: {e}'
+    return result
+
+
+
+
+def test_standalone_verify_e2e():
+    """verify-deck.py must PASS on standalone-mode output (internal consistency)."""
+    result = TestResult("verify-deck e2e on standalone output")
+    yaml_path = FIXTURES_DIR / 'standalone-embedded-js.yaml'
+    with tempfile.NamedTemporaryFile(suffix='.html', delete=False) as f:
+        out = f.name
+    code, stdout, stderr = run_renderer(yaml_path, '-o', out)
+    if code != 0:
+        result.error = f'render failed: {stderr[:200]}'
+        return result
+    verifier = Path(__file__).parent.parent / 'verify-deck.py'
+    v = subprocess.run([sys.executable, str(verifier), out], capture_output=True, text=True)
+    if v.returncode != 0:
+        result.error = f'verify-deck failed on renderer output: {v.stdout}{v.stderr}'
+    else:
+        result.passed = True
+    return result
+
+
+def test_custom_css_closing_style_tag():
+    """custom_css containing literal </style> must not break the document."""
+    result = TestResult("custom_css with literal </style> sanitized")
+    yaml_path = FIXTURES_DIR / 'css-closing-style-tag.yaml'
+    with tempfile.NamedTemporaryFile(suffix='.html', delete=False) as f:
+        out = f.name
+    code, stdout, stderr = run_renderer(yaml_path, '-o', out)
+    html = Path(out).read_text()
+    n_open = html.count('<style')
+    n_close = html.count('</style>')
+    if code != 0:
+        result.error = f'exit {code}'
+    elif n_open != n_close:
+        result.error = f'unbalanced style tags: {n_open} open vs {n_close} close'
+    elif '.safe' not in html:
+        result.error = 'custom css lost'
+    else:
+        result.passed = True
+    return result
+
+
+def test_verify_deck_reference_parity():
+    """verify-deck --reference: identical files pass, text-mutated copy fails."""
+    result = TestResult("verify-deck --reference parity mode")
+    yaml_path = FIXTURES_DIR / 'standalone-embedded-js.yaml'
+    with tempfile.NamedTemporaryFile(suffix='.html', delete=False) as f:
+        out = f.name
+    code, _, _ = run_renderer(yaml_path, '-o', out)
+    if code != 0:
+        result.error = 'render failed'
+        return result
+    verifier = Path(__file__).parent.parent / 'verify-deck.py'
+    ok = subprocess.run([sys.executable, str(verifier), out, '--reference', out],
+                        capture_output=True, text=True)
+    mutated = Path(out).read_text().replace('My Deck', 'Totally Different Content Here XYZ')
+    with tempfile.NamedTemporaryFile(suffix='.html', delete=False, mode='w') as f:
+        f.write(mutated)
+        mut = f.name
+    bad = subprocess.run([sys.executable, str(verifier), mut, '--reference', out],
+                         capture_output=True, text=True)
+    if ok.returncode != 0:
+        result.error = f'self-reference should pass: {ok.stdout}'
+    elif bad.returncode == 0:
+        result.error = 'mutated deck passed parity — layer 4 not detecting'
+    else:
+        result.passed = True
+    return result
 
 
 if __name__ == '__main__':

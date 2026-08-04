@@ -1,0 +1,33 @@
+meta:
+  title: Standalone Deck
+  custom_css: |
+    body { background: #12121f; }
+    .presentation { max-width: 1200px; margin: 0 auto; }
+    .slide { background: #1A1A2E; border-radius: 14px; }
+    .cover h1 { font-size: 3rem; }
+    .cheat-sheet-modal { display: none; position: fixed; }
+    .navigation-hint { position: fixed; top: 0; }
+approved: true
+slides:
+  - id: cover-open
+    act: 1
+    class: cover
+    claim: Opening cover
+    bridge: 開場
+    element:
+      type: html
+      data:
+        html: '<h1>My Deck</h1><button data-cheat="s1">notes</button>'
+    notes: 'cover notes'
+    facts: []
+  - id: body-slide
+    act: 1
+    anchor: true
+    claim: Body
+    bridge: 接著看內容
+    element:
+      type: html
+      data:
+        html: '<p>content</p><div class="cheat-sheet-modal" id="cheatSheetModal"><div id="cheatSheetTitle"></div><div id="cheatSheetBody"></div></div><div class="navigation-hint"><span id="navHint"></span></div><script>const cheatSheets={s1:{title:"t",content:"c"}};document.getElementById("navHint").textContent="1";<\/script>'
+    notes: ''
+    facts: []
