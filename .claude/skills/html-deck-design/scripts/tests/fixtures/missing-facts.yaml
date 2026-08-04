@@ -1,0 +1,12 @@
+meta:
+  title: Test Deck
+  lang: zh-Hant
+  acts:
+    1: "Opening"
+
+approved: false
+slides:
+  - id: slide-1
+    act: 1
+    claim: "First slide"
+    bridge: "This follows logically"

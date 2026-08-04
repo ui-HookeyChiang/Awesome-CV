@@ -56,6 +56,10 @@ Every text element maps to a semantic role with a corresponding token. Use these
 ### Diagrams
 Flexbox rows/grids + Unicode arrows (→, ↓, ↔). No SVG or canvas elements.
 
+## Rendering
+
+Deck YAML schemas render via `scripts/render-deck.py` — see `presentation-design` for schema and gate rules. Renderer handles storyboard (--storyboard), draft mode, and full build; lint rules enforce bridge/facts/approval gates.
+
 ## Mechanics (Fixed in Template)
 
 ### Navigation
