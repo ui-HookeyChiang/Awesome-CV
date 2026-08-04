@@ -279,9 +279,12 @@ def render_full_html(deck: Dict[str, Any]) -> str:
 
     # Inject custom CSS if present
     custom_css = meta.get('custom_css', '').strip()
+    # A literal '</style>' inside custom CSS would terminate the style block
+    # early and leak CSS into the body; '<\\/style' is equivalent in CSS strings.
+    safe_css = custom_css.replace('</style', '<\\/style')
     custom_css_block = ''
     if custom_css:
-        custom_css_block = f'\n    <style>\n{custom_css}\n    </style>'
+        custom_css_block = f'\n    <style>\n{safe_css}\n    </style>'
 
     # Replace example slides block (comment + 2 example divs) with actual slides
     template_slides_pattern = r'<!-- Example slide structure: fill with your content -->.*?<!-- Example SAR slide -->.*?</div>\s*</div>'
@@ -308,10 +311,16 @@ def render_full_html(deck: Dict[str, Any]) -> str:
             # Legacy deck carries its full stylesheet: REPLACE template CSS
             # instead of appending — leftover template rules for shared
             # selectors (e.g. .navigation-hint transform/bottom) otherwise
-            # merge into broken hybrids.
-            html = re.sub(r'<style>.*?</style>',
-                          f'<style>\n{custom_css}\n    </style>',
-                          html, flags=re.DOTALL, count=1)
+            # merge into broken hybrids. Contract: standalone custom_css must
+            # be a COMPLETE stylesheet (the post-render coverage check below
+            # fails the build if template base classes go undefined).
+            # Splice by index, not re.sub — custom_css may contain regex
+            # backreferences or the literal '</style>'.
+            start = html.find('<style>')
+            end = html.find('</style>', start)
+            if start != -1 and end != -1:
+                html = (html[:start] + '<style>\n' + safe_css
+                        + '\n    </style>' + html[end + len('</style>'):])
             custom_css_block = ''
     else:
         cheat_js = json.dumps(cheat_sheets, ensure_ascii=False, indent=12)
@@ -322,6 +331,18 @@ def render_full_html(deck: Dict[str, Any]) -> str:
     # Inject custom CSS after template styles (find </style> tag and insert after it)
     if custom_css_block:
         html = html.replace('    </style>', f'    </style>{custom_css_block}')
+
+    if embeds_js:
+        # Standalone contract check: custom_css must cover every class the
+        # output uses — the template stylesheet was replaced above.
+        body = html.split('<body', 1)[1] if '<body' in html else html
+        used = {c for cls in re.findall(r'class="([^"]+)"', body) for c in cls.split()}
+        css_all = ' '.join(re.findall(r'<style[^>]*>(.*?)</style>', html, re.DOTALL))
+        defined = set(re.findall(r'\.([a-zA-Z][\w-]*)', css_all))
+        missing = sorted(used - defined)
+        if missing:
+            sys.exit(f'FAIL: standalone deck classes undefined in custom_css: {missing} '
+                     f'— standalone custom_css must be a complete stylesheet')
 
     return html
 

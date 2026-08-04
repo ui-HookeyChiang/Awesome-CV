@@ -296,6 +296,9 @@ def main():
     
         test_standalone_embedded_js,
         test_cheatsheets_valid_js,
+        test_standalone_verify_e2e,
+        test_custom_css_closing_style_tag,
+        test_verify_deck_reference_parity,
     ]
 
     results = [t() for t in tests]
@@ -326,7 +329,7 @@ def test_standalone_embedded_js():
         (code == 0, f"exit {code}"),
         ('stripping template modal/nav/JS' in stderr, 'no strip warning'),
         (html.count('<script') == 1, f"{html.count('<script')} script blocks"),
-        (html.count('id="cheatSheetModal"') == 0, 'template modal not stripped'),
+        (html.count('id="cheatSheetModal"') == 1, 'expected exactly the embedded modal (template stripped)'),
         ('class="slide cover"' in html, 'cover wrapper class missing'),
         (html.count('data-cheat') == 1, f"{html.count('data-cheat')} data-cheat occurrences (expected 1: cover's own trigger only — auto-trigger must be skipped)"),
     ]
@@ -361,6 +364,76 @@ def test_cheatsheets_valid_js():
                 result.passed = True
         except ValueError as e:
             result.error = f'invalid JSON in cheatSheets: {e}'
+    return result
+
+
+
+
+def test_standalone_verify_e2e():
+    """verify-deck.py must PASS on standalone-mode output (internal consistency)."""
+    result = TestResult("verify-deck e2e on standalone output")
+    yaml_path = FIXTURES_DIR / 'standalone-embedded-js.yaml'
+    with tempfile.NamedTemporaryFile(suffix='.html', delete=False) as f:
+        out = f.name
+    code, stdout, stderr = run_renderer(yaml_path, '-o', out)
+    if code != 0:
+        result.error = f'render failed: {stderr[:200]}'
+        return result
+    verifier = Path(__file__).parent.parent / 'verify-deck.py'
+    v = subprocess.run([sys.executable, str(verifier), out], capture_output=True, text=True)
+    if v.returncode != 0:
+        result.error = f'verify-deck failed on renderer output: {v.stdout}{v.stderr}'
+    else:
+        result.passed = True
+    return result
+
+
+def test_custom_css_closing_style_tag():
+    """custom_css containing literal </style> must not break the document."""
+    result = TestResult("custom_css with literal </style> sanitized")
+    yaml_path = FIXTURES_DIR / 'css-closing-style-tag.yaml'
+    with tempfile.NamedTemporaryFile(suffix='.html', delete=False) as f:
+        out = f.name
+    code, stdout, stderr = run_renderer(yaml_path, '-o', out)
+    html = Path(out).read_text()
+    n_open = html.count('<style')
+    n_close = html.count('</style>')
+    if code != 0:
+        result.error = f'exit {code}'
+    elif n_open != n_close:
+        result.error = f'unbalanced style tags: {n_open} open vs {n_close} close'
+    elif '.safe' not in html:
+        result.error = 'custom css lost'
+    else:
+        result.passed = True
+    return result
+
+
+def test_verify_deck_reference_parity():
+    """verify-deck --reference: identical files pass, text-mutated copy fails."""
+    result = TestResult("verify-deck --reference parity mode")
+    yaml_path = FIXTURES_DIR / 'standalone-embedded-js.yaml'
+    with tempfile.NamedTemporaryFile(suffix='.html', delete=False) as f:
+        out = f.name
+    code, _, _ = run_renderer(yaml_path, '-o', out)
+    if code != 0:
+        result.error = 'render failed'
+        return result
+    verifier = Path(__file__).parent.parent / 'verify-deck.py'
+    ok = subprocess.run([sys.executable, str(verifier), out, '--reference', out],
+                        capture_output=True, text=True)
+    mutated = Path(out).read_text().replace('My Deck', 'Totally Different Content Here XYZ')
+    with tempfile.NamedTemporaryFile(suffix='.html', delete=False, mode='w') as f:
+        f.write(mutated)
+        mut = f.name
+    bad = subprocess.run([sys.executable, str(verifier), mut, '--reference', out],
+                         capture_output=True, text=True)
+    if ok.returncode != 0:
+        result.error = f'self-reference should pass: {ok.stdout}'
+    elif bad.returncode == 0:
+        result.error = 'mutated deck passed parity — layer 4 not detecting'
+    else:
+        result.passed = True
     return result
 
 

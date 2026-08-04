@@ -114,3 +114,15 @@ mechanical layers, each added after a real shipped failure:
 
 Never sign off a deck on slide count + notes count alone — every layer above
 shipped broken at least once while those two passed.
+
+### Standalone (migrated legacy) decks
+
+When any slide's escape-hatch HTML embeds a `<script>`, the renderer enters
+standalone mode: the template's modal/nav/JS are stripped and the template
+stylesheet is REPLACED by `meta.custom_css`. Contract: `custom_css` must be a
+complete stylesheet (typically the legacy deck's full `<style>` content) and
+the embedded HTML must carry its own notes modal + nav elements — the renderer
+hard-fails listing any class the output uses but `custom_css` leaves
+undefined. A correct standalone render passes all four verify-deck layers
+unchanged; a verify FAIL on a standalone deck is a real defect, never
+expected noise.
