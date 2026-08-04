@@ -179,6 +179,41 @@ def test_clean_deck_draft_mode():
     return result
 
 
+def test_template_placeholder_removal():
+    """Render test: template example slides should not appear in output."""
+    result = TestResult("template-placeholder removal (2-slide deck renders 2)")
+    yaml_path = FIXTURES_DIR / 'template-placeholder-removal.yaml'
+
+    if not yaml_path.exists():
+        result.error = f"Fixture not found: {yaml_path}"
+        return result
+
+    import tempfile
+    import re
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.html', delete=False) as f:
+        output_path = f.name
+
+    exit_code, stdout, stderr = run_renderer(yaml_path, '-o', output_path)
+    if exit_code == 0:
+        with open(output_path) as f:
+            html = f.read()
+        slide_count = len(re.findall(r'data-slide-index', html))
+        if slide_count == 2:
+            result.passed = True
+        else:
+            result.error = f"Expected 2 slides in output, got {slide_count}"
+    else:
+        result.error = f"Render failed: {stderr[:200]}"
+
+    import os
+    try:
+        os.unlink(output_path)
+    except:
+        pass
+
+    return result
+
+
 def main():
     print("Testing render-deck.py lint and mode rules\n")
 
@@ -191,6 +226,7 @@ def main():
         test_html_escape_warn,
         test_clean_deck_storyboard,
         test_clean_deck_draft_mode,
+        test_template_placeholder_removal,
     ]
 
     results = [t() for t in tests]

@@ -250,10 +250,16 @@ def render_full_html(deck: Dict[str, Any]) -> str:
     title = meta.get('title', 'Slide Deck')
     lang = meta.get('lang', 'zh-Hant')
 
-    html = template.replace(
-        '<!-- Example slide structure: fill with your content -->',
-        slides_content
-    ).replace(
+    # Replace example slides block (comment + 2 example divs) with actual slides
+    template_slides_pattern = r'<!-- Example slide structure: fill with your content -->.*?<!-- Example SAR slide -->.*?</div>\s*</div>'
+    html = re.sub(
+        template_slides_pattern,
+        slides_content,
+        template,
+        flags=re.DOTALL
+    )
+
+    html = html.replace(
         '<title>Slide Deck Template</title>',
         f'<title>{html_escape(title)}</title>'
     ).replace(
