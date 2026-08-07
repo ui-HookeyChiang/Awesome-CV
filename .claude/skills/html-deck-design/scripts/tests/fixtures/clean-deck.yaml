@@ -1,0 +1,42 @@
+meta:
+  title: Clean Test Deck
+  lang: zh-Hant
+  acts:
+    1: "Opening"
+    2: "Main Content"
+    3: "Conclusion"
+
+approved: false
+slides:
+  - id: intro
+    act: 1
+    claim: "Welcome to the presentation"
+    bridge: "Let's begin with an overview"
+    anchor: true
+    element:
+      type: statement
+      data:
+        text: "This is a clean, well-formed slide"
+    facts: []
+  - id: main-1
+    act: 2
+    claim: "Key insight about the topic"
+    bridge: "Building on the introduction"
+    anchor: true
+    element:
+      type: statement
+      data:
+        text: "We'll explore the core concepts"
+    facts:
+      - claim: "Some important fact"
+        source: "docs/reference.md:15"
+  - id: conclusion
+    act: 3
+    claim: "Summary and next steps"
+    bridge: "Wrapping up the discussion"
+    anchor: true
+    element:
+      type: statement
+      data:
+        text: "Thank you for your attention"
+    facts: []

@@ -1,0 +1,18 @@
+meta:
+  title: Style Escape
+  custom_css: |
+    .note::after { content: "</style>"; }
+    .safe { color: red; }
+approved: true
+slides:
+  - id: only
+    act: 1
+    anchor: true
+    claim: Only slide
+    bridge: 開場
+    element:
+      type: statement
+      data:
+        text: hello
+    notes: ''
+    facts: []

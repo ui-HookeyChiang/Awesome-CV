@@ -1,0 +1,27 @@
+meta:
+  title: Test Template Placeholder Removal
+  lang: zh-Hant
+  acts:
+    1: "Test"
+
+approved: true
+slides:
+  - id: test-slide-1
+    act: 1
+    claim: "First slide"
+    bridge: "Opening"
+    anchor: true
+    element:
+      type: statement
+      data:
+        text: "Test content"
+    facts: []
+  - id: test-slide-2
+    act: 1
+    claim: "Second slide"
+    bridge: "Continuation"
+    element:
+      type: statement
+      data:
+        text: "More content"
+    facts: []
