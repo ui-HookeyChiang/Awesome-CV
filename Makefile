@@ -1,4 +1,4 @@
-.PHONY: examples resume check deps clean
+.PHONY: examples resume check deps clean test-integration
 
 CC = lualatex
 EXAMPLES_DIR = examples
@@ -28,6 +28,9 @@ check: resume
 		exit 1; \
 	fi; \
 	echo "OK: resume is 2 pages"
+
+# Build-compiles gate: every example document must compile to a PDF.
+test-integration: examples
 
 deps:
 	./install.sh
