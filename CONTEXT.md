@@ -73,3 +73,25 @@ _Avoid_: STAR (we drop Task; Situation subsumes it here)
 **Tech Stack**:
 Programming languages, frameworks, and tools extracted from a job description. Used to filter and prioritize résumé bullets during Tailor.
 _Avoid_: Skills, technologies (use Tech Stack specifically for JD-extracted items)
+
+### Deck Pipeline
+
+**Deck**:
+A YAML file defining slide content (claims, bridges, elements, notes, facts) that becomes the single source of truth for a presentation. Rendered to HTML by the Renderer.
+_Avoid_: Presentation (that's the final HTML artifact), Slideshow
+
+**Storyboard**:
+The claim+bridge-only phase of a Deck before element authoring. Reviewed for narrative flow; must be approved (`approved: true`) before elements may be authored.
+_Avoid_: Outline, draft
+
+**Bridge**:
+The mandatory per-slide field explaining how the current slide follows from the previous one. Empty bridge = hard-fail lint.
+_Avoid_: Transition, segue
+
+**Token Grid**:
+The ~15 CSS custom properties (`--page-bg`, `--slide-bg`, `--card-bg`, `--text-primary`/`secondary`/`muted`, semantic colors) that define a Deck's visual skin. Swapping the grid re-brands without code changes.
+_Avoid_: Theme, stylesheet
+
+**Renderer**:
+The Python script (`scripts/render-deck.py`) that converts a Deck YAML into HTML. Supports storyboard, draft, and full-build modes; enforces bridge/facts/approval gates.
+_Avoid_: Builder, compiler

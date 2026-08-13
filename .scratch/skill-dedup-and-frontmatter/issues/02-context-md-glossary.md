@@ -9,8 +9,10 @@ Tickets 03/04/05 use this vocabulary in their own descriptions and in the pointe
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] `CONTEXT.md` has a **Journal Pipeline** entry under Automation Workflow
-- [ ] `CONTEXT.md` has a **Rule Skill** entry under Automation Workflow
-- [ ] Change is committed (not left uncommitted in the worktree)
+- [x] `CONTEXT.md` has a **Journal Pipeline** entry under Automation Workflow
+- [x] `CONTEXT.md` has a **Rule Skill** entry under Automation Workflow
+- [x] Change is committed (not left uncommitted in the worktree)
+
+Landed in fae910b + f5cef40. Closed 2026-08-14.
