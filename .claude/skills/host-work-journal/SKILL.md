@@ -1,7 +1,7 @@
 ---
 name: host-work-journal
 landing-group: workflow
-description: Collect host activity (git, shell, Claude, test artifacts) into journal/raw/ for the Awesome-CV milestone pipeline. Also collects SAR-focused categorized git commit data for sar-extraction. Use when the user asks for a work report, activity summary, journal entry, weekly report, SAR git data, or wants to review what was done over a date range.
+description: Collect host activity (git, shell, Claude, Cursor, Codex, test artifacts) into journal/raw/ for the Awesome-CV milestone pipeline. Also collects SAR-focused categorized git commit data for sar-extraction. Use when the user asks for a work report, activity summary, journal entry, weekly report, SAR git data, or wants to review what was done over a date range.
 ---
 
 # Host Work Journal
@@ -152,6 +152,8 @@ The collector gathers from all sources in parallel:
 | Shell history | Command frequency, SSH targets, SCP transfers |
 | Claude Code | Sessions, prompts by project/topic, token usage |
 | OpenCode | Sessions, prompts by project/topic, cost, tool usage (from `~/.local/share/opencode/opencode.db`) |
+| Cursor | Sessions and prompts by project/topic (from `~/.cursor/projects/*/agent-transcripts/`) |
+| Codex | Sessions and prompts by project/topic (from `~/.codex/sessions/YYYY/MM/DD/`) |
 | Test artifacts | fio sessions, device configs, result counts |
 | Infrastructure | Managed devices from SSH config |
 
@@ -159,10 +161,12 @@ The collector gathers from all sources in parallel:
 
 Save to `journal/raw/work-report_<HOST>_<START>-to-<END>.md`. Include:
 
-- **Activity Overview** — aggregate metrics (repos, commits, PRs, Claude prompts, OpenCode sessions, devices, tests)
+- **Activity Overview** — aggregate metrics (repos, commits, PRs, Claude/Cursor/Codex prompts, OpenCode sessions, devices, tests)
 - **Git Activity** — table by repo with commit count and key work summary
 - **Claude Code Usage** — by topic with prompt counts
 - **OpenCode Usage** — sessions by project with cost/token breakdown (if data present)
+- **Cursor Usage** — prompts by project/topic (if data present)
+- **Codex Usage** — prompts by project/topic (if data present)
 - **Test Sessions** — if applicable
 - **Key Work Streams** — grouped by theme, tagged for milestone integration
 
