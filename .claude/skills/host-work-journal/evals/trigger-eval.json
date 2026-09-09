@@ -1,0 +1,22 @@
+[
+  {"id": 1, "query": "Collect a work report for ampere covering 2026-09-01 through 2026-09-07, including git and Codex activity.", "should_trigger": true, "rationale": "Explicit host work-report collection over a date range."},
+  {"id": 2, "query": "I need a weekly journal entry from my shell history, Claude sessions, and test artifacts for last week.", "should_trigger": true, "rationale": "Weekly journal collection names this skill's data sources."},
+  {"id": 3, "query": "Please collect SAR git data for Q4 and write the categorized cards under journal/raw/git-sar/.", "should_trigger": true, "rationale": "Explicit SAR collection request."},
+  {"id": 4, "query": "Run the host work journal for 2026-08-01 to 2026-08-31, even though it is a small one-month report.", "should_trigger": true, "rationale": "Date-range work journal request with a small-change phrasing."},
+  {"id": 5, "query": "Just gather git activity and commit summaries from all repositories since Monday; skip the other sources.", "should_trigger": true, "rationale": "The skill supports a git-only activity collection."},
+  {"id": 6, "query": "Update the incremental SAR sweep from the last covered date through yesterday.", "should_trigger": true, "rationale": "Explicit incremental SAR update."},
+  {"id": 7, "query": "Review what I did on the c1153-macbook-pro between 2026-08-10 and 2026-08-16 and produce the work journal.", "should_trigger": true, "rationale": "Host/date review asks for a work journal."},
+  {"id": 8, "query": "Make a weekly work report from Cursor transcripts, Codex sessions, and repository commits, then hand it to the journal pipeline.", "should_trigger": true, "rationale": "Explicit collection and producer handoff request."},
+  {"id": 9, "query": "I only want the activity summary for this host, not a resume or milestone rewrite.", "should_trigger": true, "rationale": "Activity-summary request disambiguated from downstream skills."},
+  {"id": 10, "query": "Collect the work journal for February and include the test-session evidence and categorized git history.", "should_trigger": true, "rationale": "Explicit month-range journal collection."},
+  {"id": 11, "query": "Transform journal/integrated/work-report_ampere_2026-09-01-to-2026-09-07.md into a weekly brief for a presentation.", "should_trigger": false, "rationale": "Explicit weekly-brief transform belongs to brief, not the producer."},
+  {"id": 12, "query": "Take the already integrated report and turn it into a human-facing Slack summary.", "should_trigger": false, "rationale": "Presentation and Slack transformation are outside this skill's boundary."},
+  {"id": 13, "query": "Process journal/raw/work-report_ampere_2026-09-01-to-2026-09-07.md into milestone/ubiquiti.md.", "should_trigger": false, "rationale": "Milestone integration belongs to journal-integrate-milestones."},
+  {"id": 14, "query": "Validate the weekly-brief-handoff-v1 fixture and tell me whether the YAML status enum is correct.", "should_trigger": false, "rationale": "A standalone contract validation request is not collection."},
+  {"id": 15, "query": "Read my integrated work report and identify the strongest resume bullets for a storage role.", "should_trigger": false, "rationale": "Resume extraction is downstream and does not ask for host collection."},
+  {"id": 16, "query": "Write a brief presentation deck from the work report in journal/integrated/; do not collect anything.", "should_trigger": false, "rationale": "Presentation-only work should route to the presentation/brief consumer."},
+  {"id": 17, "query": "Update milestone/qnap.md with achievements from last month's journal entries.", "should_trigger": false, "rationale": "This is a milestone update, not a host activity collection."},
+  {"id": 18, "query": "Build src/resume/resume.tex and check whether the PDF is still two pages.", "should_trigger": false, "rationale": "Resume build validation is unrelated."},
+  {"id": 19, "query": "Can you explain what the integrated work-report handoff contract means without generating a report?", "should_trigger": false, "rationale": "Contract explanation alone does not request collection."},
+  {"id": 20, "query": "I have the raw report already; just compose a competing weekly narrative from it for Slack.", "should_trigger": false, "rationale": "Raw-to-summary composition for Slack violates the producer boundary."}
+]

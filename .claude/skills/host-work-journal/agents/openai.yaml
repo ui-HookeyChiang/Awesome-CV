@@ -1,0 +1,4 @@
+interface:
+  display_name: "Host Work Journal"
+  short_description: "Collect and integrate host work into canonical reports"
+  default_prompt: "Use $host-work-journal to collect host activity and produce the canonical integrated work report."
