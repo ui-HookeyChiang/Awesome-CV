@@ -1,25 +1,61 @@
 ---
 name: host-work-journal
 landing-group: workflow
-description: Collect host activity (git, shell, Claude, Cursor, Codex, test artifacts) into journal/raw/ for the Awesome-CV milestone pipeline. Also collects SAR-focused categorized git commit data for sar-extraction. Use when the user asks for a work report, activity summary, journal entry, weekly report, SAR git data, or wants to review what was done over a date range.
+standards-applied: [description, contract, behavior, disclosure, adversarial, equivalence, trigger-eval]
+description: Use when the user asks for a work report, activity summary, journal entry, weekly report, SAR git data, or a date-range review; include requests for just git activity, a small report, or an incremental SAR update. Do not use for an explicit weekly-brief presentation/transform request; route that request to brief.
 ---
 
 # Host Work Journal
 
-Collect work activity from the current host and generate journal entries for the Awesome-CV milestone pipeline.
+Collect host activity, hand it through the journal pipeline, and produce the
+canonical integrated work report for Awesome-CV.
+
+## Ownership and routing
+
+`host-work-journal` owns collection, the raw-to-integrated journal handoff,
+initiative/KD analysis, and canonical work-report composition. `journal/raw/`
+is an inbox; the producer artifact for downstream weekly presentation is only
+`journal/integrated/work-report_<HOST>_<START>-to-<END>.md`.
+
+`brief` (REQUIRED consumer) consumes and transforms an eligible integrated report only. It does
+not collect activity, integrate journals, perform initiative/KD analysis, or
+compose a competing work report. Route to `brief` only for an explicit
+weekly-brief presentation/transform request; this skill does not emit a
+human-facing Slack summary.
+
+REQUIRED: Read [`weekly-brief-handoff-v1.md`](references/weekly-brief-handoff-v1.md)
+when composing or validating the canonical report. The reference is the
+single detailed contract and defines the fail-closed boundary.
+
+The `journal-integrate-milestones` pipeline (REQUIRED) is part of the producer:
+it may refine and integrate the collected material, but the resulting
+integrated report remains `host-work-journal` output.
+
+| Request | Route |
+|---|---|
+| Collect activity, compose a work report, or update SAR data | `host-work-journal` |
+| Present or transform an eligible report as a weekly brief | `brief` (REQUIRED consumer) |
+| Integrate journals into milestones | `journal-integrate-milestones` (REQUIRED pipeline) |
+
+> Handoff constraints:
+> - never treat `journal/raw/` or activity-only input as weekly-brief eligible
+> - always validate the v1 handoff before returning the canonical artifact
 
 ## Pipeline Context
 
-This skill produces **raw journal entries** — the first stage of the career documentation pipeline:
+This skill starts with **raw journal entries** and ends with a canonical
+integrated report:
 
 ```
-journal/raw/          ← this skill writes here
+journal/raw/          ← collection inbox
   ↓ refine (translate, format, standardize)
 journal/refined/
   ↓ integrate (distill into company milestones)
 milestone/*.md        ← ubiquiti.md, qnap.md
   ↓ extract (highest-impact items)
 milestone/summary.md  ← resume-ready highlights
+
+journal/integrated/   ← canonical work-report handoff to `brief`
 ```
 
 `raw/` is an inbox, not an archive. After downstream pipelines consume the data, files move to `journal/integrated/`.
@@ -57,11 +93,13 @@ Output: `~/work-report-data_<host>_<start>-to-<end>.json`
 
 The JSON contains both regular git stats (`git` key) and SAR-categorized commits (`git_sar` key).
 
-**Phase 2: Compose journal entries** — read the JSON, compose two outputs:
+**Phase 2: Compose raw journal entries** — read the JSON, compose two inbox
+outputs:
 
-1. **Work report** → `journal/raw/work-report_<HOST>_<START>-to-<END>.md`
+1. **Activity report** → `journal/raw/work-report_<HOST>_<START>-to-<END>.md`
    - Activity overview, git stats by repo, Claude usage, test sessions, key work streams
    - **Must start with frontmatter** (see "Frontmatter template" below)
+   - Activity-only raw input is never eligible for `brief`.
 2. **SAR git data** → `journal/raw/git-sar/<START>-to-<END>/` (per-category files)
    - One file per SAR category + index.md summary
    - **Must start with frontmatter** (see "SAR frontmatter template" below)
@@ -172,9 +210,19 @@ Save to `journal/raw/work-report_<HOST>_<START>-to-<END>.md`. Include:
 
 Tag work streams with milestone categories for faster processing by `journal-integrate-milestones`. See `_shared/categories.md` for the full milestone tags table.
 
-## Report Generation Prompt
+After the journal pipeline has refined and integrated the range, perform the
+initiative/KD analysis and compose the canonical report at
+`journal/integrated/work-report_<HOST>_<START>-to-<END>.md`. Add the v1 handoff
+block exactly as specified in the required reference. A report is eligible
+only after its path, integrated stage, producer, inclusive ISO date range,
+and required semantic fields validate.
 
-After collecting JSON, use this prompt template to generate a knowledge-density weekly report:
+## Canonical Work-Report Composition
+
+After the raw collection has completed and the journal pipeline has handed the
+range into `integrated/`, use this prompt template to perform the producer's
+initiative/KD analysis and compose the one canonical work report. This is not
+a second raw report or a human-facing Slack summary:
 
 ### Phase 1: Initiative Discovery
 
@@ -338,16 +386,16 @@ Each category file lists commits grouped by repo with subject, body, and file st
 
 ## Next Steps
 
-1. Run `journal-integrate-milestones` to process reports through the pipeline
+1. Run `journal-integrate-milestones` to process reports through the pipeline and produce the integrated canonical work report
 2. Run `sar-extraction` to create case study fragments from categorized git data
 
 ## Example Requests
 
 | Request | Action |
 |---------|--------|
-| "work journal for Feb" | Collect + compose both outputs → journal/raw/ |
+| "work journal for Feb" | Collect raw inputs, integrate them, and compose the canonical report |
 | "work report 2025/11 to 2026/02" | Specified date range |
 | "just git activity" | Skip shell/Claude sections |
 | "collect SAR git data for Q4" | SAR output only |
 | "update SAR data" | Incremental — collect from last sweep end date to yesterday |
-| "journal and integrate" | Generate raw, then invoke journal-integrate-milestones |
+| "journal and integrate" | Generate raw, then invoke journal-integrate-milestones and complete the canonical handoff |
